@@ -1,0 +1,16 @@
+input{
+    height: 40px;
+    border: none;
+    background-color: rgba(171, 177, 181, 0.205);
+    width: 400px;
+}
+h3{
+    font-family: "open sans","sans-serif";
+}
+.to{
+    background-color: rgba(240, 248, 255, 0.21);
+}
+.anh{
+    border: 5px;
+    
+}

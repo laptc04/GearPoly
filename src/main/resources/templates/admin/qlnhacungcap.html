@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<style>
+    h2 {
+        font-size: 72px;
+        background: -webkit-linear-gradient(#dd93e0, #333);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    #h2 {
+        
+        background: -webkit-linear-gradient(#dd93e0, #333);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/button.css">
+    <link rel="stylesheet" href="/css/quanlyvideo.css">
+</head>
+
+<body>
+    <header>
+        <!-- place navbar here -->
+    </header>
+    <main class="container mt-5" style="height: 400px;">
+        <div>
+            <div class="main">
+
+                <div class="tab-content" id="myTabContent" style="border-radius: 25px; background-color: aliceblue; margin: 10px;">
+                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                        tabindex="0">
+                        <div class="container-fluid">
+                            <div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row position-relative ">
+                                            <div class="position-absolute top-0 start-50 end-50 "
+                                                style="margin-left: -40vh;">
+                                                <h3 class="nd mb-3 " id="h2" style="margin-left: 50px;">SUPPLIERS MANAGEMENT</h3>
+                                            </div>
+                                            <br> <br> <br>
+                                            <form method="post">
+                                                <div class="col mt-5">
+                                                    <H3>Suppliers ID</H3>
+                                                    <input class="rounded" type="text" style="width: 60vh" name="id"
+                                                        placeholder="ID">
+                                                    <H3>Suppliers Name</H3>
+                                                    <input class="rounded" type="text" style="width: 60vh"
+                                                        name="Name" placeholder="Name">
+                                                    <H3>ContactPerson</H3>
+                                                    <input class="rounded" type="text" style="width: 60vh" name="ContactPerson"
+                                                        placeholder="ContactPerson">
+                                                    <!-- <H3>Brand</H3>
+                                                                 <div class="input-group w-50">
+                                                                    
+                                                                    <select class="form-control rounded" style="width: 60vh" name="Brand">
+                                                                        <option value="" selected disabled>Select Brand</option>
+                                                                        <option value="brand1">Brand 1</option>
+                                                                        <option value="brand2">Brand 2</option>
+                                                                        <option value="brand3">Brand 3</option>
+                                                                    </select>
+                                                                </div> -->
+                                                    <H3>Email</H3>
+                                                    <input class="mota" type="text"
+                                                        style="border-radius: 5px; width: 60vh" name="Email"
+                                                        placeholder="Email">
+                                                    <H3>Phone</H3>
+                                                    <input class="mota" type="text"
+                                                        style="border-radius: 5px; width: 60vh" name="Phone number"
+                                                        placeholder="Phone number">
+                                                    <h3>Address</h3>
+                                                    <textarea name="" class="rounded" style="width: 60vh; height: 100px;" id=""></textarea>
+                                                </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col d-inline mt-4">
+                                                <a class="btn btn-1">Create</a>
+                                                <a class="btn btn-2">Update</a>
+                                                <a class="btn btn-3">Delete</a>
+                                                <a class="btn btn-4">Reset</a>
+                                            </div>
+                                        </div>
+                                        <!-- <form class="mt-2">
+                                                    <div class="col">
+                                                        <thead>
+                                                            <tr>
+                                                                <th> Hãng</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </div>
+                                                </form> -->
+                                    </div>
+                                    </form>
+
+
+                                    <!-- bảng -->
+
+
+
+                                    <div class="col">
+                                        <table class="table mt-4 table table-hover table table-sm ">
+                                            <thead class="table-info">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Address</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Button</th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>NCC1:2024235</th>
+                                                    <td>Cửa Hàng 1</td>
+                                                    <td>Thủ đức, TP Hồ Chí Minh</td>
+                                                    <td>LKDT1122@gmail.com</td>
+                                                    <td>0912995817</td>
+                                                    <td><a class="btn btn-2">Edit</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>NCC2:2023195</th>
+                                                    <td>Cửa Hàng 2</td>
+                                                    <td>Ninh Kiều, Cần Thơ</td>
+                                                    <td>PComputer922@gmail.com</td>
+                                                    <td>0817996559</td>
+                                                    <td><a class="btn btn-2">Edit</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>NCC3:2023214</th>
+                                                    <td>Cửa Hàng 3</td>
+                                                    <td>Vũng tàu</td>
+                                                    <td>TayA912@gmail.com</td>
+                                                    <td>08985610225</td>
+                                                    <td><a class="btn btn-2">Edit</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>NCC4:20221512</th>
+                                                    <td>Cửa Hàng 4</td>
+                                                    <td>Hà Nội</td>
+                                                    <td>Gaming@gmail.com</td>
+                                                    <td>0999992199</td>
+                                                    <td><a class="btn btn-2">Edit</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>NCC5:20211910</th>
+                                                    <td>Cửa Hàng 5</td>
+                                                    <td>Hồ Chí Minh</td>
+                                                    <td>VanPhong@gmail.com</td>
+                                                    <td>09103696969</td>
+                                                    <td><a class="btn btn-2">Edit</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>NCC6:20201512</th>
+                                                    <td>Cửa Hàng 6</td>
+                                                    <td>Cần Thơ</td>
+                                                    <td>GoodLinhKien123123@gmail.com</td>
+                                                    <td>0121976890</td>
+                                                    <td><a class="btn btn-2">Edit</a></td>
+                                                </tr>
+                                            </tbody>
+                                            <form class=" mt-3" style="width: 20vh;" role="search">
+
+                                                <div>
+                                                    <div class="col d-inline-flex">
+                                                        <div class="row">
+                                                            <a class="btn btn-5">Search</a>
+
+                                                        </div>
+                                                        <div>
+                                                            <input class="form-control me-2 d-inline" type="search"
+                                                                style="width: 30vh; margin-left: 50px;"
+                                                                placeholder="Search" aria-label="Search">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </table>
+                                        <nav class="tohop" aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                    tabindex="0">
+                    <div class="container-fluid">
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+    </main>
+    <footer>
+        <!-- place footer here -->
+    </footer>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
