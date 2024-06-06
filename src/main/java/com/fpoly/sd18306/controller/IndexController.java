@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/user/")
 public class IndexController {
 
-	@GetMapping("/index")
+	@GetMapping("/index/trangchu")
 	public String getUserIndex() {
 		return "client/index";
 	}
