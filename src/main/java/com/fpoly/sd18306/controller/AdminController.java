@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/")
 public class AdminController {
 	@GetMapping("/index")
-	public String getAdminIndex() {
+	public String getAdminIndex2() {
 		return "admin/index";
 	}
 
