@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SuppliersController {
 	
 	
-	
-	
 	@GetMapping("/Suppliers")
 	public String getSuppliers() {
 		return "admin/qlHangsx";
