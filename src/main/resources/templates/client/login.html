@@ -1,9 +1,6 @@
-<c:url var="url" value="/home" />
-<c:url var="url2" value="/acccount" />
-<c:url var="url3" value="/" />
-<c:url var="url4" value="/admin" />
+
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
 	<title>Đăng nhập</title>
@@ -26,7 +23,7 @@
 			<div class="row">
 				<div class="col-4"></div>
 				<div class="col-4">
-					<form action="${url2}/Login" method="post">
+					<form action="/login" method="post">
 						<div class="container-fluid">
 							<!--  -->
 							<div class="card mt-2 bg-white border">
@@ -37,19 +34,23 @@
 												GearPoly</a></h1>
 									</center>
 									<label for="exampleFormControlInput1" class="form-label text-dark">Tên đăng
-										nhập:</label> <input name="username" type="username" class="form-control"
+										nhập:</label> <input name="id" type="username" class="form-control"
 										id="exampleFormControlInput1" placeholder="Tên đăng nhập:">
+									<p class="text-danger" th:if='${error?.getFieldError("id") != null}'
+										th:text='${error?.getFieldError("id")?.getDefaultMessage()}'></p>
 								</div>
 								<div class="mb-3 card-body ">
 									<label for="exampleFormControlInput2" class="form-label  text-dark">Mật
 										khẩu:</label> <input name="password" type="password" class="form-control"
 										id="exampleFormControlInput2" placeholder="Mật khẩu:">
+									<p class="text-danger" th:if='${error?.getFieldError("password") != null}'
+										th:text='${error?.getFieldError("password")?.getDefaultMessage()}'></p>
 								</div>
 								<div class="mb-3 card-body ">
 									<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> <label
 										for="vehicle1" class="text-dark">Remember
 										me ?</label><br>
-									<button type="submit" class="btn btn-primary mt-1 " formaction="${url2}/Login">Đăng
+									<button type="submit" class="btn btn-primary mt-1 " formaction="">Đăng
 										nhập</button>
 
 									<div class="a mt-2 d-flex">
