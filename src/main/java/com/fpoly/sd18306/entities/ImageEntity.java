@@ -2,6 +2,8 @@ package com.fpoly.sd18306.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,17 +20,18 @@ import lombok.Setter;
 @Setter
 @Data
 @Entity
-@Table(name = "Images")
+@Table(name = "images")
 public class ImageEntity implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
-
-    @Column(name = "name", nullable = false, length = 255)
-    private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "prod_id", nullable = false)
-    private ProductEntity product;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private int id;
+	
+	@Column(name = "name")
+	private String  name;
+	
+	@ManyToOne
+	@JoinColumn(name = "prod_id")
+	@JsonBackReference
+	ProductEntity productEntity;
 }

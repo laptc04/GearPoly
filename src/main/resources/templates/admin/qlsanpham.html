@@ -101,35 +101,33 @@ h2 {
 										<div class="table-responsive">
 											<table class="table mt-4 table table-hover table table-sm ">
 											<thead>
-												<tr>
-													<th>Mã</th>
-													<th>Tên</th>
-													<th>Giá</th>
-													<th>Số Lượng</th>
-													<th>Danh mục</th>
-													<th>Nhà Sản Xuất</th>
-													<th>Hình Ảnh</th>
-													<th>Mô Tả</th>
-													<th>Button</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr th:each="item : ${products}">
-													<th th:text="item.id"></th>
-													<td th:text="item.productName"></td>
-													<td th:text="item.price"></td>
-													<td th:text="item.soluong"></td>
-													<td th:text="item.category?.categoriesName"></td>
-													<td th:text="item.manufacturer?.manufacturerName"></td>
-													<td>
-														<!-- <div th:each="item : ${item.imageEntities}">
+							                    <tr>
+							                        <th>Mã</th>
+							                        <th>Tên</th>
+							                        <th>Giá</th>
+							                        <th>Số Lượng</th>
+							                        <th>Danh mục</th>
+							                        <th>Hình Ảnh</th>
+							                        <th>Mô Tả</th>
+							                        <th>Hành Động</th>
+							                    </tr>
+							                </thead>
+							                <tbody>
+							                    <tr th:each="item : ${products}">
+							                        <td th:text="${item.id}"></td>
+							                        <td th:text="${item.product_name}"></td>
+							                        <td th:text="${item.price}"></td>
+							                        <td th:text="${item.soluong}"></td>
+							                        <td th:text="${item.categoryEntity?.name}"></td>
+							                        <td >
+							                            <div th:each="item : ${item.imageEntities}">
 															<img th:src="'/images/' + ${item.name}" style="width: 100px; height: 100px;"/>
-														</div> -->
-													</td>
-													<td th:text="item.description"></td>
-													<td><a class="btn btn-2">Chỉnh</a></td>
-												</tr>
-											</tbody>
+														</div>
+							                        </td>
+							                        <td th:text="${item.description}"></td>
+							                        <td><a class="btn btn-primary" href="#">Chỉnh</a></td>
+							                    </tr>
+							                </tbody>
 										</table>
 										</div>
 										<nav class="tohop" aria-label="Page navigation example">
