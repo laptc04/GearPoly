@@ -18,6 +18,7 @@ public class CartController {
 	public String cartList(Model model) {
 		model.addAttribute("cart", cartJpa.findAll());
 		return "client/giohang";
+		
 	}
 //	@GetMapping("/add-to-cart")
 //	public String updateCart(@RequestParam("id") int id , @RequestParam("path") String path,

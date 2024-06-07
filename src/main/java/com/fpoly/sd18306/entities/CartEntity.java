@@ -31,6 +31,7 @@ public class CartEntity {
 	@JsonIgnoreProperties("carts")
 	AccountEntity accountEntity;
 
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	@JsonIgnoreProperties("carts")
