@@ -1,192 +1,168 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <style>
-    h2 {
-        font-size: 72px;
-        background: -webkit-linear-gradient(#dd93e0, #333);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+h2 {
+	font-size: 72px;
+	background: -webkit-linear-gradient(#dd93e0, #333);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
 </style>
 
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Title</title>
+<!-- Required meta tags -->
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <!-- Bootstrap CSS v5.2.1 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/css/button.css">
-    <link rel="stylesheet" href="/css/quanlyvideo.css">
+<!-- Bootstrap CSS v5.2.1 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+	crossorigin="anonymous" />
+<link rel="stylesheet" href="/css/button.css">
+<link rel="stylesheet" href="/css/quanlyvideo.css">
 </head>
 
 <body>
-    <header>
-        <!-- place navbar here -->
-    </header>
-    <main class="container mt-5" style="height: 400px;">
-        <div>
-            <div class="main">
+	<main class="container mt-5" style="height: 400px;">
+		<div>
+			<div class="main">
 
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
-                        tabindex="0">
-                        <div class="container-fluid">
-                            <div>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="home-tab-pane"
+						role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+						<div class="container-fluid">
+							<div>
 
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="row position-relative ">
-                                            <div class="position-absolute start-50 "
-                                                style="margin-left: -40vh;">
-                                                <H2 class="nd mb-3 ">PRODUCT MANAGEMENT</H2>
-                                            </div>
-                                            <br> <br> <br>
-                                            <form method="post">
-                                                <div class="col mt-5">
-                                                    <H3> ProductName</H3>
-                                                    <input class="rounded" type="text" style="width: 60vh"
-                                                        name="ProductName" placeholder="ProductName">
-                                                    <H3> Price DECIMAL</H3>
-                                                    <input class="rounded" type="text" style="width: 60vh" name="Price DECIMAL"
-                                                        placeholder="Price DECIMAL">
-                                                    <H3> ManufacturerID</H3>
-                                                    <select class="rounded" style="width: 60vh; height: 37px;" name="ManufacturerID" id="">
-                                                        <option selected disabled value="-1">Chọn nhà sản xuất</option>
-                                                        <option value="">AMD</option>
-                                                        <option value="">NVIDIA</option>
-                                                    </select>
-                                                    <H3>SupplierID INT</H3>
-                                                    <select class="rounded" style="width: 60vh; height: 37px;" name="SupplierID" id="">
-                                                        <option selected disabled value="-1">Chọn nhà cung cấp</option>
-                                                        <option value="">GearPoly</option>
-                                                        <option value="">việt Nam</option>
-                                                    </select>
-                                                    <H3>Decription</H3>
-                                                    <input class="mota" type="text"
-                                                        style="border-radius: 5px; width: 60vh; height: 20vh;"
-                                                        name="decription" placeholder=" Decription">
-                                                    <H3>Image</H3>
-                                                    <input class="rounded p-1" type="file" style="width: 60vh"
-                                                        name="Image">
-                                                    <!-- <label for="exampleInput1" class="form-label">Name</label>
-                                                            <input type="file" class="form-control" multiple name="file" accept="image/*"> -->
-                                                </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col d-inline mt-4">
-                                                <a class="btn btn-1">Create</a>
-                                                <a class="btn btn-2">Update</a>
-                                                <a class="btn btn-3">Delete</a>
-                                                <a class="btn btn-4">Reset</a>
-                                            </div>
-                                        </div>
-                                        <!-- <form class="mt-2">
-                                                    <div class="col">
-                                                        <thead>
-                                                            <tr>
-                                                                <th> Hãng</th>
-                                                            </tr>
-                                                        </thead>
-                                                    </div>
-                                                </form> -->
-                                    </div>
-                                    </form>
+								<div class="row">
+									<div class="col-5">
+										<div class="row position-relative ">
+											<div class="position-absolute start-50 "
+												style="margin-left: -40vh;">
+												<H2 class="nd mb-3 ">Quản Lý Sản Phẩm</H2>
+											</div>
+											<br> <br> <br>
+											<form method="post"
+												enctype="multipart/form-data">
+												<div class="col mt-5">
+													<H3>Tên Sản Phẩm</H3>
+													<input class="rounded" type="text" style="width: 60vh"
+														name="ProductName" placeholder="Tên Sản Phẩm">
+													<H3>Giá</H3>
+													<input class="rounded" type="text" style="width: 60vh"
+														name="price" placeholder="Giá">
+													<H3>Danh mục</H3>
+													<select class="rounded" style="width: 60vh; height: 37px;"
+														name="category" id="">
+														<option selected disabled value="-1">Chọn danh mục</option>
+														<option value="">Chuột</option>
+														<option value="">Bàn Phím</option>
+													</select>
+													<H3>Nhà Cung Cấp</H3>
+													<select class="rounded" style="width: 60vh; height: 37px;"
+														name="Manufacturer" id="">
+														<option selected disabled value="-1">Chọn nhà sản
+															xuất</option>
+														<option value="">AMD</option>
+														<option value="">NVIDIA</option>
+													</select>
+													<H3>Mô Tả</H3>
+													<input class="mota" type="text"
+														style="border-radius: 5px; width: 60vh; height: 20vh;"
+														name="decription" placeholder="Mô Tả">
+													<H3>Image</H3>
+													<input class="rounded p-1" type="file" style="width: 60vh"
+														name="file" multiple accept="image/*">
+												</div>
+												<div class="row">
+													<div class="col d-inline mt-4">
+														<a class="btn btn-primary btn-1">Thêm</a> 
+														<a class="btn btn-success btn-2">Cập Nhật</a> 
+														<a class="btn btn-danger btn-3">Xóa</a> 
+														<a class="btn btn-info btn-4">Làm mới</a>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
 
+									<div class="col-7">
+										<form class="d-flex ms-auto" th:action="@{/search}"
+											method="get">
+											<div class="d-flex">
+												<input class="form-control me-2" type="search"
+													placeholder="Tìm kiếm" name="name" />
+												<button class="btn btn-outline-success" type="submit">Tìm</button>
+											</div>
+										</form>
+										<div class="table-responsive">
+											<table class="table mt-4 table table-hover table table-sm ">
+											<thead>
+												<tr>
+													<th>Mã</th>
+													<th>Tên</th>
+													<th>Giá</th>
+													<th>Số Lượng</th>
+													<th>Danh mục</th>
+													<th>Nhà Sản Xuất</th>
+													<th>Hình Ảnh</th>
+													<th>Mô Tả</th>
+													<th>Button</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="item : ${products}">
+													<th th:text="item.id"></th>
+													<td th:text="item.productName"></td>
+													<td th:text="item.price"></td>
+													<td th:text="item.soluong"></td>
+													<td th:text="item.category?.categoriesName"></td>
+													<td th:text="item.manufacturer?.manufacturerName"></td>
+													<td>
+														<!-- <div th:each="item : ${item.imageEntities}">
+															<img th:src="'/images/' + ${item.name}" style="width: 100px; height: 100px;"/>
+														</div> -->
+													</td>
+													<td th:text="item.description"></td>
+													<td><a class="btn btn-2">Chỉnh</a></td>
+												</tr>
+											</tbody>
+										</table>
+										</div>
+										<nav class="tohop" aria-label="Page navigation example">
+											<ul class="pagination">
+												<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+												<li class="page-item"><a class="page-link" href="#">1</a></li>
+												<li class="page-item"><a class="page-link" href="#">2</a></li>
+												<li class="page-item"><a class="page-link" href="#">3</a></li>
+												<li class="page-item"><a class="page-link" href="#">Next</a></li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer>
+		<!-- place footer here -->
+	</footer>
+	<!-- Bootstrap JavaScript Libraries -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+		integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+		crossorigin="anonymous"></script>
 
-                                    <!-- bảng -->
-
-
-
-                                    <div class="col">
-                                        <table class="table mt-4 table table-hover table table-sm ">
-                                            <thead>
-                                                <tr>
-                                                    <th>ProductID</th>
-                                                    <th>ProductName</th>
-                                                    <th>Price DECIMAL</th>
-                                                    <th>ManufacturerID</th>
-                                                    <th>SupplierID</th>
-                                                    <th>Decription</th>
-                                                    <th>Images</th>
-                                                    <th>Button</th>
-
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
-                                                    <td>Card đồ họa</td>
-                                                    <td>RTX</td>
-                                                    <td>2</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua vì máy tính bạn cần</td>
-                                                    <td>...</td>
-                                                    <td><a class="btn btn-2">Edit</a></td>
-                                                </tr>
-                                            </tbody>
-                                            <form class=" mt-3" style="width: 20vh;" role="search">
-
-                                                <div>
-                                                    <div class="col d-inline-flex">
-                                                        <div class="row">
-                                                            <a class="btn btn-5">Search</a>
-
-                                                        </div>
-                                                        <div>
-                                                            <input class="form-control me-2 d-inline" type="search"
-                                                                style="width: 30vh; margin-left: 50px;"
-                                                                placeholder="Search" aria-label="Search">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-
-                                        </table>
-                                        <nav class="tohop" aria-label="Page navigation example">
-                                            <ul class="pagination">
-                                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                    tabindex="0">
-                    <div class="container-fluid">
-                        <div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        </div>
-        </div>
-    </main>
-    <footer>
-        <!-- place footer here -->
-    </footer>
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+		integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>
