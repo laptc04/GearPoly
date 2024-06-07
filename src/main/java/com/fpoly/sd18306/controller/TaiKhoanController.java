@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fpoly.sd18306.entities.AccountsEntity;
+import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.models.Account;
 
@@ -41,7 +41,7 @@ public class TaiKhoanController {
 		if(error.hasErrors()) {
 			model.addAttribute("error", error);
 		}else {
-			AccountsEntity accountEntity = new AccountsEntity();
+			AccountEntity accountEntity = new AccountEntity();
 			
 			accountEntity.setId(id);
 			accountEntity.setFullname(fullname);
@@ -51,7 +51,7 @@ public class TaiKhoanController {
 			accountEntity.setAddress("");
 			accountEntity.setImage("");
 			accountEntity.setRole(false);
-			AccountsEntity accSaveEntity = accountJPA.save(accountEntity);
+			AccountEntity accSaveEntity = accountJPA.save(accountEntity);
 		}
 		model.addAttribute("account", account);
 		return "client/register";
