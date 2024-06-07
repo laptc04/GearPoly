@@ -42,7 +42,7 @@
 									</center>
 									<label for="exampleFormControlInput1"
 										class="form-label text-dark">Tên đăng nhập:</label> <input
-										name="id" type="username" class="form-control"
+										name="id" class="form-control"
 										id="exampleFormControlInput1" placeholder="Tên đăng nhập:" th:value="${account?.id}">
 									<p class="text-danger" th:if='${error?.getFieldError("id") != null}'
 										th:text='${error?.getFieldError("id")?.getDefaultMessage()}'></p>
@@ -73,8 +73,7 @@
 								</div>
 
 								<div class="mb-2 card-body ">
-									<button type="submit" class="btn btn-primary mt-1 "
-										formaction="">Đăng ký</button>
+									<button type="submit" class="btn btn-primary mt-1 ">Đăng ký</button>
 
 									<div class="a mt-2 d-flex">
 										<p>
