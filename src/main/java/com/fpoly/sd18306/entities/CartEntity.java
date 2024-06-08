@@ -1,10 +1,8 @@
 package com.fpoly.sd18306.entities;
 
-import java.util.List;
+import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fpoly.sd18306.models.Account;
-import com.fpoly.sd18306.models.Product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +19,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "carts")
-public class CartEntity {
+public class CartEntity implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
