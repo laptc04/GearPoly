@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <title>id sản phảm</title>
@@ -17,7 +17,7 @@
         <!-- place navbar here -->
     </header>
     <main>
-        <div class="container">
+        <div class="container" th:if="${productID != null}">
             <div class="row mt-3">
                 <div class="col-5">
                     <div id="carouselId" class=" carousel slide" data-bs-ride="carousel">
@@ -30,17 +30,9 @@
                         <div class="carousel-inner img-thumbnail" style="height: 600px;" role="listbox">
                             <div class=" carousel-item active">
                                 <img height="600px"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
+                                th:each="image : ${productID.imageEntities}"
+								th:src="'/images/' + ${image?.name}"
                                     class="w-100 d-block" alt="First slide" />
-                            </div>
-                            <div class="carousel-item">
-                                <img height="600px"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyRex7sIWzXZCZF09MioICPVHN3e7gexDzKDKBckIWMvoYF61tKvziNQRzRDymjQj5Fqo&usqp=CAU"
-                                    class="w-100 d-block" alt="Second slide" />
-                            </div>
-                            <div height="600px" class="carousel-item">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbRta_uKp41D578xX8qjWXzzFbPRcDy6XxO574IcKYpxOZ-qD5bBBD2bv6aWsybUKmeRA&usqp=CAU"
-                                    class="w-100 d-block" alt="Third slide" />
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"
@@ -55,29 +47,22 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-7">
-                    <h3>Màn hình Monitor Xiaomi 27 inch A27i ELA5345EU
+                <div class="col-7" >
+                    <h3 th:text="${productID?.product_name}">Màn hình Monitor Xiaomi 27 inch A27i ELA5345EU
                     </h3>
-                    <h5 class="text-danger"><strong>500.000đ</strong></h5>
+                    <h5 class="text-danger" th:text="${#numbers.formatCurrency(productID?.price)}"><strong>500.000đ</strong></h5>
                     <hr>
                     <div class="row">
                         <h5>CHI TIẾT SẢN PHẨM</h5> <br><br>
                         <div class="col-3">
-                            <p>Danh mục</p>
+                         	<p>Danh mục</p>      
                             <p>Nhà sản xuất</p>
-                            <p>Nhà cung cấp</p>
-                            <p>Màn hình</p>
-                            <p>Tấm nền</p>
-                            <p>Độ phân giải</p>
-                            
+                            <p>Nhà cung cấp</p>      
                         </div>
                         <div class="col-9">
-                            <p>Màn hình rời</p>
+                        <p th:text="${productID?.CategoryEntity?.categories_name}" ></p>
                             <p>Cao đẳng FTP Cần Thơ</p>
                             <p>Gear Poly</p>
-                            <p>24 inch</p>
-                            <p>IPS 100%sRPG</p>
-                            <p>Full HD (1920 x 1080)</p>
                         </div>
                     </div><br><br><br><br>
                     <div class="row">
@@ -99,7 +84,7 @@
                         </div>
                     </div>
                     <form class="d-flex">
-                        <a  name="" id="" class="btn btn-outline-danger " href="#" role="button">Thêm vào giỏ
+                        <a   id="" class="btn btn-outline-danger " th:href="'/add-to-cart?id=' + ${productID?.id} + '&path='+${path}" role="button">Thêm vào giỏ
                             hàng</a>
                         <a style="margin-left: 10px;" name="" id="" class="btn btn-primary " href="/user/taohoadon" target="_parent" role="button">Mua sản phảm</a>
                     </form>
@@ -108,7 +93,7 @@
             </div>
             <hr>
             <h4>MÔ TẢ SẢN PHẨM</h4>
-            <p>Màn hình Xiaomi A27 Ela5345EU 27 inch là sự kết hợp hoàn hảo giữa thiết kế tinh tế và hiệu suất đỉnh cao.
+            <p th:text="${productID?.description}">Màn hình Xiaomi A27 Ela5345EU 27 inch là sự kết hợp hoàn hảo giữa thiết kế tinh tế và hiệu suất đỉnh cao.
                 Với kích thước rộng 27 inch, độ phân giải cao và màu sắc chân thực, thiết bị màn hình Xiaomi này mang
                 lại trải nghiệm xem hình ảnh và video tuyệt vời. Đây chính là sự lựa chọn lý tưởng cho những người đòi
                 hỏi chất lượng và thẩm mỹ trong trải nghiệm hiển thị.</p>
