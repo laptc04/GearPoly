@@ -28,6 +28,7 @@
 				<div class="col-4"></div>
 				<div class="col-4">
 					<form th:action="@{/login}" method="post">
+						<input type="hidden" name="path" th:value="${path}"/>
 						<div class="container-fluid">
 							<div class="card  bg-white border">
 								<div class=" card-body">

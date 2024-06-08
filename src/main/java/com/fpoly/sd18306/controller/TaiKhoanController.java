@@ -16,6 +16,8 @@ import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.models.Account;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 
@@ -23,6 +25,8 @@ import jakarta.validation.Valid;
 public class TaiKhoanController {
 	@Autowired
 	AccountJPA accountJPA;
+	@Autowired
+	HttpServletResponse response;
 
 	
 	@GetMapping("/index")
@@ -61,23 +65,28 @@ public class TaiKhoanController {
 		return "client/register";
 	}
 	@GetMapping("/login")
-	public String login() {
+	public String login(@RequestParam(name="path", defaultValue= "") String path, Model model) {
+		model.addAttribute("path", path);
 		return "client/login";
 	}
 	
 	@PostMapping("/login")
 	public String loginSave(@RequestParam("id") String id,
 				            @RequestParam("password") String password,
+				            @RequestParam("path") String path,
 				            Model model) {
 		
 		AccountEntity accountEntity = accountJPA.findByIdAndPassword(id, password);
         if (accountEntity != null) {
-        	// Login success
-            model.addAttribute("account", accountEntity);
-            return "client/index";
+        	Cookie cookie = new Cookie("id", id);
+			response.addCookie(cookie);						
+			if(path.equals("")) {
+				return "redirect:/index";
+			}else {
+				return String.format("redirect:%s", path);
+			}
         } else {
-            // Login failed
-            model.addAttribute("message", "Invalid id or password");
+            model.addAttribute("message", "Mật khẩu hoặc tên đăng nhập không chính xác");
             return "client/login";
         }
 	}
