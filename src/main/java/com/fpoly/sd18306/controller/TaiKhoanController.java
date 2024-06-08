@@ -1,5 +1,8 @@
 package com.fpoly.sd18306.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +23,7 @@ import jakarta.validation.Valid;
 public class TaiKhoanController {
 	@Autowired
 	AccountJPA accountJPA;
+
 	
 	@GetMapping("/index")
 	public String index() {
@@ -62,12 +66,20 @@ public class TaiKhoanController {
 	}
 	
 	@PostMapping("/login")
-	public String loginSave(@Valid @ModelAttribute("account") Account account,BindingResult error, Model model) {
-		if(error.hasErrors()) {
-			model.addAttribute("error", error);
-		}
-		model.addAttribute("account", account);
-		return "client/login";
+	public String loginSave(@RequestParam("id") String id,
+				            @RequestParam("password") String password,
+				            Model model) {
+		
+		AccountEntity accountEntity = accountJPA.findByIdAndPassword(id, password);
+        if (accountEntity != null) {
+        	// Login success
+            model.addAttribute("account", accountEntity);
+            return "client/index";
+        } else {
+            // Login failed
+            model.addAttribute("message", "Invalid id or password");
+            return "client/login";
+        }
 	}
 	@GetMapping("/changepassword")
 	public String changePassWord() {
