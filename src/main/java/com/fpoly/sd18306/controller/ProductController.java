@@ -20,6 +20,7 @@ import com.fpoly.sd18306.jpa.CategoryJPA;
 import com.fpoly.sd18306.jpa.ImageJPA;
 import com.fpoly.sd18306.jpa.ProductJPA;
 import com.fpoly.sd18306.models.Product;
+import com.fpoly.sd18306.services.ProductService;
 import com.fpoly.sd18306.services.UploadService;
 
 @Controller
@@ -36,6 +37,8 @@ public class ProductController {
 	@Autowired
 	UploadService uploadService;
 	
+	@Autowired
+	ProductService productService;
 	
 	@GetMapping("/productsManager")
 	public String product(Model model) {
@@ -47,6 +50,21 @@ public class ProductController {
 	public String AddProduct() {
 		return "admin/qlsanpham";
 	}
+	
+	@GetMapping("/searchProd")
+	public String searchProducts(Model model, @RequestParam("product_name") String product_name) {
+	    List<ProductEntity> productList = productJPA.findByName(product_name);
+	    model.addAttribute("products", productList);
+	    return "admin/qlsanpham";
+	}
+	
+	@GetMapping("/sort-products")
+	public String sortProducts(@RequestParam String sortBy, Model model) {
+	    List<ProductEntity> sortedProducts = productService.sortBy(sortBy);
+	    model.addAttribute("products", sortedProducts);
+	    return "admin/qlsanpham";
+	}
+
 	
 	@PostMapping("/add-productsManager")
 	public String addProductSave(@ModelAttribute Product product, RedirectAttributes redirectAttributes) {
@@ -180,7 +198,7 @@ public class ProductController {
         }
         
         // Chuyển hướng về trang quản lý sản phẩm
-        return "admin/qlsanpham";
+        return "redirect:/productsManager";
     }
 	
 	@ModelAttribute("categories")
