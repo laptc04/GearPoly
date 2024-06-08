@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <style>
     h2 {
         font-size: 72px;
@@ -44,7 +44,7 @@
                                                 <H2 class="nd ">PRODUCT CATEGORY MANAMENT</H2>
                                             </div>
                                             <br> <br> <br>
-                                            <form method="post" style="margin-left: 17vh;">
+                                            <form action="/categoriesPage" method="post" style="margin-left: 17vh;">
                                                 <div class="col">
                                                     <H3>Product Name</H3>
                                                     <input class="rounded" type="text" style="width: 60vh" name="id"
@@ -79,22 +79,8 @@
                                                 <a class="btn btn-4">Reset</a>
                                             </div>
                                         </div>
-                                        <!-- <form class="mt-2">
-                                                    <div class="col">
-                                                        <thead>
-                                                            <tr>
-                                                                <th> Hãng</th>
-                                                            </tr>
-                                                        </thead>
-                                                    </div>
-                                                </form> -->
                                     </div>
                                     </form>
-
-
-                                    <!-- bảng -->
-
-
 
                                     <div class="col">
                                         <table class="table mt-4 table table-hover table table-sm ">
@@ -111,53 +97,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
+                                                <tr th:each="item : ${categories}">
+                                                    <th th:text="${item.id}">SP1</th>
+                                                    <td th:text="${item.categories_name}">Rtx 3060Ti</td>
                                                     <td>Card đồ họa</td>
                                                     <td>RTX</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua vì máy tính bạn cần
+                                                    <td>
                                                     </td>
-                                                    <td><a class="btn btn-2">Edit</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
-                                                    <td>Card đồ họa</td>
-                                                    <td>RTX</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua v</td>
-                                                    <td><a class="btn btn-2">Edit</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
-                                                    <td>Card đồ họa</td>
-                                                    <td>RTX</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua v</td>
-                                                    <td><a class="btn btn-2">Edit</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
-                                                    <td>Card đồ họa</td>
-                                                    <td>RTX</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua v</td>
-                                                    <td><a class="btn btn-2">Edit</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
-                                                    <td>Card đồ họa</td>
-                                                    <td>RTX</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua v</td>
-                                                    <td><a class="btn btn-2">Edit</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>SP1</th>
-                                                    <td>Rtx 3060Ti</td>
-                                                    <td>Card đồ họa</td>
-                                                    <td>RTX</td>
-                                                    <td>Mặt hàng này đắt lắm khuyến nghị nên mua v</td>
                                                     <td><a class="btn btn-2">Edit</a></td>
                                                 </tr>
                                             </tbody>

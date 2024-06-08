@@ -12,12 +12,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@Data
 @Table(name = "categories")
 public class CategoryEntity implements Serializable{
 	@Id
@@ -26,7 +28,7 @@ public class CategoryEntity implements Serializable{
 	private int id;
 	
 	@Column(name = "categories_name", unique = true, length = 255)
-	private String name;
+	private String categories_name;
 	
 	@Column(name = "image", length = 255)
 	private String image;

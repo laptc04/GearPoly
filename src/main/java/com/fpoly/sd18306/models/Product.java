@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,14 @@ public class Product {
 	private int price;
 	
 	@NotEmpty(message = "Số lượng trong kho không được bỏ trống")
-	private int in_stock;
+	private int soluong;
 	
 	@NotEmpty(message = "Mô tả không được bỏ trống")
 	private String description;
+	
+	private boolean hien;
+	@NotNull(message = "Danh mục không được bỏ trống")
+	private int categories_id;
 	
 	private List<MultipartFile> file;
 }
