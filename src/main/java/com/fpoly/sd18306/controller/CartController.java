@@ -14,10 +14,17 @@ import com.fpoly.sd18306.jpa.CartJpa;
 public class CartController {
 	@Autowired
 	CartJpa cartJpa; 
+	
 	@GetMapping("/cart")
 	public String cartList(Model model) {
 		model.addAttribute("cart", cartJpa.findAll());
-		return "client/giohang";
+		return "client/index";
+		
+	}
+	@GetMapping("user/index")
+	public String getsanpham(Model model) {
+		model.addAttribute("cart", cartJpa.findAll());
+		return "client/sanpham";
 		
 	}
 //	@GetMapping("/add-to-cart")
