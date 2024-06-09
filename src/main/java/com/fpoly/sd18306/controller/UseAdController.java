@@ -1,6 +1,8 @@
 package com.fpoly.sd18306.controller;
 
 import java.awt.print.Pageable;
+import java.time.Year;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fpoly.sd18306.entities.UseAdEntity;
 import com.fpoly.sd18306.jpa.UseAdJPA;
 import com.fpoly.sd18306.services.UploadService;
+
 
 @Controller
 public class UseAdController {
@@ -45,5 +48,17 @@ public class UseAdController {
 	    model.addAttribute("totalPages", productsPage.getTotalPages());
 	    model.addAttribute("pageSize", size);
 	    return "/admin/qlnguoidung";
+	}
+	@GetMapping("/searchByYear")
+	public String searchProductsByName(@RequestParam(value = "name", required = false) String name, Model model) {
+		if (name == null || name.isBlank()) {
+			model.addAttribute("errorMessage", "Vui lòng nhập tên sản phẩm.");
+			return "/admin/qlnguoidung";
+		}
+
+		List<UseAdEntity> productEntities = useadJPA.findByNameContainingIgnoreCase(name);
+		model.addAttribute("account", productEntities);
+		model.addAttribute("fullname", name);
+		return "/admin/qlnguoidung";
 	}
 }
