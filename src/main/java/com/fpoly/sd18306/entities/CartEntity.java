@@ -22,7 +22,7 @@ import lombok.Setter;
 public class CartEntity implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private int id;
 
 	@ManyToOne
 	@JoinColumn(name = "account_id")
@@ -36,7 +36,7 @@ public class CartEntity implements Serializable{
 	ProductEntity productEntity;
 
 	@Column
-	private Integer quantity;
+	private int quantity;
 
 	@Column
 	private Integer price;

@@ -18,7 +18,8 @@
     </header>
     <main>
         <div class="container" th:if="${productID != null}">
-            <div class="row mt-3">
+        <form action="/user/chitiet" method="post" enctype="multipart/form-data">
+        	<div class="row mt-3">
                 <div class="col-5">
                     <div id="carouselId" class=" carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
@@ -50,7 +51,6 @@
                 <div class="col-7" >
                     <h3 th:text="${productID?.product_name}">Màn hình Monitor Xiaomi 27 inch A27i ELA5345EU
                     </h3>
-                    <h5 class="text-danger" th:text="${#numbers.formatCurrency(productID?.price)}"><strong>500.000đ</strong></h5>
                     <hr>
                     <div class="row">
                         <h5>CHI TIẾT SẢN PHẨM</h5> <br><br>
@@ -64,7 +64,10 @@
                             <p>Cao đẳng FTP Cần Thơ</p>
                             <p>Gear Poly</p>
                         </div>
-                    </div><br><br><br><br>
+                        
+                        
+                    </div><br><br> <h2 class="text-danger" th:text="${#numbers.formatCurrency(productID?.price)}"><strong>500.000đ</strong></h2>
+                    <br><br><br><br>
                     <div class="row">
                         <div class="col-2">
                             <div class="mb-3">
@@ -72,25 +75,27 @@
                             </div>
                         </div>
                         <div class="col-5">
-                            <form class="d-flex">
+                            <div class="d-flex">
                                 <button class="btn btn-danger" type="submit"
                                     style="width: 40px; border-radius: 10px 0 0 10px;">-</button>
                                 <input class="form-control me-0" type="number" value="1" min="1"
                                     style="width: 100px; border-radius: 0px;">
                                 <button class="btn btn-primary" type="submit"
                                     style="width: 40px; border-radius: 0 10px 10px 0;">+</button>
-                            </form><br>
+                            </div><br>
 
                         </div>
                     </div>
-                    <form class="d-flex">
-                        <a   id="" class="btn btn-outline-danger " th:href="'/add-to-cart?id=' + ${productID?.id} + '&path='+${path}" role="button">Thêm vào giỏ
+                    <div class="d-flex">
+                        <a   id="" class="btn btn-outline-danger " th:href="'/add-to-cart?id=' + ${productID?.id} + '&path='+${path} +'&quantity=10'" role="button">Thêm vào giỏ
                             hàng</a>
                         <a style="margin-left: 10px;" name="" id="" class="btn btn-primary " href="/user/taohoadon" target="_parent" role="button">Mua sản phảm</a>
-                    </form>
+                    </div>
 
                 </div>
             </div>
+        </form>
+            
             <hr>
             <h4>MÔ TẢ SẢN PHẨM</h4>
             <p th:text="${productID?.description}">Màn hình Xiaomi A27 Ela5345EU 27 inch là sự kết hợp hoàn hảo giữa thiết kế tinh tế và hiệu suất đỉnh cao.
