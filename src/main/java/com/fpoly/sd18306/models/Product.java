@@ -1,6 +1,7 @@
 package com.fpoly.sd18306.models;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Product {
 	
-	private int id;
+	private Optional<Integer> id;
 
 	@NotEmpty(message = "Tên không được bỏ trống")
 	@Length(min = 3, message = "Tên không được dưới 3 kí tự")
@@ -34,6 +35,7 @@ public class Product {
 	private String description;
 	
 	private boolean hien;
+	
 	@NotNull(message = "Danh mục không được bỏ trống")
 	private int categories_id;
 	

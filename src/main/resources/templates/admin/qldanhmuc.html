@@ -7,6 +7,11 @@ h2 {
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
+.cateName{
+	text-decoration: none;
+	color: black;
+	width: 100%;
+}
 </style>
 
 <head>
@@ -93,7 +98,9 @@ h2 {
 											<tbody>
 												<tr th:each="item : ${categories}">
 													<th th:text="${item.id}"></th>
-													<td th:text="${item.categories_name}"></td>
+													<td>
+														<a class="cateName" th:text="${item?.categories_name}" th:href="'/productsManager?id=' + ${item?.id}"></a>
+													</td>
 													<td>
 														<img th:src="'/images/' + ${item?.image}" 
 															class="img-thumbnail me-3" alt="Product Image" 
