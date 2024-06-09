@@ -1,14 +1,11 @@
 package com.fpoly.sd18306.controller;
 
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -17,7 +14,9 @@ import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.models.Account;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 
@@ -86,18 +85,63 @@ public class TaiKhoanController {
 				return String.format("redirect:%s", path);
 			}
         } else {
-            model.addAttribute("message", "Mật khẩu hoặc tên đăng nhập không chính xác");
+            model.addAttribute("message", "*Mật khẩu hoặc tên đăng nhập không chính xác");
             return "client/login";
         }
 	}
-	@GetMapping("/changepassword")
-	public String changePassWord() {
-		
-		return "client/changepassword";
-	}
-	@GetMapping("/forgotpassword")
-	public String forgotPassWord() {
-		
-		return "client/Forgotpassword";
-	}
+	@GetMapping("/changePassword")
+    public String changePasswordPage(HttpServletRequest request, Model model) {
+        String userId = getUserIdFromCookies(request);
+        if (userId != null) {
+            model.addAttribute("userId", userId);
+            return "client/changepassword";
+        } else {
+            return "client/login";
+        }
+    }
+
+    @PostMapping("/changePassword")
+    @Transactional
+    public String changePassword(@RequestParam("id") String id,
+                                 @RequestParam("oldPassword") String oldPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 Model model) {
+        model.addAttribute("userId", id);
+
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("message2", "*Mật khẩu mới và xác nhận mật khẩu không khớp");
+            return "client/changepassword";
+        }
+
+        AccountEntity accountEntity = accountJPA.findByIdAndPassword(id, oldPassword);
+        if (accountEntity != null) {
+            accountEntity.setPassword(newPassword);
+            accountJPA.save(accountEntity);
+            model.addAttribute("message3", "Đổi mật khẩu thành công. Vui lòng đăng nhập lại.");
+            return "redirect:/login";
+        } else {
+            model.addAttribute("message2", "*Mật khẩu cũ không chính xác");
+            return "client/changepassword";
+        }
+    }
+    private String getUserIdFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("id".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("id", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/login";
+    }
 }
