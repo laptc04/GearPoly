@@ -33,9 +33,10 @@
 						<div class="flex-grow-1">
 							<h5 class="card-title mb-1" th:text="${item?.product_name}">Card title</h5>
 						</div>
+						<table>
 						<div class="d-flex align-items-center me-3">
 							<a th:href="'/update-to-cart?id=' + ${item?.id} + '&quantity=' + ${item?.quantity - 1}" class="btn btn-danger btn-sm me-1">-</a>
-							<input th:value="${item?.quantity}" type="number" class="form-control form-control-sm text-center" value="1"
+							<input th:value="${item?.quantity}" type="number" class="form-control form-control-sm text-center" value="1" min="1"
 								style="width: 50px;">
 							<a th:href="'/update-to-cart?id=' + ${item?.id} + '&quantity=' + ${item?.quantity + 1}" class="btn btn-success btn-sm ms-1">+</a>
 						</div>
@@ -43,11 +44,7 @@
 						<a class="m-2 text-danger" th:href="'/remove-to-cart?id=' + ${item?.id}">
 							<i class="fa-solid fa-trash"></i>
 						</a>
-						<div class="form-check m-2">
-							<label class="form-check-label" for="flexCheckChecked">
-								<i class="fa-solid fa-comment-dollar"></i>
-							</label>
-						</div>
+						</table>
 					</div>
 					<!-- Repeat the above block for each item -->
 					<!-- End of repeated blocks -->

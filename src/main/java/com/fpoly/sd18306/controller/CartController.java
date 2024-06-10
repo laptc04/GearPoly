@@ -1,11 +1,15 @@
 package com.fpoly.sd18306.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fpoly.sd18306.entities.ProductEntity;
 import com.fpoly.sd18306.jpa.CartJpa;
 import com.fpoly.sd18306.jpa.ProductJPA;
 import com.fpoly.sd18306.services.CartService;
@@ -43,7 +47,19 @@ public class CartController {
 		model.addAttribute("cart", cartService);
 		return "client/chitietsanpham";
 	}
+	
+	@GetMapping("/searchProIndex")
+	public String searchProducts() {
+	   
+	    return "client/index";
+	}
 		
+	@PostMapping("/searchProIndex")
+	public String searchProducts(Model model, @RequestParam("product_name2") String product_name2) {
+	    List<ProductEntity> productList = productJPA.findByName(product_name2);
+	    model.addAttribute("productsIndex", productList);
+	    return "client/index";
+	}
 	
 	@GetMapping("/cart")
 	public String cartList(Model model) {

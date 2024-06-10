@@ -49,27 +49,22 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-
-
-
         <div class="container">
             <div class="row">
                 <!--  -->
                 <!-- div con -->
                 <div class="col-4" th:each="item : ${products}">
-                    <div class="card mt-5" style="width: 18rem;">
-                        <a th:href="'/user/chitiet?id=' + ${item?.id} "><img th:each="image : ${item.imageEntities}"
+                    <div class="card mt-5 border border-dark-subtle" style="width: 18rem;">
+                        <a class="text-center" th:href="'/user/chitiet?id=' + ${item?.id} "><img th:each="image : ${item.imageEntities}"
 								th:src="'/images/' + ${image?.name}" class="card-img-top"
-                                alt="..."></a>                       
+                                alt="..." style="width: 200px"></a>                       
                         <div class="card-body" >
-                            <h5 class="card-title" th:text="${item?.product_name}">Màn hình Viewsonic VA2432-H 24" IPS 100Hz viền mỏng</h5>
+                            <h6 class="card-title" th:text="${item?.product_name}">Màn hình Viewsonic VA2432-H 24" IPS 100Hz viền mỏng</h6>
                             <p class="card-text bg-secondary-subtle" th:each="itemCate : ${item.categoryEntity}"
                              th:text="${itemCate?.categories_name}">
                             </p>
                             <p class="text-danger" th:text="${#numbers.formatCurrency(item?.price)}">2.290.000₫</p>
-                            <a href="" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                            <a href="#" class="btn btn-primary"><i class="fa-solid fa-thumbs-up"></i></a>
-                            <a href="#" class="btn btn-primary"><i class="fa-solid fa-share"></i></a>
+                            <h6 class="text-warning">0.0 <i class="fa-solid fa-star"></i></h6>
                         </div>
                     </div>
                    

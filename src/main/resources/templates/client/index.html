@@ -14,17 +14,17 @@
 </head>
 
 <body>
+ 	<form th:action="@{/searchProIndex}" method="post">
 	<header>
 		<!-- place navbar here -->
-
 		<nav class="navbar bg-white fixed-top">
 			<div class="container-fluid bg-danger">
 				<img src="../images/banner4.png" alt="" width="10000000000px">
 				<a class="navbar-brand" href="/user/index">
 					GearPoly</a>
-				<form class="d-flex mt-3 " role="search">
-					<input class="form-control me-2  m-1" type="search" placeholder="Search" aria-label="Search"
-						style="width: 500px;"><button type="button" class="btn btn-outline-light text-dark m-1"><i class="fa-solid fa-magnifying-glass"></i></button>
+				<div class="d-flex mt-3 " role="search">
+					<input  name="product_name2" class="form-control me-2  m-1" type="search" placeholder="Search" aria-label="Search"
+						style="width: 500px;"><button  type="submit" class="btn btn-outline-light text-dark m-1"><i class="fa-solid fa-magnifying-glass"></i></button>
 					<button class="btn btn-outline-light text-dark m-1" type="submit"><i
 							class="fa-solid fa-bell"></i></button>
 					<button class="btn btn-outline-light text-dark m-1" type="submit"><i
@@ -34,7 +34,7 @@
 					</a>
 					<a href="/user/nguoidung" target="user"><img src="/images/unnamed.gif" class="rounded-image" alt=""
 							style="width: 35px;"></a>
-				</form>
+				</div>
 				<div>
 					<button class="navbar-toggler bg-light" type="button" data-bs-toggle="offcanvas"
 						data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
@@ -188,7 +188,7 @@
 
 					<!--  -->
 					<iframe src="/user/index" name="user" width="100%" height="1000px" frameborder="0"></iframe>
-
+					
 
 					<!--  -->
 
@@ -211,6 +211,7 @@
 		</div>
 		</div>
 	</main>
+	</form>
 	<footer class="text-center text-lg-start bg-body-tertiary text-muted">
 		<!-- Section: Social media -->
 		<section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
