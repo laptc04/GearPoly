@@ -44,10 +44,10 @@
 									<input
 										name="password" type="password" class="form-control"
 										id="exampleFormControlInput2" placeholder="Mật khẩu:" required>
-									<div th:if="${message}" class="text-danger">
-							            <p th:text="${message}"></p>
+									<div th:if="${message}" class="pt-3">
+							            <div class="text-danger" th:text="${message}"></div>
 							        </div>
-								<div class="mb-3 card-body ">
+								<div class="pt-3">
 									<input type="checkbox" id="vehicle1" name="vehicle1"
 										value="Bike"> <label for="vehicle1" class="text-dark">Remember
 										me ?</label><br>
@@ -55,14 +55,9 @@
 										formaction="">Đăng nhập</button>
 									<div class="a mt-2 d-flex">
 										<p>
-											<a href="/user/quenmatkhau"
-												class="link-offset-2 link-underline link-underline-opacity-0 m-3">Quên
-												mật khẩu ?</a>
-										</p>
-										<p>
 											<a
 												class="link-offset-3 link-underline link-underline-opacity-0"
-												href="/user/dangky">Tạo tài khoản mới</a>
+												href="/register">Tạo tài khoản mới</a>
 										</p>
 									</div>
 									<center>

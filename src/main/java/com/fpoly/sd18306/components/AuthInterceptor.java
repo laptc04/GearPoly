@@ -1,5 +1,7 @@
 package com.fpoly.sd18306.components;
 
+import java.net.URLEncoder;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,15 +27,17 @@ public class AuthInterceptor implements HandlerInterceptor {
 				return true;
 			}
 		}
-		response.sendRedirect(String.format("/login?path=%s", request.getRequestURI()));
-		return true;
+		 String redirectUrl = String.format("/login?path=%s", URLEncoder.encode(request.getRequestURI(), "UTF-8"));
+		System.out.println("Redirect URL: " + redirectUrl);
+        response.sendRedirect(redirectUrl);
+		return false;
 	}
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-		System.out.printf("Post handle: %s\n", request.getRequestURI());
+		System.out.printf("Post handle: %s%n", request.getRequestURI());
 	}
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-		System.out.printf("After handle: %s\n", request.getRequestURI());
+		System.out.printf("After handle: %s%n", request.getRequestURI());
 	}
 }

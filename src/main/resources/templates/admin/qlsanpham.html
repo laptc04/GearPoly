@@ -7,6 +7,25 @@ h2 {
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
+.mota {
+    border-radius: 5px;
+    width: 60vh;
+    height: 20vh;
+    padding: 10px;
+    border: 1px solid #ccc;
+    resize: vertical; /* Allows the user to resize the textarea vertically */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    font-size: 1rem; /* Adjusts the font size */
+    color: #333; /* Sets the text color */
+    background-color: #f9f9f9; /* Sets a light background color */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for border and shadow */
+}
+
+.mota:focus {
+    border-color: #007bff; /* Changes border color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adds a glow effect on focus */
+    outline: none; /* Removes default outline */
+}
 </style>
 
 <head>
@@ -48,16 +67,17 @@ h2 {
 											</div>
 											<br> <br> <br>
 											<form th:action="${product == null ? '/add-productsManager' : '/update-productsManager'}" method="post" enctype="multipart/form-data">
-												<input type="hidden" name="id" th:value="${product?.id}" />
+    											
 												<div class="col mt-5">
+												<input type="hidden" name="id" th:value="${product?.id}" />
 													<H3>Tên Sản Phẩm</H3>
 													<input class="rounded" type="text" style="width: 60vh"
 														name="product_name" placeholder="Tên Sản Phẩm" th:value="${product?.product_name}">
 													<H3>Giá</H3>
-													<input class="rounded" type="text" style="width: 60vh"
+													<input class="rounded" type="number" style="width: 60vh"
 														name="price" placeholder="Giá" th:value="${product?.price}">
 													<H3>Sô Lượng</H3>
-													<input class="rounded" type="number" style="width: 60vh"
+													<input class="rounded"  type="number" style="width: 60vh"
 														name="soluong" placeholder="Số lượng sản phẩm" th:value="${product?.soluong}">
 													<H3>Danh Mục</H3>
 													<select class="rounded" style="width: 60vh; height: 37px;"
@@ -68,9 +88,7 @@ h2 {
 														th:selected="${itemCat?.id == product?.categoryEntity?.id}"></option>
 													</select>
 													<H3>Mô Tả</H3>
-													<input class="mota" type="text"
-														style="border-radius: 5px; width: 60vh; height: 20vh;"
-														name="description" placeholder="Mô Tả" th:value="${product?.description}">
+													<textarea class="mota" name="description" placeholder="Mô Tả" th:text="${product?.description}"></textarea>
 													<H3>Hình Ảnh</H3>
 													<input class="rounded p-1" type="file" style="width: 60vh"
 														name="file" multiple accept="image/*">
@@ -87,7 +105,6 @@ h2 {
 													    			</tr>
 													    		</tbody>
 													    	</table>
-													        
 													    </div>
 													</div>
 												</div>
@@ -97,28 +114,44 @@ h2 {
 											</form>
 										</div>
 									</div>
-
 									<div class="col-7">
-										<form class="d-flex ms-auto" th:action="@{/searchProd}"
-											method="get">
-											<div class="d-flex">
-												<input class="form-control me-2" type="search"
-													placeholder="Tìm kiếm" name="product_name" />
-												<button class="btn btn-outline-success" type="submit">Tìm</button>
+										<div class="row">
+											<div class="d-flex" >
+												<form th:action="@{/search-by-category}" method="get">
+												    <select class="rounded" style="width: 190px; height: 37px;" name="categories_id" onchange="this.form.submit()">
+												        <option selected value="-1">Tìm theo danh mục</option>
+												        <option th:each="itemCat : ${categories}" th:value="${itemCat?.id}" 
+												                th:text="${itemCat?.categories_name}" 
+												                th:selected="${itemCat?.id == selectedCategory}"></option>
+												    </select>
+												</form>
+												<form class="d-flex ms-auto" th:action="@{/searchProd}"
+													method="get" >
+													<div class="d-flex">
+														<input class="form-control me-2" type="search"
+															placeholder="Tìm kiếm" name="product_name" style="width: 472px;"/>
+														<button class="btn btn-outline-success" type="submit">Tìm</button>
+													</div>
+												</form>
 											</div>
-										</form>
-										<a type="button" class="btn btn-primary">
-											các sản phẩm bị ẩn
-									  	</a>
-									  	<a type="button" class="btn btn-primary">
-											các sản phẩm hiện
-									  	</a>
-									  	<select onchange="location = this.value;">
-										    <option value="" selected disabled>Sort by</option>
-										    <option th:value="@{/sort-products?sortBy=product_name}">Theo Tên</option>
-										    <option th:value="@{/sort-products?sortBy=soluong}">Số lượng</option>
-										    <option th:value="@{/sort-products?sortBy=price}">Giá</option>
-										</select>
+											
+											<div class="d-flex" style="margin-top: 10px;">
+								                <a type="button" id="hiddenButton" class="btn btn-primary" style="width: 140px; margin-right: 10px" th:href="@{/products-hidden}">Sản phẩm ẩn</a>
+								                <a type="button" id="visibleButton" class="btn btn-primary" style="width: 140px; margin-right: 10px" th:href="@{/products-visible}">Sản phẩm hiện</a>
+								            	<form class="d-flex ms-auto" th:action="@{/searchMinMax}"
+													method="get" >
+													<div class="d-flex">
+														<input class="form-control me-2" type="search"
+															placeholder="Giá thấp nhất" name="minPrice" style="width: 170px;"/>
+														<input class="form-control me-2" type="search"
+															placeholder="Giá cao nhất" name="maxPrice" style="width: 170px;"/>
+														<button class="btn btn-outline-success" type="submit">Tìm</button>
+													</div>
+												</form>
+								            </div>
+								            
+										</div>
+										
 										<div class="table-responsive">
 											<table class="table mt-4 table table-hover table table-sm ">
 											<thead>
@@ -140,7 +173,7 @@ h2 {
 							                        <td th:text="${item.product_name}"></td>
 							                        <td th:text="${#numbers.formatCurrency(item.price)}"></td>
 							                        <td th:text="${item.soluong}"></td>
-							                        <td th:text="${item.categoryEntity?.categories_name}"></td>
+							                        <td th:text="${item.categoryEntity.categories_name}"></td>
 							                        <td>
 													    <div style="position: relative; width: 100px; height: 100px;">
 													        <div th:each="item : ${item.imageEntities}">
@@ -149,46 +182,49 @@ h2 {
 													    </div>
 													</td>
 							                        <td>
-							                        	<button type="button" class="btn btn-info" data-bs-toggle="modal" 
-							                        		th:data-bs-target="'#descriptionModal' + ${item.id}" style="margin-top: 15px;">Xem mô tả
-                                                        </button>
-                                                        
-                                                        <div class="modal fade" th:id="'descriptionModal' + ${item.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel">Mô tả sản phẩm</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <p th:text="${item.description}"></p>
-                                                                    </div>
-                                                                    <div class="modal-footer " >
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-							                        
+													    <button type="button" class="btn btn-info" data-bs-toggle="modal" th:data-bs-target="'#descriptionModal' + ${item.id}" style="margin-top: 15px;">Xem mô tả</button>
+													    <div class="modal fade" th:id="'descriptionModal' + ${item.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+													        <div class="modal-dialog">
+													            <div class="modal-content">
+													                <div class="modal-header">
+													                    <h5 class="modal-title" id="exampleModalLabel">Mô tả sản phẩm</h5>
+													                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													                </div>
+													                <div class="modal-body">
+													                    <p th:if="${item.description != null and !#strings.isEmpty(item.description)}" th:text="${item.description}"></p>
+													                    <p th:if="${item.description == null or #strings.isEmpty(item.description)}">Không có mô tả cho sản phẩm này</p>
+													                </div>
+													                <div class="modal-footer">
+													                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+													                </div>
+													            </div>
+													        </div>
+													    </div>
+													</td>
 							                        <td>
 													    <input type="checkbox" th:checked="${item.hien}" th:onclick="'updateStatus(' + ${item.id} + ', ' + this.checked + ')'" 
 													    style="margin-top: 45px; margin-left: 15px;"/>
 													</td>
-							                        <td><a class="btn btn-primary" style="margin-top: 30px;" th:href="'/update-productsManager?id=' + ${item.id}">Chỉnh</a></td>
+							                        <td>
+							                        	<a class="btn btn-primary" style="margin-top: 30px;" th:href="'/update-productsManager?id=' + ${item.id}">Chỉnh</a>
+							                        </td>
 							                    </tr>
 							                </tbody>
 										</table>
 										</div>
 										<nav class="tohop" aria-label="Page navigation example">
-											<ul class="pagination">
-												<li class="page-item"><a class="page-link" href="#">Previous</a></li>
-												<li class="page-item"><a class="page-link" href="#">1</a></li>
-												<li class="page-item"><a class="page-link" href="#">2</a></li>
-												<li class="page-item"><a class="page-link" href="#">3</a></li>
-												<li class="page-item"><a class="page-link" href="#">Next</a></li>
-											</ul>
-										</nav>
+								            <ul class="pagination">
+								                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+								                    <a class="page-link" th:href="@{'/productsManager?page=' + ${currentPage - 1} + '&size=5'}">Previous</a>
+								                </li>
+								                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+								                    <a class="page-link" th:href="@{'/productsManager?page=' + ${i} + '&size=5'}" th:text="${i + 1}">1</a>
+								                </li>
+								                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+								                    <a class="page-link" th:href="@{'/productsManager?page=' + ${currentPage + 1} + '&size=5'}">Next</a>
+								                </li>
+								            </ul>
+								        </nav>
 									</div>
 								</div>
 							</div>
@@ -201,15 +237,34 @@ h2 {
 	<footer>
 		<!-- place footer here -->
 	</footer>
+	
+	
 	<!-- Bootstrap JavaScript Libraries -->
-	<script th:inline="javascript">
-	    function updateStatus(productId, newStatus) {
-	        var xhr = new XMLHttpRequest();
-	        xhr.open("POST", "/update-status?id=" + productId + "&status=" + newStatus, true);
-	        xhr.setRequestHeader('Content-Type', 'application/json');
-	        xhr.send();
-	    }
-	</script>
+	<script>
+		function updateStatus(id, status) {
+		    fetch('/update-status', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/x-www-form-urlencoded'
+		        },
+		        body: new URLSearchParams({
+		            'id': id,
+		            'status': status
+		        })
+		    })
+		    .then(response => response.json())
+		    .then(data => {
+		        if (data.success) {
+		            alert('Cập nhật trạng thái sản phẩm thành công!');
+		        } else {
+		            alert('Cập nhật trạng thái sản phẩm thất bại: ' + data.message);
+		        }
+		    })
+		    .catch(error => {
+		        alert('Cập nhật trạng thái sản phẩm thất bại. Vui lòng thử lại.');
+		    });
+		}
+		</script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
 		integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
