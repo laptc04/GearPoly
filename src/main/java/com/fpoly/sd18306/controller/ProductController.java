@@ -1,6 +1,8 @@
 package com.fpoly.sd18306.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -183,37 +186,70 @@ public class ProductController {
 		return "redirect:/productsManager";
 	}
 
+//	@PostMapping("/update-status")
+//	public String ChangesStatusSave(@RequestParam("id") int id, @RequestParam("status") boolean status,
+//			RedirectAttributes redirectAttributes) {
+//		try {
+//			// Tìm sản phẩm theo id
+//			ProductEntity product = productJPA.findById(id).orElse(null);
+//
+//			// Nếu sản phẩm tồn tại
+//			if (product != null) {
+//				// Cập nhật trạng-thái mới
+//				product.setHien(status);
+//
+//				// Lưu sản phẩm sau khi cập nhật
+//				productJPA.save(product);
+//
+//				// Thông báo thành công
+//				redirectAttributes.addFlashAttribute("message", "Cập nhật trạng thái sản phẩm thành công!");
+//				redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+//			} else {
+//				// Thông báo sản phẩm không tồn tại
+//				redirectAttributes.addFlashAttribute("message", "Sản phẩm không tồn tại!");
+//				redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+//			}
+//		} catch (Exception e) {
+//			// Thông báo lỗi nếu có lỗi xảy ra trong quá trình cập nhật
+//			redirectAttributes.addFlashAttribute("message", "Cập nhật trạng thái sản phẩm thất bại. Vui lòng thử lại.");
+//			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+//		}
+//
+//		// Chuyển hướng về trang quản lý sản phẩm
+//		return "redirect:/productsManager";
+//	}
+
 	@PostMapping("/update-status")
-	public String ChangesStatusSave(@RequestParam("id") int id, @RequestParam("status") boolean status,
-			RedirectAttributes redirectAttributes) {
-		try {
-			// Tìm sản phẩm theo id
-			ProductEntity product = productJPA.findById(id).orElse(null);
+	@ResponseBody
+	public Map<String, Object> ChangesStatusSave(@RequestParam("id") int id, @RequestParam("status") boolean status) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        // Tìm sản phẩm theo id
+	        ProductEntity product = productJPA.findById(id).orElse(null);
 
-			// Nếu sản phẩm tồn tại
-			if (product != null) {
-				// Cập nhật trạng-thái mới
-				product.setHien(status);
+	        // Nếu sản phẩm tồn tại
+	        if (product != null) {
+	            // Cập nhật trạng-thái mới
+	            product.setHien(status);
 
-				// Lưu sản phẩm sau khi cập nhật
-				productJPA.save(product);
+	            // Lưu sản phẩm sau khi cập nhật
+	            productJPA.save(product);
 
-				// Thông báo thành công
-				redirectAttributes.addFlashAttribute("message", "Cập nhật trạng thái sản phẩm thành công!");
-				redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-			} else {
-				// Thông báo sản phẩm không tồn tại
-				redirectAttributes.addFlashAttribute("message", "Sản phẩm không tồn tại!");
-				redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-			}
-		} catch (Exception e) {
-			// Thông báo lỗi nếu có lỗi xảy ra trong quá trình cập nhật
-			redirectAttributes.addFlashAttribute("message", "Cập nhật trạng thái sản phẩm thất bại. Vui lòng thử lại.");
-			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-		}
+	            // Thông báo thành công
+	            response.put("success", true);
+	            response.put("message", "Cập nhật trạng thái sản phẩm thành công!");
+	        } else {
+	            // Thông báo sản phẩm không tồn tại
+	            response.put("success", false);
+	            response.put("message", "Sản phẩm không tồn tại!");
+	        }
+	    } catch (Exception e) {
+	        // Thông báo lỗi nếu có lỗi xảy ra trong quá trình cập nhật
+	        response.put("success", false);
+	        response.put("message", "Cập nhật trạng thái sản phẩm thất bại. Vui lòng thử lại.");
+	    }
 
-		// Chuyển hướng về trang quản lý sản phẩm
-		return "redirect:/productsManager";
+	    return response;
 	}
 
 	@GetMapping("/delete-image")
@@ -240,32 +276,28 @@ public class ProductController {
 
 	@GetMapping("/products-hidden")
 	public String getHiddenProducts(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size, Model model) {
-		List<ProductEntity> hiddenProducts = productJPA.findByHien(true);
-		
-		Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-		Page<ProductEntity> productPage = productJPA.findAll(pageable);
+	        @RequestParam(defaultValue = "5") int size, Model model) {
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+	    Page<ProductEntity> productPage = productJPA.findByHien(true, pageable);
 
-		model.addAttribute("products", productPage.getContent());
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", productPage.getTotalPages());
-		model.addAttribute("products", hiddenProducts);
-		return "admin/qlsanpham";
+	    model.addAttribute("products", productPage.getContent());
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPages", productPage.getTotalPages());
+	    return "admin/qlsanpham";
 	}
 
 	@GetMapping("/products-visible")
 	public String getVisibleProducts(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size, Model model) {
-		List<ProductEntity> visibleProducts = productJPA.findByHien(false);
-		Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-		Page<ProductEntity> productPage = productJPA.findAll(pageable);
+	        @RequestParam(defaultValue = "5") int size, Model model) {
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+	    Page<ProductEntity> productPage = productJPA.findByHien(false, pageable);
 
-		model.addAttribute("products", productPage.getContent());
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", productPage.getTotalPages());
-		model.addAttribute("products", visibleProducts);
-		return "admin/qlsanpham";
+	    model.addAttribute("products", productPage.getContent());
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPages", productPage.getTotalPages());
+	    return "admin/qlsanpham";
 	}
+
 
 	@GetMapping("/searchMinMax")
 	public String searchByPriceRange(Model model, @RequestParam(value = "minPrice", required = false) Double minPrice,
@@ -283,6 +315,28 @@ public class ProductController {
 		return "admin/qlsanpham";
 	}
 
+	@GetMapping("/search-by-category")
+    public String searchByCategory(@RequestParam("categories_id") int categoryId,
+                                   @RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "5") int size, Model model) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<ProductEntity> productPage;
+
+        if (categoryId == -1) {
+            productPage = productJPA.findAll(pageable);  // Hiển thị tất cả sản phẩm nếu không chọn danh mục
+        } else {
+            productPage = productJPA.findByCategoryEntityId(categoryId, pageable);
+        }
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("categories", categoryJPA.findAll());  // Thêm danh sách danh mục vào model
+        model.addAttribute("selectedCategory", categoryId);  // Lưu giá trị danh mục được chọn vào model
+
+        return "admin/qlsanpham";  // Trả về trang hiển thị sản phẩm
+    }
+	
 	@ModelAttribute("categories")
 	public List<CategoryEntity> getCategoriesEntities() {
 		return categoryJPA.findAll();

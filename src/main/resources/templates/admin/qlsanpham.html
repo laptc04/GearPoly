@@ -116,14 +116,25 @@ h2 {
 									</div>
 									<div class="col-7">
 										<div class="row">
-											<form class="d-flex ms-auto" th:action="@{/searchProd}"
-												method="get" >
-												<div class="d-flex">
-													<input class="form-control me-2" type="search"
-														placeholder="Tìm kiếm" name="product_name" style="width: 672px;"/>
-													<button class="btn btn-outline-success" type="submit">Tìm</button>
-												</div>
-											</form>
+											<div class="d-flex" >
+												<form th:action="@{/search-by-category}" method="get">
+												    <select class="rounded" style="width: 190px; height: 37px;" name="categories_id" onchange="this.form.submit()">
+												        <option selected value="-1">Tìm theo danh mục</option>
+												        <option th:each="itemCat : ${categories}" th:value="${itemCat?.id}" 
+												                th:text="${itemCat?.categories_name}" 
+												                th:selected="${itemCat?.id == selectedCategory}"></option>
+												    </select>
+												</form>
+												<form class="d-flex ms-auto" th:action="@{/searchProd}"
+													method="get" >
+													<div class="d-flex">
+														<input class="form-control me-2" type="search"
+															placeholder="Tìm kiếm" name="product_name" style="width: 472px;"/>
+														<button class="btn btn-outline-success" type="submit">Tìm</button>
+													</div>
+												</form>
+											</div>
+											
 											<div class="d-flex" style="margin-top: 10px;">
 								                <a type="button" id="hiddenButton" class="btn btn-primary" style="width: 140px; margin-right: 10px" th:href="@{/products-hidden}">Sản phẩm ẩn</a>
 								                <a type="button" id="visibleButton" class="btn btn-primary" style="width: 140px; margin-right: 10px" th:href="@{/products-visible}">Sản phẩm hiện</a>
@@ -226,7 +237,34 @@ h2 {
 	<footer>
 		<!-- place footer here -->
 	</footer>
+	
+	
 	<!-- Bootstrap JavaScript Libraries -->
+	<script>
+		function updateStatus(id, status) {
+		    fetch('/update-status', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/x-www-form-urlencoded'
+		        },
+		        body: new URLSearchParams({
+		            'id': id,
+		            'status': status
+		        })
+		    })
+		    .then(response => response.json())
+		    .then(data => {
+		        if (data.success) {
+		            alert('Cập nhật trạng thái sản phẩm thành công!');
+		        } else {
+		            alert('Cập nhật trạng thái sản phẩm thất bại: ' + data.message);
+		        }
+		    })
+		    .catch(error => {
+		        alert('Cập nhật trạng thái sản phẩm thất bại. Vui lòng thử lại.');
+		    });
+		}
+		</script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
 		integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
