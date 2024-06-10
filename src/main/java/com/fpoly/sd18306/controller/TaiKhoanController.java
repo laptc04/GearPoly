@@ -65,6 +65,7 @@ public class TaiKhoanController {
 	}
 	@GetMapping("/login")
 	public String login(@RequestParam(name="path", defaultValue= "") String path, Model model) {
+		System.out.println("Login path: " + path);
 		model.addAttribute("path", path);
 		return "client/login";
 	}
@@ -72,14 +73,16 @@ public class TaiKhoanController {
 	@PostMapping("/login")
 	public String loginSave(@RequestParam("id") String id,
 				            @RequestParam("password") String password,
-				            @RequestParam("path") String path,
+				            HttpServletResponse response,
+				            HttpServletRequest request,
 				            Model model) {
-		
+		String path = request.getParameter("path");
+		System.out.println("Login save path: " + path);
 		AccountEntity accountEntity = accountJPA.findByIdAndPassword(id, password);
         if (accountEntity != null) {
         	Cookie cookie = new Cookie("id", id);
 			response.addCookie(cookie);						
-			if(path.equals("")) {
+			if(path == null || path.isEmpty()) {
 				return "redirect:/index";
 			}else {
 				return String.format("redirect:%s", path);
