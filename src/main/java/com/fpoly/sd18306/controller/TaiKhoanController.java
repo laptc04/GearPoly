@@ -16,6 +16,7 @@ import com.fpoly.sd18306.models.Account;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
@@ -26,6 +27,9 @@ public class TaiKhoanController {
 	AccountJPA accountJPA;
 	@Autowired
 	HttpServletResponse response;
+	
+	@Autowired 
+	HttpSession httpSession;
 
 	
 	@GetMapping("/index")
@@ -81,7 +85,8 @@ public class TaiKhoanController {
 		AccountEntity accountEntity = accountJPA.findByIdAndPassword(id, password);
         if (accountEntity != null) {
         	Cookie cookie = new Cookie("id", id);
-			response.addCookie(cookie);						
+			response.addCookie(cookie);
+	     	httpSession.setAttribute("account", accountEntity);
 			if(path == null || path.isEmpty()) {
 				return "redirect:/index";
 			}else {

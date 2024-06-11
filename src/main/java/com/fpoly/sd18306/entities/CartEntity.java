@@ -43,4 +43,6 @@ public class CartEntity implements Serializable{
 
 	@Column(length = 255)
 	private String image;
+	
+
 }

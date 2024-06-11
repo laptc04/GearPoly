@@ -1,15 +1,18 @@
  package com.fpoly.sd18306.services;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fpoly.sd18306.entities.CartEntity;
 import com.fpoly.sd18306.entities.ProductEntity;
+import com.fpoly.sd18306.jpa.CartJpa;
 import com.fpoly.sd18306.jpa.ProductJPA;
-import com.fpoly.sd18306.models.CartItem;
 import com.fpoly.sd18306.models.Product;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,69 +27,47 @@ public class CartService {
 
 	@Autowired
 	ProductJPA productJPA;
+	
+	@Autowired
+	CartJpa cartJPA;
 
-	public ArrayList<CartItem> getCartItems() {
-		ArrayList<CartItem> cartItem = (ArrayList<CartItem>) session.getAttribute("cart");
-		return cartItem == null ? new ArrayList<CartItem>() : cartItem;
+	public List<CartEntity> getCartList() {
+		List<CartEntity> CartEntity = (List<CartEntity>) session.getAttribute("cart");
+		return CartEntity == null ? new ArrayList<CartEntity>() : CartEntity;
 	}
 
-	public void add(@RequestParam("id") int id) {
-		Optional<ProductEntity> productfind = productJPA.findById(id);
-		
-		CartItem item = new CartItem();
-		if(productfind.isPresent()) {
-//			Optional<Integer> getId = productfind.get();
-			item.setId(productfind.get().getId());
-			item.setProduct_name(productfind.get().getProduct_name());
-			item.setDescription(productfind.get().getDescription());
-			item.setPrice(productfind.get().getPrice());
-			item.setQuantity(1);
-			ArrayList<CartItem> cartItems = this.getCartItems();
-			int index = -1;
-			for (int i = 0; i < cartItems.size(); i++) {
-				if (cartItems.get(i).getId() == id) {
-					index = i;
-					break;
-				}
-			}
-			if (index == -1) {
-				cartItems.add(item);
-			} else {
-				int quantity = cartItems.get(index).getQuantity();
-				item.setQuantity(quantity + 1);
-				cartItems.set(index, item);
-			}
-			session.setAttribute("cart", cartItems);
-			
-		}
-		
-		
-		
-	}
-
+	
 	public void remove(int id) {
 		//get cart list
-		ArrayList<CartItem> cartItems = this.getCartItems();
-		for(int index = 0 ; index < cartItems.size(); index++) {
-			if(cartItems.get(index).getId() == id) {
-				cartItems.remove(index);
+		List<CartEntity> CartEntitys = this.getCartList();
+		for(int index = 0 ; index < CartEntitys.size(); index++) {
+			if(CartEntitys.get(index).getId() == id) {
+				CartEntitys.remove(index);
 				break;
 			}
 		}
-		session.setAttribute("cart", cartItems);
+		session.setAttribute("cart", CartEntitys);
  	}
 
 	public void update(int id, int quantity) {
-		ArrayList<CartItem> cartItems = this.getCartItems();
-		for(int index = 0 ; index < cartItems.size(); index++) {
-			if(cartItems.get(index).getId() == id) {
-				CartItem item = cartItems.get(index);
-				item.setQuantity(quantity);
-				cartItems.set(index, item);
+		List<CartEntity> CartEntitys = this.getCartList();
+//		for(int index = 0 ; index < CartEntitys.size(); index++) {
+//			if(CartEntitys.get(index).getId() == id) {
+//				CartEntity item = CartEntitys.get(index);
+//				item.setQuantity(quantity);
+//				CartEntitys.set(index, item);
+//				break;
+//			}
+//		}
+		for (CartEntity cartEntity : CartEntitys) {
+			if (cartEntity.getId() ==id) {
+				cartEntity.setQuantity(quantity);
+				cartEntity.setPrice((cartEntity.getProductEntity().getPrice()) * quantity);
+				cartJPA.save(cartEntity);
 				break;
 			}
 		}
-		session.setAttribute("cart", cartItems);
+		session.setAttribute("cart", CartEntitys);
 	}
 	
 	public void clear() {
@@ -95,7 +76,7 @@ public class CartService {
 
 	public int getCount() {
 		int count = 0 ;
-		for(CartItem item : this.getCartItems()) {
+		for(CartEntity item : this.getCartList()) {
 			count += item.getQuantity();
 		}
 		return count;
@@ -103,13 +84,14 @@ public class CartService {
 	}
 
 	public int getAmount() {
-		int amout = 0 ;
-		for(CartItem item : this.getCartItems()) {
-			amout += item.getQuantity() * item.getPrice();
+		int amount = 0 ;
+		List<CartEntity> cartList =this.getCartList();
+		for (CartEntity cartEntity : cartList) {
+			amount += cartEntity.getPrice();
 		}
 		
 		
-		return amout;
+		return amount;
 	}
 
 }

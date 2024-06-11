@@ -14,14 +14,14 @@
 </head>
 
 <body>
- 	<form th:action="@{/searchProIndex}" method="post">
+ 
 	<header>
-		<!-- place navbar here -->
+		<!-- place navbar here --><form th:action="@{/searchProIndex}" method="post">
 		<nav class="navbar bg-white fixed-top">
 			<div class="container-fluid bg-danger">
 				<img src="../images/banner4.png" alt="" width="10000000000px">
 				<a class="navbar-brand" href="/user/index">
-					GearPoly</a>
+					GearPoly</a>		
 				<div class="d-flex mt-3 " role="search">
 					<input  name="product_name2" class="form-control me-2  m-1" type="search" placeholder="Search" aria-label="Search"
 						style="width: 500px;"><button  type="submit" class="btn btn-outline-light text-dark m-1"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -96,6 +96,7 @@
 				</div>
 			</div>
 		</nav>
+			</form>
 	</header>
 	<main>
 		<br>
@@ -212,7 +213,7 @@
 		</div>
 		</div>
 	</main>
-	</form>
+
 	<footer class="text-center text-lg-start bg-body-tertiary text-muted">
 		<!-- Section: Social media -->
 		<section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">

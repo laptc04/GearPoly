@@ -1,12 +1,14 @@
 package com.fpoly.sd18306.entities;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -41,9 +43,9 @@ public class AccountEntity implements Serializable {
     @Column(name = "role")
     private boolean role;
 
-//    @OneToMany(mappedBy = "account")
-//    private Set<BillsEntity> bills;
-//
-//    @OneToMany(mappedBy = "account")
-//    private Set<CartsEntity> carts;
+    @OneToMany(mappedBy = "account")
+    private List<BillEntity> bills;
+
+    @OneToMany(mappedBy = "accountEntity")
+    private List<CartEntity> carts;
 }
