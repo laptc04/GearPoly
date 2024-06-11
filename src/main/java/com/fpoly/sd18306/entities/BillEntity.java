@@ -2,7 +2,7 @@ package com.fpoly.sd18306.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -43,5 +43,5 @@ public class BillEntity implements Serializable {
     private int total;
 
     @OneToMany(mappedBy = "bill")
-    private Set<DetailBillEntity> detailsBill;
+    private List<DetailBillEntity> detailsBill;
 }
