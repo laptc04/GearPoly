@@ -60,9 +60,9 @@ public class TaiKhoanController {
 	    if (error.hasErrors()) {
 	        model.addAttribute("error", error);
 	    } else {
-	        // Check if the id already exists
+	        //kiểm tra id
 	        Optional<AccountEntity> existingAccountById = accountJPA.findById(id);
-	        // Check if the email already exists
+	        //kiểm tra email
 	        Optional<AccountEntity> existingAccountByEmail = accountJPA.findByEmail(email);
 
 	        if (existingAccountById.isPresent()) {
