@@ -37,6 +37,11 @@ public class TaiKhoanController {
 		
 		return "client/index";
 	}
+	@GetMapping("/admin/index")
+	public String adminIndex() {
+		
+		return "admin/index";
+	}
 	@GetMapping("/register")
 	public String register() {
 		return "client/register";
@@ -87,6 +92,13 @@ public class TaiKhoanController {
         	Cookie cookie = new Cookie("id", id);
 			response.addCookie(cookie);
 	     	httpSession.setAttribute("account", accountEntity);
+	     	//kiểm tra role
+	        if (accountEntity.isRole() == true) {
+	            return "redirect:/admin/index";
+	        } else if (accountEntity.isRole() == false) {
+	            return "redirect:/index";
+	        }
+	        //
 			if(path == null || path.isEmpty()) {
 				return "redirect:/index";
 			}else {
