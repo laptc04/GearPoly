@@ -1,5 +1,8 @@
 package com.fpoly.sd18306.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fpoly.sd18306.entities.AccountEntity;
+import com.fpoly.sd18306.entities.BillEntity;
 import com.fpoly.sd18306.entities.CartEntity;
+import com.fpoly.sd18306.entities.ProductEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.jpa.BillsJPA;
 import com.fpoly.sd18306.jpa.CartJpa;
@@ -26,7 +31,7 @@ import jakarta.validation.Valid;
 
 @Controller
 public class TaoHoaDonController {
-	
+
 	@Autowired
 	CartService cartService;
 
@@ -68,6 +73,10 @@ public class TaoHoaDonController {
 	public String postTaoHoaDon(@Valid Account account, BindingResult error, Model model, @RequestParam("id") String id,
 			@RequestParam("fullname") String fullname, @RequestParam("phone") String phone,
 			@RequestParam("address") String address) {
+
+		LocalDate localDate = LocalDate.now();
+        Date currentDate = Date.valueOf(localDate);
+
 		if (!fullname.equals("") && !phone.equals("") && !address.equals("")) {
 			if (phone.matches("^0\\d{9}$")) {
 				String sdt = billsJPA.findPhoneById(id);
@@ -76,7 +85,16 @@ public class TaoHoaDonController {
 					if (sdt.equals(phone)) {
 						System.out.println(sdt);
 						int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
-						return "redirect:/index";
+						Optional<AccountEntity> acc = accountJPA.findById(id);
+						if (acc.isPresent()) {
+							BillEntity bill = new BillEntity();
+							bill.setAccount(acc.get());
+							bill.setBillDate(currentDate);
+							bill.setTotal(cartService.getAmount());
+							billsJPA.save(bill);
+							billsJPA.deleteByAccountId(id);
+							return "redirect:/index";
+						}
 					} else {
 						if (phone.equals(ac.getPhone())) {
 							model.addAttribute("message2", "Số điện thoại này đã tồn tại!");
@@ -89,8 +107,17 @@ public class TaoHoaDonController {
 				return "client/laphoadon";
 			}
 			int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
+			Optional<AccountEntity> acc = accountJPA.findById(id);
+			if (acc.isPresent()) {
+				BillEntity bill = new BillEntity();
+				bill.setAccount(acc.get());
+				bill.setBillDate(currentDate);
+				bill.setTotal(cartService.getAmount());
+				billsJPA.save(bill);
+				billsJPA.deleteByAccountId(id);
+				return "redirect:/index";
+			}
 			return "redirect:/index";
-
 		} else {
 			if (fullname.equals("")) {
 				model.addAttribute("message1", "Vui lòng nhập tên");

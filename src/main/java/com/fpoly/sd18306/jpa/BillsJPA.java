@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 
 public interface BillsJPA extends JpaRepository<BillEntity, String> {
 
-	//lấy sđt theo id ng dùng
+	// lấy sđt theo id khách hàng
 	@Query(value = "SELECT phone FROM accounts WHERE id = :id", nativeQuery = true)
 	String findPhoneById(@Param("id") String id);
 
@@ -25,4 +25,9 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	public int updateByAccountId(@Param("fullname") String fullname, @Param("phone") String phone,
 			@Param("address") String address, @Param("id") String id);
 
+	// xóa sản phẩm trong giỏ hàng khi mua sản phẩm
+	@Modifying
+    @Transactional
+    @Query(value = "DELETE FROM carts WHERE account_id = :accountId", nativeQuery = true)
+    void deleteByAccountId(@Param("accountId") String accountId);
 }
