@@ -11,14 +11,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.CartEntity;
+import com.fpoly.sd18306.entities.CategoryEntity;
 import com.fpoly.sd18306.entities.ProductEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.jpa.CartJpa;
+import com.fpoly.sd18306.jpa.CategoryJPA;
 import com.fpoly.sd18306.jpa.ProductJPA;
 import com.fpoly.sd18306.services.CartService;
 
@@ -44,6 +47,9 @@ public class CartController {
 	
 	@Autowired
 	HttpSession httpSession;
+
+	@Autowired
+	CategoryJPA categoryJPA;
 	
 	
 
@@ -56,17 +62,14 @@ public class CartController {
 
 	
 	@GetMapping("user/index")
-	public String getsanpham(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size,
-			Model model) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-		Page<ProductEntity> productPage = productJPA.findAll(pageable);
-//		model.addAttribute("products", productJPA.findAll());
+	public String getsanpham(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size, Model model) {
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+	    Page<ProductEntity> productPage = productJPA.findAll(pageable);
 
-		model.addAttribute("products", productPage.getContent());
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", productPage.getTotalPages());
-		return "client/sanpham";
-
+	    model.addAttribute("products", productPage.getContent());
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPages", productPage.getTotalPages());
+	    return "client/sanpham";
 	}
 
 	@GetMapping("user/chitiet")
@@ -79,14 +82,67 @@ public class CartController {
 	@GetMapping("/searchProIndex")
 	public String searchProducts() {
 
-		return "client/index";
+		return "client/sanpham";
 	}
 
+//	@PostMapping("/searchProIndex")
+//	public String searchProducts(Model model, @RequestParam("product_name") String product_name) {
+//		List<ProductEntity> productList = productJPA.findByName(product_name);
+//		model.addAttribute("products", productList);
+//		return "client/sanpham";
+//	}
+	
 	@PostMapping("/searchProIndex")
-	public String searchProducts(Model model, @RequestParam("product_name2") String product_name2) {
-		List<ProductEntity> productList = productJPA.findByName(product_name2);
+	public String searchProducts(Model model, @RequestParam("product_name") String productName) {
+	    List<ProductEntity> productList = productJPA.findByName(productName);
+	    model.addAttribute("products", productList);
+
+	    // Khởi tạo currentPage và totalPages cho việc phân trang khi tìm kiếm
+	    model.addAttribute("currentPage", 0); // hoặc giá trị mặc định khác
+	    model.addAttribute("totalPages", 1); // Giả sử có ít nhất một trang
+
+	    return "client/sanpham";
+	}
+	@GetMapping("/searchMinMaxIndex")
+	public String searchByPriceRange(Model model, @RequestParam(value = "minPrice", required = false) Double minPrice,
+			@RequestParam(value = "maxPrice", required = false) Double maxPrice) {
+		List<ProductEntity> productList;
+
+		if (minPrice != null && maxPrice != null) {
+			productList = productJPA.findByPriceBetween(minPrice, maxPrice);
+		} else {
+			productList = productJPA.findAll();
+		}
+		model.addAttribute("currentPage", 0); // hoặc giá trị mặc định khác
+		model.addAttribute("totalPages", 1);
 		model.addAttribute("products", productList);
-		return "client/index";
+
+		return "client/sanpham";
+	}
+	@GetMapping("/search-by-categoryIndex")
+    public String searchByCategory(@RequestParam("categories_id") int categoryId,
+    		@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size, Model model) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+	    Page<ProductEntity> productPage;
+
+	    if (categoryId == -1) {
+	        productPage = productJPA.findAll(pageable);  // Hiển thị tất cả sản phẩm nếu không chọn danh mục
+	    } else {
+	        productPage = productJPA.findByCategoryEntityId(categoryId, pageable);
+	    }
+	    model.addAttribute("products", productPage.getContent());
+	    model.addAttribute("currentPage", productPage.getNumber());
+	    model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("categories", categoryJPA.findAll());  // Thêm danh sách danh mục vào model
+        model.addAttribute("selectedCategory", categoryId);  // Lưu giá trị danh mục được chọn vào model
+
+        return "client/sanpham";  // Trả về trang hiển thị sản phẩm
+    }
+	
+	@ModelAttribute("categories")
+	public List<CategoryEntity> getCategoriesEntities() {
+		return categoryJPA.findAll();
 	}
 
 	@GetMapping("/cart")

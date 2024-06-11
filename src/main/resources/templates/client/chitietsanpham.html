@@ -82,7 +82,7 @@
         </form>
         <form th:action="@{'/add-to-cart?id=' + ${productID?.id} + '&path=' + ${path}}" method="post">
         <div class="text-center">
-        	<input  type="text" name="id" th:value="${productID?.id}">
+        	<input  type="hidden" name="id" th:value="${productID?.id}">
    		<div class="d-flex">
         <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 70px; margin-right: 10px;">
         <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>

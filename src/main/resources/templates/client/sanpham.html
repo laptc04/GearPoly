@@ -57,8 +57,35 @@
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
 				<span class="visually-hidden">Next</span>
 			</button>
+
+
 		</div>
+
+		<form class="d-flex ms-auto mt-2" th:action="@{/searchMinMaxIndex}"
+			method="get">
+			<div class="d-flex">
+				<input class="form-control me-2" type="search"
+					placeholder="Giá thấp nhất" name="minPrice" style="width: 170px;" />
+				<input class="form-control me-2" type="search"
+					placeholder="Giá cao nhất" name="maxPrice" style="width: 170px;" />
+				<button class="btn btn-outline-success" type="submit">Tìm</button>
+			</div>
+		</form>
+		<form th:action="@{/search-by-categoryIndex}" method="get">
+			<select class="rounded" style="width: 190px; height: 37px;"
+				name="categories_id" onchange="this.form.submit()">
+				<option selected value="-1">Tìm theo danh mục</option>
+				<option th:each="itemCat : ${categories}" th:value="${itemCat?.id}"
+					th:text="${itemCat?.categories_name}"
+					th:selected="${itemCat?.id == selectedCategory}"></option>
+			</select>
+		</form>
+
 		<div class="container">
+
+			<div th:if="${#lists.isEmpty(products)}">
+				<p>Không tìm thấy sản phẩm nào.</p>
+			</div>
 			<div class="row">
 				<!--  -->
 				<!-- div con -->
@@ -88,46 +115,41 @@
 						</div>
 					</div>
 
+
 				</div>
 
 
 			</div>
-		</div>
-		<div class="row mt-2">
-			
-			<div class="col-3">
-			
+			<div class="row mt-2"></div>
+			<div class="col-5"></div>
+
+			<div class="col-2">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item"
+							th:classappend="${currentPage == 0} ? 'disabled'"><a
+							class="page-link"
+							th:href="@{'/user/index?page=' + (${currentPage > 0 ? currentPage - 1 : 0}) + '&size=6'}">Previous</a>
+						</li>
+						<li class="page-item"
+							th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+							th:classappend="${i == currentPage} ? 'active'"><a
+							class="page-link"
+							th:href="@{'/user/index?page=' + ${i} + '&size=6'}"
+							th:text="${i + 1}">1</a></li>
+						<li class="page-item"
+							th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+							<a class="page-link"
+							th:href="@{'/user/index?page=' + (${currentPage < totalPages - 1 ? currentPage + 1 : totalPages - 1}) + '&size=6'}">Next</a>
+						</li>
+					</ul>
+				</nav>
 			</div>
-			
-			<div class="col-6">
-			<nav  aria-label="Page navigation example" >
-				<ul class="pagination">
-					<li class="page-item"
-						th:classappend="${currentPage == 0} ? 'disabled'"><a
-						class="page-link"
-						th:href="@{'/user/index?page=' + ${currentPage - 1} + '&size=6'}">Previous</a>
-					</li>
-					<li class="page-item"
-						th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-						th:classappend="${i == currentPage} ? 'active'"><a
-						class="page-link"
-						th:href="@{'/user/index?page=' + ${i} + '&size=6'}"
-						th:text="${i + 1}">1</a></li>
-					<li class="page-item"
-						th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-						<a class="page-link"
-						th:href="@{'/user/index?page=' + ${currentPage + 1} + '&size=6'}">Next</a>
-					</li>
-				</ul>
-			</nav>
-			</div>
-			<div class="col-3">
-			
-			</div>
-			
+			<div class="col-5"></div>
+
 
 		</div>
-		
+
 	</main>
 	<footer>
 		<!-- place footer here -->
