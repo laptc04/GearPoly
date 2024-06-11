@@ -15,5 +15,6 @@ public interface CartJpa extends  JpaRepository <CartEntity, String>{
 	@Query(value="select *from carts c where c.account_id =:accountID", nativeQuery = true)
 	public List<CartEntity> findByAccountID(@RequestParam("accountID") String accountID);
 	
+	Optional<CartEntity> findByAccountEntityAndProductEntity(AccountEntity account, ProductEntity product);
 }
 

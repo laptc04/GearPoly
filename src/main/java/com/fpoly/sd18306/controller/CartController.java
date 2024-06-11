@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.server.Cookie;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,9 +53,18 @@ public class CartController {
 //		return "client/index";
 //		
 //	}
+
+	
 	@GetMapping("user/index")
-	public String getsanpham(Model model) {
-		model.addAttribute("products", productJPA.findAll());
+	public String getsanpham(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size,
+			Model model) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+		Page<ProductEntity> productPage = productJPA.findAll(pageable);
+//		model.addAttribute("products", productJPA.findAll());
+
+		model.addAttribute("products", productPage.getContent());
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", productPage.getTotalPages());
 		return "client/sanpham";
 
 	}
@@ -112,23 +123,31 @@ public class CartController {
 	    if (productOptional.isPresent()) {
 	        ProductEntity product = productOptional.get();
 
-	        // Tạo đối tượng CartEntity
-	        CartEntity cartEntity = new CartEntity();
-	        cartEntity.setProductEntity(product);
-	        cartEntity.setAccountEntity(account);
-	        cartEntity.setPrice( cartService.getAmount()); // Hoặc sử dụng cartService.getAmount() nếu cần thiết
-	        cartEntity.setQuantity(quantity);
-
-	        // Lưu đối tượng CartEntity vào cơ sở dữ liệu
-	        cartJpa.save(cartEntity);
+	        // Tìm kiếm sản phẩm trong giỏ hàng của tài khoản
+	        Optional<CartEntity> existingCartOptional = cartJpa.findByAccountEntityAndProductEntity(account, product);
+	        if (existingCartOptional.isPresent()) {
+	            // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
+	            CartEntity existingCart = existingCartOptional.get();
+	            existingCart.setQuantity(existingCart.getQuantity() + quantity);
+	            cartJpa.save(existingCart);
+	        } else {
+	            // Nếu sản phẩm chưa tồn tại trong giỏ hàng, tạo mới một bản ghi
+	            CartEntity cartEntity = new CartEntity();
+	            cartEntity.setProductEntity(product);
+	            cartEntity.setAccountEntity(account);
+	            cartEntity.setPrice(product.getPrice()); // Hoặc sử dụng cartService.getAmount() nếu cần thiết
+	            cartEntity.setQuantity(quantity);
+	            cartJpa.save(cartEntity);
+	        }
 
 	        // Chuyển hướng đến trang giỏ hàng hoặc trang trước đó
-	        return "redirect:/cart" ;
+	        return "redirect:/cart";
 	    }
 
 	    // Nếu sản phẩm không tồn tại, chuyển hướng đến trang lỗi
 	    return "redirect:/error";
 	}
+
 
 
 		
