@@ -25,7 +25,11 @@ public class Account {
 	@NotEmpty(message = "Email không bỏ trống.")
 	@Email
 	private String email;
+	@NotBlank(message = "Số điện thoại không bỏ trống.")
+	@NotEmpty(message = "Số điện thoại không bỏ trống.")
 	private String phone;
+	@NotBlank(message = "Địa chỉ không bỏ trống.")
+	@NotEmpty(message = "Địa chỉ không bỏ trống.")
 	private String address;
 	private String image;
 	boolean role;
