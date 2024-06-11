@@ -1,6 +1,9 @@
 package com.fpoly.sd18306.controller;
 
 
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,34 +47,47 @@ public class TaiKhoanController {
 	}
 	@GetMapping("/register")
 	public String register() {
-		return "client/register";
+	    return "client/register";
 	}
-	
+
 	@PostMapping("/register")
-	public String registerSave(@Valid  Account account, BindingResult error,
-							   @RequestParam("id") String id,
-							   @RequestParam("fullname") String fullname,
-							   @RequestParam("email") String email,
-							   @RequestParam("password") String password, Model model) {
-		
-		if(error.hasErrors()) {
-			model.addAttribute("error", error);
-		}else {
-			AccountEntity accountEntity = new AccountEntity();
-			
-			accountEntity.setId(id);
-			accountEntity.setFullname(fullname);
-			accountEntity.setEmail(email);
-			accountEntity.setPassword(password);
-			accountEntity.setPhone("");
-			accountEntity.setAddress("");
-			accountEntity.setImage("");
-			accountEntity.setRole(false);
-			AccountEntity accSaveEntity = accountJPA.save(accountEntity);
-		}
-		model.addAttribute("account", account);
-		return "client/register";
+	public String registerSave(@Valid Account account, BindingResult error,
+	                           @RequestParam("id") String id,
+	                           @RequestParam("fullname") String fullname,
+	                           @RequestParam("email") String email,
+	                           @RequestParam("password") String password,
+	                           Model model) {
+	    if (error.hasErrors()) {
+	        model.addAttribute("error", error);
+	    } else {
+	        // Check if the id already exists
+	        Optional<AccountEntity> existingAccountById = accountJPA.findById(id);
+	        // Check if the email already exists
+	        Optional<AccountEntity> existingAccountByEmail = accountJPA.findByEmail(email);
+
+	        if (existingAccountById.isPresent()) {
+	            model.addAttribute("messregerr", "*Tên đăng nhập đã tồn tại");
+	        } else if (existingAccountByEmail.isPresent()) {
+	            model.addAttribute("messregerr", "*Email đã tồn tại");
+	        } else {
+	            AccountEntity accountEntity = new AccountEntity();
+	            accountEntity.setId(id);
+	            accountEntity.setFullname(fullname);
+	            accountEntity.setEmail(email);
+	            accountEntity.setPassword(password);
+	            accountEntity.setPhone("");
+	            accountEntity.setAddress("");
+	            accountEntity.setImage("");
+	            accountEntity.setRole(false);
+	            AccountEntity accSaveEntity = accountJPA.save(accountEntity);
+	            model.addAttribute("messreg", "Đăng ký thành công");
+	        }
+	    }
+	    model.addAttribute("account", account);
+	    return "client/register";
 	}
+
+
 	@GetMapping("/login")
 	public String login(@RequestParam(name="path", defaultValue= "") String path, Model model) {
 		System.out.println("Login path: " + path);

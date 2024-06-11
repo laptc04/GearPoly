@@ -71,34 +71,23 @@
 									<p class="text-danger" th:if='${error?.getFieldError("password") != null}'
 										th:text='${error?.getFieldError("password")?.getDefaultMessage()}'></p>
 								</div>
-
+								<div th:if="${messreg}" class="pt-3 mb-2 card-body">
+							          <div class="text-success" th:text="${messreg}"></div>
+							    </div>
+							    <div th:if="${messregerr}" class="pt-3 mb-2 card-body">
+							          <div class="text-danger" th:text="${messregerr}"></div>
+							    </div>
 								<div class="mb-2 card-body ">
 									<button type="submit" class="btn btn-primary mt-1 ">Đăng ký</button>
 
 									<div class="a mt-2 d-flex">
 										<p>
 											<a
-												class="link-offset-2 link-underline link-underline-opacity-0 m-3"
-												href="/user/quenmatkhau">Quên mật khẩu ?</a>
-										</p>
-										<p>
-											<a
 												class="link-offset-3 link-underline link-underline-opacity-0"
 												href="/login">Đăng nhập ?</a>
 										</p>
 									</div>
-									<center>
-										<div class="">
-											<button type="submit" class="btn btn-primary mt-1 ">
-												Đăng ký bằng <img src="../images/facebook.webp" alt=""
-													style="width: 30px;">
-											</button>
-											<button type="submit" class="btn btn-danger mt-1 ">
-												Đăng ký bằng <img src="../images/email.png" alt=""
-													style="width: 30px;">
-											</button>
-										</div>
-									</center>
+
 								</div>
 
 
