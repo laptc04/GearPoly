@@ -1,0 +1,240 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+<title>Title</title>
+<!-- Required meta tags -->
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<!-- Main CSS-->
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+<!-- or -->
+<link rel="stylesheet"
+	href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap CSS v5.2.1 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+	crossorigin="anonymous" />
+</head>
+
+<body>
+	<header>
+		<!-- place navbar here -->
+	</header>
+	<main class="app-content mt-5">
+			<div class="container">
+			<div class="row mt-3">
+				<!-- Form tìm kiếm theo tên -->
+				<div class="row">
+					<div class="col-6">
+					<form action="/searchByName" method="get">
+						<div class="mb-3">
+							<label for="" class="form-label">Tìm kiếm theo tên</label>
+							<div style="display: flex;">
+								<input type="text" class="form-control" name="name" id=""
+									aria-describedby="helpId" placeholder="" th:value="${name}" />
+								<button type="submit" class="btn btn-primary ms-2">Tìm</button>
+							</div>
+						</div>
+					</form>
+					</div>
+					<div class="col-6">
+					<form action="/searchByYear" method="get">
+						<div class="mb-3">
+							<label for="" class="form-label">Thống kê theo năm</label>
+							<div style="display: flex;">
+								<input type="text" class="form-control" name="billDate" id=""
+									aria-describedby="helpId" placeholder="" th:value="${billDate}" />
+								<button type="submit" class="btn btn-primary ms-2">Tìm</button>
+							</div>
+						</div>
+					</form>
+					</div>
+				</div>
+		<div class="app-title">
+			<ul class="app-breadcrumb breadcrumb side">
+				<li class="breadcrumb-item active"><b>DANH SÁCH NGƯỜI DÙNG</b></li>
+			</ul>
+			<div id="clock"></div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tile">
+					<div class="tile-body">
+						<table class="table table-hover table-bordered js-copytextarea"
+							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+							<thead>
+								<tr>
+									<th width="10"><input type="checkbox" id="all"></th>
+									<th width="150">Họ và tên</th>	
+									<th width="20">Tổng Tiền</th>
+									<th width="300">Năm</th>
+								</tr>
+							</thead>
+							<tbody th:each="qltotal,index:${yearValue}">
+								<tr>
+									<td width="10"><input type="checkbox" name="check1"
+										value="1"></td>
+									
+									<td th:text="${qltotal?.account}"></td>
+									<td th:text="${qltotal?.total}"></td>
+									<td th:text="${qltotal?.yearValue}"></td>			
+									<td class="table-td-center">
+										<button class="btn btn-primary btn-sm trash" title="Xóa">
+											<i class="fas fa-trash-alt"></i>
+										</button>
+										<button class="btn btn-primary btn-sm edit" type="button"
+											title="Sửa" data-bs-toggle="modal" data-bs-target="#ModalUP"
+											data-id="#CD12837" data-name="Hồ Thị Thanh Ngân"
+											data-password="12345" data-email="abcd@gmail.com"
+											data-phone="0926737168"
+											data-address="155-157 Trần Quốc Thảo, Quận 3, Hồ Chí Minh">
+											<i class="fas fa-edit"></i>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+<!-- Phân trang -->
+			<nav aria-label="Page navigation" th:if="${totalPages > 1}">
+				<ul class="pagination">
+					<li class="page-item"
+						th:classappend="${currentPage == 0} ? 'disabled' : ''"><a
+						class="page-link"
+						th:href="@{/timtheonam/pages(page=0, size=${pageSize})}"
+						aria-label="First"> <span aria-hidden="true">&laquo;</span>
+					</a></li>
+					<li class="page-item"
+						th:classappend="${currentPage == 0} ? 'disabled' : ''"><a
+						class="page-link"
+						th:href="@{/timtheonam/pages(page=${currentPage - 1}, size=${pageSize})}"
+						aria-label="Previous"> <span aria-hidden="true">&lt;</span>
+					</a></li>
+					<li class="page-item"
+						th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+						th:classappend="${currentPage == pageNumber} ? 'active' : ''">
+						<a class="page-link"
+						th:href="@{/timtheonam/pages(page=${pageNumber}, size=${pageSize})}"
+						th:text="${pageNumber + 1}"></a>
+					</li>
+					<li class="page-item"
+						th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+						<a class="page-link"
+						th:href="@{/timtheonam/page(page=${currentPage + 1}, size=${pageSize})}"
+						aria-label="Next"> <span aria-hidden="true">&gt;</span>
+					</a>
+					</li>
+					<li class="page-item"
+						th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+						<a class="page-link"
+						th:href="@{/timtheonam/pages(page=${totalPages - 1}, size=${pageSize})}"
+						aria-label="Last"> <span aria-hidden="true">&raquo;</span>
+					</a>
+					</li>
+				</ul>
+			</nav>
+				</div>
+			</div>
+		</div>
+	</main>
+	<!-- MODAL -->
+	<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog"
+		aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+
+				<div class="modal-body">
+					<div class="row">
+						<div class="form-group col-md-12">
+							<span class="thong-tin-thanh-toan">
+								<h5>Chỉnh sửa thông tin khách hàng</h5>
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6">
+							<label class="control-label">ID</label> <input id="modal-id"
+								class="form-control" type="text" required disabled>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Họ và tên</label> <input
+								id="modal-name" class="form-control" type="text" required>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Tổng Tiền</label> <input
+								id="modal-password" class="form-control" type="text" required>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Nam</label> <input
+								id="modal-email" class="form-control" type="text" required>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Số điện thoại</label> <input
+								id="modal-phone" class="form-control" type="number" required>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Địa chỉ</label> <input
+								id="modal-address" class="form-control" type="text" required>
+						</div>
+					</div>
+					<br> <br>
+					<button class="btn btn-save" type="button">Lưu lại</button>
+					<a class="btn btn-cancel" data-bs-dismiss="modal" href="#">Hủy
+						bỏ</a> <br>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+	<!-- MODAL -->
+
+	<!-- Bootstrap JavaScript Libraries -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+		integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+		crossorigin="anonymous">
+		
+	</script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+		integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+		crossorigin="anonymous">
+		
+	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var editButtons = document.querySelectorAll('.btn.edit');
+
+			editButtons.forEach(function(button) {
+				button.addEventListener('click', function() {
+					var id = button.getAttribute('data-id');
+					var name = button.getAttribute('data-name');
+					var password = button.getAttribute('data-password');
+					var email = button.getAttribute('data-email');
+					var phone = button.getAttribute('data-phone');
+					var address = button.getAttribute('data-address');
+
+					document.getElementById('modal-id').value = id;
+					document.getElementById('modal-name').value = name;
+					document.getElementById('modal-password').value = password;
+					document.getElementById('modal-email').value = email;
+					document.getElementById('modal-phone').value = phone;
+					document.getElementById('modal-address').value = address;
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

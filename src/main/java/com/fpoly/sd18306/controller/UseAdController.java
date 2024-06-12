@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
 import com.fpoly.sd18306.entities.UseAdEntity;
-import com.fpoly.sd18306.jpa.BillJPA;
-import com.fpoly.sd18306.jpa.BillsJPA;
+
 import com.fpoly.sd18306.jpa.UseAdJPA;
 import com.fpoly.sd18306.services.UploadService;
 
@@ -30,18 +29,18 @@ public class UseAdController {
 
 	@Autowired
 	UseAdJPA useadJPA;
-	@Autowired
-	BillsJPA billsJPA;
 
+	@Autowired
+	UploadService uploadService;
 
 	@GetMapping("/manauser")
 	public String showProdGet(Model model) {
-		return showProducts(0, 5, model); 
+		return showProducts(0, 5, model);
 	}
 
 	@PostMapping("/manauser")
 	public String showProdPost(Model model) {
-		return showProducts(0, 5, model); 
+		return showProducts(0, 5, model);
 	}
 
 	@GetMapping("/manauser/page")
@@ -59,47 +58,51 @@ public class UseAdController {
 	@GetMapping("/searchByName")
 	public String searchProductsByName(@RequestParam(value = "name", required = false) String name, Model model) {
 		if (name == null || name.isBlank()) {
-			model.addAttribute("errorMessage", "Vui lòng nhập tên người dùng.");
+			model.addAttribute("errorMessage", "Không tìm được kết quả, vui lòng nhập tên người dùng.");
 			return "/admin/qlnguoidung";
-		}else {
+		} 
+//		else if (!name.equalsIgnoreCase()) {
+//	        model.addAttribute("errorMessage", "Người dùng có tên '" + name + "' không tồn tại.");
+//	        return "/admin/qlnguoidung";
+//		}
+		else {
 			List<AccountEntity> productEntities = useadJPA.findByNameContainingIgnoreCase(name);
 			model.addAttribute("account", productEntities);
-			model.addAttribute("fullname", name);
+			model.addAttribute( name);
 			return "/admin/qlnguoidung";
 		}	
-	}	
-		@GetMapping("/searchByPhone")
-		public String searchProductsByPhone(@RequestParam(value = "phone", required = false) String phone, Model model) {
-			if (phone == null || phone.isBlank()) {
-				model.addAttribute("errorMessage", "Vui lòng nhập tên người dùng.");
-				return "/admin/qlnguoidung";
-			}else {
-				List<AccountEntity> productEntities = useadJPA.findByPhoneContainingIgnoreCase(phone);
-				model.addAttribute("account", productEntities);
-				model.addAttribute("phone", phone);
-				return "/admin/qlnguoidung";
-			}	
 	}
-	
-//	@GetMapping("/searchByYear")
-//	public String searchTotalByYear() {
-//		return "redirect:/timtheonam";
-//	}
-//	
-//	@GetMapping("/timtheonam")
-//	public String timtktheomam(Model model, 
-//		@RequestParam(value = "yearValue", required = false) String yearValue
-//		) {
-//	if (yearValue == null || yearValue.isBlank()) {
-//		model.addAttribute("errorMessage", "Vui lòng nhập số năm để xem doanh thu.");
-//		return "/admin/qlnamtotal";
-//	}
-//	List<BillEntity> productEntities = billsJPA.findTotalByYear(yearValue);
-//	model.addAttribute("account", productEntities);
-//	model.addAttribute("billDate", yearValue);
-//		return "/admin/qlnamtotal";
-//	}
-	
+
+	@GetMapping("/searchByPhone")
+	public String searchProductsByPhone(@RequestParam(value = "phone", required = false) String phone, Model model) {
+		if (phone == null || phone.isBlank()) {
+			model.addAttribute("errorMessage", "Vui lòng nhập tên người dùng.");
+			return "/admin/qlnguoidung";
+		} else {
+			List<AccountEntity> productEntities = useadJPA.findByPhoneContainingIgnoreCase(phone);
+			model.addAttribute("account", productEntities);
+			model.addAttribute("phone", phone);
+			return "/admin/qlnguoidung";
+		}
+	}
+
+	@GetMapping("/searchByYear")
+	public String searchTotalByYear() {
+		return "redirect:/timtheonam";
+	}
+
+	@GetMapping("/timtheonam")
+	public String timtktheomam(Model model, @RequestParam(value = "bill_date", required = false) String bill_date) {
+		if (bill_date == null || bill_date.isBlank()) {
+			model.addAttribute("errorMessage", "Vui lòng nhập số năm để xem doanh thu.");
+			return "/admin/qlnamtotal";
+		}
+		List<UseAdEntity> productEntities = useadJPA.findAccountBillsByTotal(bill_date);
+		model.addAttribute("account", productEntities);
+		model.addAttribute("billDate", bill_date);
+		return "/admin/qlnamtotal";
+	}
+
 //	@GetMapping("/timtheonam")
 //	public String showProdGet1(Model model) {
 //		return showProducts(0, 5, model); // Gọi lại hàm showProducts với trang đầu tiên và kích thước trang mặc định

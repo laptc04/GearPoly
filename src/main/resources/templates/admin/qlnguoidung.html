@@ -56,7 +56,7 @@
 								<div style="display: flex;">
 									<input type="text" class="form-control" name="phone" id=""
 										aria-describedby="helpId" placeholder=""
-										th:value="${phone}" />
+										th:value="${paramType == 'phone' ? phone : email}" />
 									<button type="submit" class="btn btn-primary ms-2">Tìm</button>
 								</div>
 							</div>
@@ -67,6 +67,7 @@
 							class="btn btn-primary ms-3"> Làm mới </a>
 					</div>
 				</div>
+
 				<div class="app-title">
 					<ul class="app-breadcrumb breadcrumb side">
 						<li class="breadcrumb-item active"><b>DANH SÁCH NGƯỜI
@@ -108,7 +109,7 @@
 											<td th:text="${qlnguoidung?.phone}">0926737168</td>
 											<td th:text="${qlnguoidung?.role}">Khách hàng</td>
 											<td class="table-td-center">
-												<button class="btn btn-primary btn-sm trash" title="Xóa">
+												<button class="btn btn-primary btn-sm trash" title="Xóa" >
 													<i class="fas fa-trash-alt"></i>
 												</button>
 												<button class="btn btn-primary btn-sm edit" type="button"
@@ -171,48 +172,22 @@
 		aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
-
+			<form action="/searchByYear">
 				<div class="modal-body">
 					<div class="row">
-						<div class="form-group col-md-12">
-							<span class="thong-tin-thanh-toan">
-								<h5>Chỉnh sửa thông tin khách hàng</h5>
-							</span>
-						</div>
-					</div>
-					<div class="row">
 						<div class="form-group col-md-6">
-							<label class="control-label">ID</label> <input id="modal-id"
-								class="form-control" type="text" required disabled>
 						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Họ và tên</label> <input
-								id="modal-name" class="form-control" type="text" required>
+						<div class="form-group">
+							<label class="control-label">Họ và tên</label> 
+							<input id="modal-name" name="bill_date" class="form-control" type="text" th:value="${bill_date}">
 						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Password</label> <input
-								id="modal-password" class="form-control" type="text" required>
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Địa chỉ email</label> <input
-								id="modal-email" class="form-control" type="text" required>
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Số điện thoại</label> <input
-								id="modal-phone" class="form-control" type="number" required>
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Địa chỉ</label> <input
-								id="modal-address" class="form-control" type="text" required>
-						</div>
-					</div>
-					<br> <br>
-					<button class="btn btn-save" type="button">Lưu lại</button>
+					<button class="btn btn-save" type="submit">Tìm Thống Kê Năm</button>
 					<a class="btn btn-cancel" data-bs-dismiss="modal" href="#">Hủy
 						bỏ</a> <br>
 				</div>
 				<div class="modal-footer"></div>
 			</div>
+			</form>
 		</div>
 	</div>
 	<!-- MODAL -->
