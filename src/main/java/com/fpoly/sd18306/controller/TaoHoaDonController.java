@@ -2,6 +2,7 @@ package com.fpoly.sd18306.controller;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +61,6 @@ public class TaoHoaDonController {
 					model.addAttribute("account", accountEntity.get());
 					model.addAttribute("sanpham", cartList);
 					model.addAttribute("total", cartService.getAmount());
-					break;
 				}
 			}
 		}
@@ -105,12 +105,18 @@ public class TaoHoaDonController {
 					} else {
 						if (phone.equals(ac.getPhone())) {
 							model.addAttribute("message2", "Số điện thoại này đã tồn tại!");
+							List<CartEntity> cartList = cartJPA.findByAccountID(id);
+							model.addAttribute("sanpham", cartList);
+							model.addAttribute("total", cartService.getAmount());
 							return "client/laphoadon";
 						}
 					}
 				}
 			} else {
 				model.addAttribute("message2", "Số điện thoại không hợp lệ!");
+				List<CartEntity> cartList = cartJPA.findByAccountID(id);
+				model.addAttribute("sanpham", cartList);
+				model.addAttribute("total", cartService.getAmount());
 				return "client/laphoadon";
 			}
 			int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
@@ -121,16 +127,9 @@ public class TaoHoaDonController {
 				bill.setBillDate(currentDate);
 				bill.setTotal(cartService.getAmount());
 				billsJPA.save(bill);
-				
-				int billid = bill.getId();
-//				DetailBillEntity detailbill = new DetailBillEntity();
-//				detailbill.setPrice(cartService.getAmount());
-//				detailbill.setQuantity(accountEntity);
-//				System.out.println(idsanpham);
-				billsJPA.deleteByAccountId(id);
+				billsJPA.deleteByAccountId(id);	
 				return "redirect:/index";
 			}
-
 			return "redirect:/index";
 		} else {
 			if (fullname.equals("")) {
@@ -150,13 +149,10 @@ public class TaoHoaDonController {
 			for (Cookie cookie : request.getCookies()) {
 				String name = cookie.getValue();
 				List<BillEntity> billEntity = billsJPA.findByacId(name);
-				if (billEntity!=null) {
-					model.addAttribute("bill", billEntity);
-					break;
-				}
+				Collections.sort(billEntity, (b1, b2) -> Integer.compare(b2.getId(), b1.getId()));
+				model.addAttribute("bill", billEntity);
 			}
 		}
-		
 		return "client/qlTTngdung";
 	}
 	
