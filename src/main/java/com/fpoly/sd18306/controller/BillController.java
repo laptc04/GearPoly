@@ -7,10 +7,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BillController {
-
-	@GetMapping("/user/nguoidung")
-	public String getMethodName() {
-		return "client/qlTTngdung";
-	}
 	
 }

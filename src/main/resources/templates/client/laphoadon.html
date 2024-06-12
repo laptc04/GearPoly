@@ -58,6 +58,7 @@
 								</thead>
 								<tbody class="table-group-divider" th:each="item,index:${sanpham}">
 									<tr class="align-middle">
+										<input name="idsanpham" type="hidden" th:value="${item?.productEntity.id}" >
 										<td th:text="${index.index + 1}">1</td>
 										<td scope="row" th:each="image : ${item.productEntity.imageEntities}">
 											<img th:src="@{'/images/' + ${image.getName()}}" class="rounded mx-auto d-block" width="50px"
@@ -77,7 +78,7 @@
 									phẩm</button>
 								<a class="btn btn-danger ms-1 mb-2" href="/cart" role="button">Hủy</a>
 								<h5 class="text-danger d-block"
-									th:text="'Tổng giá: '+${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+									th:text="'Tổng tiền: '+${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
 									style="margin-left: 315px;">Tổng giá: 3.000.000đ</h5>
 							</div>
 						</div>

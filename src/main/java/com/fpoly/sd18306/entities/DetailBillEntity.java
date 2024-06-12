@@ -23,21 +23,21 @@ public class DetailBillEntity implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    public int id;
 
     @ManyToOne
     @JoinColumn(name = "pro_id")
     @JsonIgnoreProperties(value = "productEntity")
-    private ProductEntity product;
+    public ProductEntity product;
 
     @ManyToOne
     @JoinColumn(name = "bill_id")
     @JsonIgnoreProperties(value = "billEntity")
-    private BillEntity bill;
+    public BillEntity bill;
 
     @Column(name = "price")
-    private int price;
+    public int price;
 
     @Column(name = "quantity")
-    private int quantity;
+    public int quantity;
 }
