@@ -1,6 +1,7 @@
 package com.fpoly.sd18306.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,6 @@ public class BillEntity implements Serializable {
     @JsonIgnoreProperties(value = "accountEntity")
     private AccountEntity account;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "bill_date")
     private Date billDate;
 

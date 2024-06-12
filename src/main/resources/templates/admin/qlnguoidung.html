@@ -30,118 +30,141 @@
 		<!-- place navbar here -->
 	</header>
 	<main class="app-content mt-5">
-			<div class="container">
+		<div class="container">
 			<div class="row mt-3">
 				<!-- Form tìm kiếm theo tên -->
-				<div class="col-6">
-					<form action="/searchByYear" method="get">
-						<div class="mb-3">
-							<label for="" class="form-label">Tìm kiếm theo tên</label>
-							<div style="display: flex;">
-								<input type="text" class="form-control" name="name" id=""
-									aria-describedby="helpId" placeholder="" th:value="${name}" />
-								<button type="submit" class="btn btn-primary ms-2">Tìm</button>
+				<div class="row">
+					<div class="col-6">
+						<form action="/searchByName" method="get">
+							<div class="mb-3">
+								<label for="" class="form-label">Tìm kiếm theo tên</label>
+								<div style="display: flex;">
+									<input type="text" class="form-control" name="name" id=""
+										aria-describedby="helpId" placeholder="" th:value="${name}" />
+									<button type="submit" class="btn btn-primary ms-2">Tìm</button>
+								</div>
 							</div>
-						</div>
-					</form>
-				</div>
-		<div class="app-title">
-			<ul class="app-breadcrumb breadcrumb side">
-				<li class="breadcrumb-item active"><b>DANH SÁCH NGƯỜI DÙNG</b></li>
-			</ul>
-			<div id="clock"></div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-12">
-				<div class="tile">
-					<div class="tile-body">
-						<table class="table table-hover table-bordered js-copytextarea"
-							cellpadding="0" cellspacing="0" border="0" id="sampleTable">
-							<thead>
-								<tr>
-									<th width="10"><input type="checkbox" id="all"></th>
-									<th>ID</th>
-									<th width="150">Họ và tên</th>
-									<th>Email</th>
-									<th width="20">Ảnh</th>
-									<th width="300">Địa chỉ</th>
-									<th>SĐT</th>
-									<th>Role</th>
-									<th width="100">Tính năng</th>
-								</tr>
-							</thead>
-							<tbody th:each="qlnguoidung,index:${account}">
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td th:text="${qlnguoidung?.id}">#CD12837</td>
-									<td th:text="${qlnguoidung?.fullname}">Hồ Thị Thanh Ngân</td>
-									<td th:text="${qlnguoidung?.email}">abcd@gmail.com</td>
-									<td><img th:src="@{'/images/' + ${qlnguoidung?.image}}"
-										alt="QLUser Image" style="width: 50px; height: auto;"></td>
-									<td th:text="${qlnguoidung?.address}">155-157 Trần Quốc
-										Thảo, Quận 3, Hồ Chí Minh</td>
-									<td th:text="${qlnguoidung?.phone}">0926737168</td>
-									<td th:text="${qlnguoidung?.role}">Khách hàng</td>
-									<td class="table-td-center">
-										<button class="btn btn-primary btn-sm trash" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa" data-bs-toggle="modal" data-bs-target="#ModalUP"
-											data-id="#CD12837" data-name="Hồ Thị Thanh Ngân"
-											data-password="12345" data-email="abcd@gmail.com"
-											data-phone="0926737168"
-											data-address="155-157 Trần Quốc Thảo, Quận 3, Hồ Chí Minh">
-											<i class="fas fa-edit"></i>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+							<div>
+								<h3 th:text="${errorMessage}"></h3>
+							</div>
+						</form>
 					</div>
-<!-- Phân trang -->
-			<nav aria-label="Page navigation" th:if="${totalPages > 1}">
-				<ul class="pagination">
-					<li class="page-item"
-						th:classappend="${currentPage == 0} ? 'disabled' : ''"><a
-						class="page-link"
-						th:href="@{/manauser/page(page=0, size=${pageSize})}"
-						aria-label="First"> <span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<li class="page-item"
-						th:classappend="${currentPage == 0} ? 'disabled' : ''"><a
-						class="page-link"
-						th:href="@{/manauser/page(page=${currentPage - 1}, size=${pageSize})}"
-						aria-label="Previous"> <span aria-hidden="true">&lt;</span>
-					</a></li>
-					<li class="page-item"
-						th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
-						th:classappend="${currentPage == pageNumber} ? 'active' : ''">
-						<a class="page-link"
-						th:href="@{/manauser/page(page=${pageNumber}, size=${pageSize})}"
-						th:text="${pageNumber + 1}"></a>
-					</li>
-					<li class="page-item"
-						th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
-						<a class="page-link"
-						th:href="@{/manauser/page(page=${currentPage + 1}, size=${pageSize})}"
-						aria-label="Next"> <span aria-hidden="true">&gt;</span>
-					</a>
-					</li>
-					<li class="page-item"
-						th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
-						<a class="page-link"
-						th:href="@{/manauser/page(page=${totalPages - 1}, size=${pageSize})}"
-						aria-label="Last"> <span aria-hidden="true">&raquo;</span>
-					</a>
-					</li>
-				</ul>
-			</nav>
+					<div class="col-6">
+						<form action="/searchByYear" method="get">
+							<div class="mb-3">
+								<label for="" class="form-label">Thống kê theo năm</label>
+								<div style="display: flex;">
+									<input type="text" class="form-control" name="bill_date" id=""
+										aria-describedby="helpId" placeholder=""
+										th:value="${bill_date}" />
+									<button type="submit" class="btn btn-primary ms-2">Tìm</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="btn-add mt-5 mb-3">
+						<a th:href="@{/manauser}" type="button"
+							class="btn btn-primary ms-3"> Làm mới </a>
+					</div>
 				</div>
-			</div>
-		</div>
+				<div class="app-title">
+					<ul class="app-breadcrumb breadcrumb side">
+						<li class="breadcrumb-item active"><b>DANH SÁCH NGƯỜI
+								DÙNG</b></li>
+					</ul>
+					<div id="clock"></div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="tile">
+							<div class="tile-body">
+								<table class="table table-hover table-bordered js-copytextarea"
+									cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+									<thead>
+										<tr>
+											<th width="10"><input type="checkbox" id="all"></th>
+											<th>ID</th>
+											<th width="150">Họ và tên</th>
+											<th>Email</th>
+											<th width="20">Ảnh</th>
+											<th width="300">Địa chỉ</th>
+											<th>SĐT</th>
+											<th>Role</th>
+											<th width="100">Tính năng</th>
+										</tr>
+									</thead>
+									<tbody th:each="qlnguoidung,index:${account}">
+										<tr>
+											<td width="10"><input type="checkbox" name="check1"
+												value="1"></td>
+											<td th:text="${qlnguoidung?.id}">#CD12837</td>
+											<td th:text="${qlnguoidung?.fullname}">Hồ Thị Thanh Ngân</td>
+											<td th:text="${qlnguoidung?.email}">abcd@gmail.com</td>
+											<td><img th:src="@{'/images/' + ${qlnguoidung?.image}}"
+												alt="QLUser Image" style="width: 50px; height: auto;"></td>
+											<td th:text="${qlnguoidung?.address}">155-157 Trần Quốc
+												Thảo, Quận 3, Hồ Chí Minh</td>
+											<td th:text="${qlnguoidung?.phone}">0926737168</td>
+											<td th:text="${qlnguoidung?.role}">Khách hàng</td>
+											<td class="table-td-center">
+												<button class="btn btn-primary btn-sm trash" title="Xóa">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+												<button class="btn btn-primary btn-sm edit" type="button"
+													title="Sửa" data-bs-toggle="modal"
+													data-bs-target="#ModalUP" data-id="#CD12837"
+													data-name="Hồ Thị Thanh Ngân" data-password="12345"
+													data-email="abcd@gmail.com" data-phone="0926737168"
+													data-address="155-157 Trần Quốc Thảo, Quận 3, Hồ Chí Minh">
+													<i class="fas fa-edit"></i>
+												</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- Phân trang -->
+							<nav aria-label="Page navigation" th:if="${totalPages > 1}">
+								<ul class="pagination">
+									<li class="page-item"
+										th:classappend="${currentPage == 0} ? 'disabled' : ''"><a
+										class="page-link"
+										th:href="@{/manauser/page(page=0, size=${pageSize})}"
+										aria-label="First"> <span aria-hidden="true">&laquo;</span>
+									</a></li>
+									<li class="page-item"
+										th:classappend="${currentPage == 0} ? 'disabled' : ''"><a
+										class="page-link"
+										th:href="@{/manauser/page(page=${currentPage - 1}, size=${pageSize})}"
+										aria-label="Previous"> <span aria-hidden="true">&lt;</span>
+									</a></li>
+									<li class="page-item"
+										th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+										th:classappend="${currentPage == pageNumber} ? 'active' : ''">
+										<a class="page-link"
+										th:href="@{/manauser/page(page=${pageNumber}, size=${pageSize})}"
+										th:text="${pageNumber + 1}"></a>
+									</li>
+									<li class="page-item"
+										th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+										<a class="page-link"
+										th:href="@{/manauser/page(page=${currentPage + 1}, size=${pageSize})}"
+										aria-label="Next"> <span aria-hidden="true">&gt;</span>
+									</a>
+									</li>
+									<li class="page-item"
+										th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+										<a class="page-link"
+										th:href="@{/manauser/page(page=${totalPages - 1}, size=${pageSize})}"
+										aria-label="Last"> <span aria-hidden="true">&raquo;</span>
+									</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
 	</main>
 	<!-- MODAL -->
 	<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog"

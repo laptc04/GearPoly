@@ -45,22 +45,28 @@
 					</div>
 					<h4>Sản phẩm đã chọn</h2>
 						<div class="table-responsive">
-							<table class="table">
+							<table class="table table-bordered">
 								<thead>
 									<tr>
 										<th>STT</th>
-										<th scope="col">Hình ảnh</th>
+										<th class="text-center" scope="col">Hình ảnh</th>
 										<th scope="col">Tên sản phẩm</th>
-										<th scope="col">Số lượng</th>
 										<th>Giá</th>
+										<th scope="col">Số lượng</th>
+										<th>Tổng giá</th>
 									</tr>
 								</thead>
 								<tbody class="table-group-divider" th:each="item,index:${sanpham}">
 									<tr class="align-middle">
+										<input name="idsanpham" type="hidden" th:value="${item?.productEntity.id}" >
 										<td th:text="${index.index + 1}">1</td>
-										<td scope="row"><img src="../images/2.png" class="rounded mx-auto" width="50px"
-												height="50px" alt=""></td>
+										<td scope="row" th:each="image : ${item.productEntity.imageEntities}">
+											<img th:src="@{'/images/' + ${image.getName()}}" class="rounded mx-auto d-block" width="50px"
+												height="50px" alt="">
+										</td>
 										<td th:text="${item?.productEntity?.product_name}">Màn hình</td>
+										<td th:text="${#numbers.formatDecimal(item?.productEntity?.price, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+											class="text-danger">500.000đ</td>
 										<td th:text="${item?.quantity}">1</td>
 										<td th:text="${#numbers.formatDecimal(item?.price, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
 											class="text-danger">500.000đ</td>
@@ -68,12 +74,12 @@
 								</tbody>
 							</table>
 							<div class="d-flex align-items-center me-3">
-								<button type="submit" class="btn btn-primary mb-2" href="#" role="button">Mua san
+								<button type="submit" class="btn btn-primary mb-2" href="#" role="button">Mua sản
 									phẩm</button>
 								<a class="btn btn-danger ms-1 mb-2" href="/cart" role="button">Hủy</a>
-								<h6 class="text-danger"
-									th:text="'Tổng giá: '+${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
-									style="margin-left: 315px;">Tổng giá: 3.000.000đ</h6>
+								<h5 class="text-danger d-block"
+									th:text="'Tổng tiền: '+${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+									style="margin-left: 315px;">Tổng giá: 3.000.000đ</h5>
 							</div>
 						</div>
 				</form>
