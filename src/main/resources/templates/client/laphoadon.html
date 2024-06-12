@@ -73,11 +73,12 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="d-flex align-items-center me-3">
+							<hr>
+							<div class="d-flex align-items-center">
 								<button type="submit" class="btn btn-primary mb-2" href="#" role="button">Mua sản
 									phẩm</button>
 								<a class="btn btn-danger ms-1 mb-2" href="/cart" role="button">Hủy</a>
-								<h5 class="text-danger d-block"
+								<h5 class="text-danger"
 									th:text="'Tổng tiền: '+${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
 									style="margin-left: 315px;">Tổng giá: 3.000.000đ</h5>
 							</div>
