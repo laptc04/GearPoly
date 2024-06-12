@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
 import com.fpoly.sd18306.entities.UseAdEntity;
-import com.fpoly.sd18306.jpa.BillJPA;
 import com.fpoly.sd18306.jpa.BillsJPA;
 import com.fpoly.sd18306.jpa.UseAdJPA;
 import com.fpoly.sd18306.services.UploadService;
