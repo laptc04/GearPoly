@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 public interface AccountJPA extends JpaRepository<AccountEntity, String> {
 	AccountEntity findByIdAndPassword(String id, String password);
 	Optional<AccountEntity> findByEmail(String email);
+	Optional<AccountEntity> findById(String id);
 	@Modifying
 	@Transactional
     @Query("UPDATE AccountEntity a SET a.password = :newPassword WHERE a.id = :id")

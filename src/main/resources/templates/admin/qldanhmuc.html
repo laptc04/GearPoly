@@ -38,7 +38,9 @@ h2 {
 	<main class="container mt-5" style="height: 400px;">
 		<div>
 			<div class="main">
-
+				<div th:if="${message}" class="alert" th:classappend="${alertClass}" role="alert">
+			        <span th:text="${message}"></span>
+				</div>
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="home-tab-pane"
 						role="tabpanel" aria-labelledby="home-tab" tabindex="0">
@@ -53,27 +55,22 @@ h2 {
 												<H2 class="nd ">Quản Lý Danh Mục</H2>
 											</div>
 											<br> <br> <br>
-											<form th:action="${category == null ? '/add-categoriesManager' : '/update-categoriesManager'}" method="post"
-												style="margin-left: 17vh;" enctype="multipart/form-data">
-												<input type="hidden" name="id" th:value="${category?.id}">
-												<div class="col">
-													<H3>Tên Danh Mục</H3>
-													<input class="rounded" type="text" style="width: 60vh"
-														name="categories_name" placeholder="Tên Danh Mục" th:value="${cat?.categories_name}">
-														<br>
-													<H3>Hình Ảnh</H3>
-													<input class="rounded p-1" type="file" style="width: 60vh"
-														name="file" multiple accept="image/*">
-												</div>
-												<div class="mb-3" th:if="${cat != null}">
-													<img th:src="'/images/' + ${cat?.image}"
-														style="width: 100px; height: 100px">
-												</div>
-												<br>
-													<div class="col d-inline mt-5">
-														<button type="submit" class="btn btn-primary"
-															th:text="${category == null} ? 'Thêm' : 'Cập Nhật'"></button>
-													</div>
+											<form th:action="@{${category == null ? '/add-categoriesManager' : '/update-categoriesManager'}}" method="post" style="margin-left: 17vh;" enctype="multipart/form-data">
+											    <input type="hidden" name="id" th:value="${category?.id}" />
+											    <div class="col">
+											        <h3>Tên Danh Mục</h3>
+											        <input class="rounded" type="text" style="width: 60vh" name="categories_name" placeholder="Tên Danh Mục" th:value="${category?.categories_name}" />
+											        <br>
+											        <h3>Hình Ảnh</h3>
+											        <input class="rounded p-1" type="file" style="width: 60vh" name="file" multiple accept="image/*" />
+											    </div>
+											    <div class="mb-3" th:if="${category != null}">
+											        <img th:src="'/images/' + ${category?.image}" style="width: 100px; height: 100px" />
+											    </div>
+											    <br>
+											    <div class="col d-inline mt-5">
+											        <button type="submit" class="btn btn-primary" th:text="${category == null ? 'Thêm' : 'Cập Nhật'}"></button>
+											    </div>
 											</form>
 										</div>
 									</div>
@@ -104,11 +101,11 @@ h2 {
 													<td>
 														<img th:src="'/images/' + ${item?.image}" 
 															class="img-thumbnail me-3" alt="Product Image" 
-															style="width: 150px;">
+															style="width: 150px; height: 150px;">
 													</td> 
 													<td>
-														<a type="button" class="btn btn-2 btn-success" href="/update-categoriesManager?id">Sửa</a>
-														<br>
+														<a type="button" class="btn btn-2 btn-success" th:href="@{'/update-categoriesManager?id=' + ${item?.id}}">Sửa</a>
+														<br>	
 														<!-- <form method="POST" th:action="@{/delete-categoriesManager}">
 							                				<input type="hidden" name="id" th:value="${item?.id}">
 							                				<button type="submit" class="btn btn-danger" role="button">Xóa</button>
@@ -118,14 +115,18 @@ h2 {
 											</tbody>
 										</table>
 										<nav class="tohop" aria-label="Page navigation example">
-											<ul class="pagination">
-												<li class="page-item"><a class="page-link" href="#">Previous</a></li>
-												<li class="page-item"><a class="page-link" href="#">1</a></li>
-												<li class="page-item"><a class="page-link" href="#">2</a></li>
-												<li class="page-item"><a class="page-link" href="#">3</a></li>
-												<li class="page-item"><a class="page-link" href="#">Next</a></li>
-											</ul>
-										</nav>
+									        <ul class="pagination">
+									            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+									                <a class="page-link" th:href="@{/categoriesManager(page=${currentPage - 1}, size=${5})}">Previous</a>
+									            </li>
+									            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+									                <a class="page-link" th:href="@{/categoriesManager(page=${i}, size=${5})}" th:text="${i + 1}"></a>
+									            </li>
+									            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+									                <a class="page-link" th:href="@{/categoriesManager(page=${currentPage + 1}, size=${5})}">Next</a>
+									            </li>
+									        </ul>
+									    </nav>
 									</div>
 								</div>
 							</div>
