@@ -122,7 +122,7 @@ public class CartController {
 	@GetMapping("/search-by-categoryIndex")
     public String searchByCategory(@RequestParam("categories_id") int categoryId,
     		@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size, Model model) {
+            @RequestParam(defaultValue = "6") int size, Model model) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 	    Page<ProductEntity> productPage;
 
