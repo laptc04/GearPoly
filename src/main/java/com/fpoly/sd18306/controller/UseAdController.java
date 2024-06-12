@@ -66,9 +66,19 @@ public class UseAdController {
 			model.addAttribute("account", productEntities);
 			model.addAttribute("fullname", name);
 			return "/admin/qlnguoidung";
-		}
-
-		
+		}	
+	}	
+		@GetMapping("/searchByPhone")
+		public String searchProductsByPhone(@RequestParam(value = "phone", required = false) String phone, Model model) {
+			if (phone == null || phone.isBlank()) {
+				model.addAttribute("errorMessage", "Vui lòng nhập tên người dùng.");
+				return "/admin/qlnguoidung";
+			}else {
+				List<AccountEntity> productEntities = useadJPA.findByPhoneContainingIgnoreCase(phone);
+				model.addAttribute("account", productEntities);
+				model.addAttribute("phone", phone);
+				return "/admin/qlnguoidung";
+			}	
 	}
 	
 //	@GetMapping("/searchByYear")

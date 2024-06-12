@@ -20,6 +20,9 @@ public interface UseAdJPA extends JpaRepository<AccountEntity, String> {
 	@Query("SELECT p FROM AccountEntity p WHERE LOWER(p.fullname) LIKE LOWER(CONCAT('%', :fullname, '%'))")
 	public List<AccountEntity> findByNameContainingIgnoreCase(@Param("fullname") String fullname);
 	
+	@Query("SELECT p FROM AccountEntity p WHERE LOWER(p.phone) LIKE LOWER(CONCAT('%', :phone, '%'))")
+	public List<AccountEntity> findByPhoneContainingIgnoreCase(@Param("phone") String phone);
+	
 
 //	@Query(nativeQuery = true, name = "UseAd.getAccountBillsByTotal")
 //	List<UseAdEntity>findAccountBillsByTotal(@Param("bill_date") String bill_date);

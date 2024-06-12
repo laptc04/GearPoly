@@ -50,13 +50,13 @@
 						</form>
 					</div>
 					<div class="col-6">
-						<form action="/searchByYear" method="get">
+						<form action="/searchByPhone" method="get">
 							<div class="mb-3">
-								<label for="" class="form-label">Thống kê theo năm</label>
+								<label for="" class="form-label">Tìm kiếm theo số điện thoại</label>
 								<div style="display: flex;">
-									<input type="text" class="form-control" name="bill_date" id=""
+									<input type="text" class="form-control" name="phone" id=""
 										aria-describedby="helpId" placeholder=""
-										th:value="${bill_date}" />
+										th:value="${phone}" />
 									<button type="submit" class="btn btn-primary ms-2">Tìm</button>
 								</div>
 							</div>
