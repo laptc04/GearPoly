@@ -150,13 +150,9 @@ public class TaoHoaDonController {
 			for (Cookie cookie : request.getCookies()) {
 				String name = cookie.getValue();
 				List<BillEntity> billEntity = billsJPA.findByacId(name);
-				if (billEntity!=null) {
-					model.addAttribute("bill", billEntity);
-					break;
-				}
+				model.addAttribute("bill", billEntity);
 			}
 		}
-		
 		return "client/qlTTngdung";
 	}
 	
