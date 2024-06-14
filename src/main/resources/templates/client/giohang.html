@@ -11,7 +11,9 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 	<script src="https://kit.fontawesome.com/8121fed272.js" crossorigin="anonymous"></script>
+	
 </head>
+
 
 <body>
 	<header><!-- place navbar here -->
@@ -27,14 +29,14 @@
 				<h3>GIỎ HÀNG</h3>
 				<div class="col-12" >
 					<div class="d-flex align-items-center mb-3"  th:each="item : ${cart}">
-						<img height="600px"
-                                th:each="image : ${tiem?.imageEntities}"
-								th:src="'/images/' + ${image?.name}"
-                                    class="w-100 d-block"/>
+						     <img height="60px" width="60px"
+                     th:src="'/images/' + ${item?.productEntity?.imageEntities[0]?.name}"
+                     class="d-block"/>
+                     
 						<div class="flex-grow-1">
 							<h5 class="card-title mb-1" th:text="${item?.productEntity?.product_name}">Card title</h5>
 						</div>
-						<table>
+						<td class="center">
 						<div class="d-flex align-items-center me-3">
 							<a th:href="'/update-to-cart?id=' + ${item?.id} + '&quantity=' + ${item?.quantity - 1}" type="button" class="btn btn-danger btn-sm me-1">-</a>
 							<input th:value="${item?.quantity}" type="number" class="form-control form-control-sm text-center" value="1" min="1"
@@ -45,7 +47,7 @@
 						<a class="m-2 text-danger" th:href="'/remove-to-cart?id=' + ${item?.id}">
 							<i class="fa-solid fa-trash"></i>
 						</a>
-						</table>
+						</td>
 					</div>
 					<!-- Repeat the above block for each item -->
 					<!-- End of repeated blocks -->

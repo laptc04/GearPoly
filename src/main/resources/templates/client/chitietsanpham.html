@@ -2,168 +2,214 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-    <title>id sản phảm</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>id sản phảm</title>
+<!-- Required meta tags -->
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <!-- Bootstrap CSS v5.2.1 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+<!-- Bootstrap CSS v5.2.1 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+	crossorigin="anonymous" />
 </head>
 
 <body>
-    <header>
-        <!-- place navbar here -->
-    </header>
-    <main>
-        <div class="container" th:if="${productID != null}">
-        <form action="/user/chitiet" method="post" enctype="multipart/form-data">
-        	<div class="row mt-3">
-                <div class="col-5">
-                    <div id="carouselId" class=" carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-                            <li data-bs-target="#carouselId" data-bs-slide-to="0" class="active" aria-current="true">
-                            </li>
-                            <li data-bs-target="#carouselId" data-bs-slide-to="1" aria-label="Second slide"></li>
-                            <li data-bs-target="#carouselId" data-bs-slide-to="2" aria-label="Third slide"></li>
-                        </div>
-                        <div class="carousel-inner img-thumbnail" style="height: 600px;" role="listbox">
-                            <div class=" carousel-item active">
-                                <img height="600px"
-                                th:each="image : ${productID.imageEntities}"
-								th:src="'/images/' + ${image?.name}"
-                                    class="w-100 d-block" alt="First slide" />
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselId"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-7" >
-                    <h3 th:text="${productID?.product_name}">Màn hình Monitor Xiaomi 27 inch A27i ELA5345EU
-                    </h3>
-                    <hr>
-                    <div class="row">
-                        <h5>CHI TIẾT SẢN PHẨM</h5> <br><br>
-                        <div class="col-3">
-                         	<p>Danh mục</p>      
-                            <p>Nhà sản xuất</p>
-                            <p>Nhà cung cấp</p>      
-                        </div>
-                        <div class="col-9">
-                        <p th:text="${productID?.CategoryEntity?.categories_name}" ></p>
-                            <p>Cao đẳng FTP Cần Thơ</p>
-                            <p>Gear Poly</p>
-                        </div>
-                        
-                        
-                    </div><br><br> <h2 class="text-danger" th:text="${#numbers.formatCurrency(productID?.price)}"><strong>500.000đ</strong></h2>
-                    <br><br><br><br>
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="mb-3">
-                               
-                            </div>
-                        </div>
-                    </div>
-                    
+	<header>
+		<!-- place navbar here -->
+	</header>
+	<main>
+		<div class="container" th:if="${productID != null}">
+			<form action="/user/chitiet" method="post"
+				enctype="multipart/form-data">
+				<div class="row mt-3">
+					<div class="col-5">
+						<div id="carouselId" class="carousel slide"
+							data-bs-ride="carousel">
+							<div class="carousel-indicators"
+								th:if="${#lists.size(productID.imageEntities) > 0}">
+								<li th:each="image, iterStat : ${productID.imageEntities}"
+									data-bs-target="#carouselId"
+									th:data-bs-slide-to="${iterStat.index}"
+									th:classappend="${iterStat.index == 0} ? 'active'"
+									th:aria-current="${iterStat.index == 0} ? 'true' : 'false'"></li>
+							</div>
+							<div class="carousel-inner img-thumbnail" style="height: 600px;"
+								role="listbox">
+								<div th:if="${#lists.size(productID.imageEntities) == 0}"
+									class="carousel-item active">
+									<img height="600px" src="/images/default.jpg"
+										class="w-100 d-block" alt="Default slide" />
+								</div>
+								<div th:each="image, iterStat : ${productID.imageEntities}"
+									th:classappend="${iterStat.index == 0} ? 'active' : ''"
+									class="carousel-item">
+									<img height="600px" th:src="'/images/' + ${image.name}"
+										class="w-100 d-block"
+										th:alt="'Slide ' + ${iterStat.index + 1}" />
+								</div>
+							</div>
+							<button class="carousel-control-prev" type="button"
+								data-bs-target="#carouselId" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button"
+								data-bs-target="#carouselId" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
 
-                </div>
-            </div>
-        </form>
-        <form th:action="@{'/add-to-cart?id=' + ${productID?.id} + '&path=' + ${path}}" method="post">
-        <div class="text-center">
-        	<input  type="hidden" name="id" th:value="${productID?.id}">
-   		<div class="d-flex">
-        <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 70px; margin-right: 10px;">
-        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-    	</div>
-        </div>
-    
-		</form>
-            
-            <hr>
-            <h4>MÔ TẢ SẢN PHẨM</h4>
-            <p th:text="${productID?.description}">Màn hình Xiaomi A27 Ela5345EU 27 inch là sự kết hợp hoàn hảo giữa thiết kế tinh tế và hiệu suất đỉnh cao.
-                Với kích thước rộng 27 inch, độ phân giải cao và màu sắc chân thực, thiết bị màn hình Xiaomi này mang
-                lại trải nghiệm xem hình ảnh và video tuyệt vời. Đây chính là sự lựa chọn lý tưởng cho những người đòi
-                hỏi chất lượng và thẩm mỹ trong trải nghiệm hiển thị.</p>
-            <hr>
-            <h4>SẢN PHẢM TƯƠNG TỰ</h4><br>
-            <div class="row row-cols-1 row-cols-md-4 g-4">
-                <div class="col">
-                    <div class="card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Màn hình </h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
-                                to additional content. This content is a little bit longer.</p>
-                            <p class="text-danger"><strong>500.000đ</strong></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Màn hình </h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
-                                to additional content. This content is a little bit longer.</p>
-                            <p class="text-danger"><strong>500.000đ</strong></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Màn hình </h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
-                                to additional content. This content is a little bit longer.</p>
-                            <p class="text-danger"><strong>500.000đ</strong></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Màn hình </h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
-                                to additional content. This content is a little bit longer.</p>
-                            <p class="text-danger"><strong>500.000đ</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <!-- Footer -->
-    <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+					</div>
+					<div class="col-7">
+						<h3 th:text="${productID?.product_name}">Màn hình Monitor
+							Xiaomi 27 inch A27i ELA5345EU</h3>
+						<hr>
+						<div class="row">
+							<h5>CHI TIẾT SẢN PHẨM</h5>
+							<br> <br>
+							<div class="col-3">
+								<p>Danh mục</p>
+								<p>Nhà sản xuất</p>
+								<p>Nhà cung cấp</p>
+							</div>
+							<div class="col-9">
+								<p th:text="${productID?.CategoryEntity?.categories_name}"></p>
+								<p>Cao đẳng FTP Cần Thơ</p>
+								<p>Gear Poly</p>
+							</div>
 
-    </footer>
-    <!-- Footer -->
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+						</div>
+						<br> <br>
+						<h2 class="text-danger"
+							th:text="${#numbers.formatCurrency(productID?.price)}">
+							<strong>500.000đ</strong>
+						</h2>
+						<br> <br> <br> <br>
+			</form>
+			<div class="row">
+				<div class="col-6">
+					<div class="mb-5"></div>
+					<form
+						th:action="@{'/add-to-cart?id=' + ${productID?.id} + '&path=' + ${path}}"
+						method="post">
+						<div class="text-center">
+							<input type="hidden" name="id" th:value="${productID?.id}">
+							<div class="d-flex">
+								<button type="submit" class="btn btn-primary">Thêm vào
+									giỏ hàng</button>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+
+
+		</div>
+		</div>
+
+
+
+		<hr>
+		<h4>MÔ TẢ SẢN PHẨM</h4>
+		<p th:text="${productID?.description}">Màn hình Xiaomi A27
+			Ela5345EU 27 inch là sự kết hợp hoàn hảo giữa thiết kế tinh tế và
+			hiệu suất đỉnh cao. Với kích thước rộng 27 inch, độ phân giải cao và
+			màu sắc chân thực, thiết bị màn hình Xiaomi này mang lại trải nghiệm
+			xem hình ảnh và video tuyệt vời. Đây chính là sự lựa chọn lý tưởng
+			cho những người đòi hỏi chất lượng và thẩm mỹ trong trải nghiệm hiển
+			thị.</p>
+		<hr>
+		<h4>SẢN PHẢM TƯƠNG TỰ</h4>
+		<br>
+		<div class="row row-cols-1 row-cols-md-4 g-4">
+			<div class="col">
+				<div class="card">
+					<img
+						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
+						class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Màn hình</h5>
+						<p class="card-text">This is a longer card with supporting
+							text below as a natural lead-in to additional content. This
+							content is a little bit longer.</p>
+						<p class="text-danger">
+							<strong>500.000đ</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<img
+						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
+						class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Màn hình</h5>
+						<p class="card-text">This is a longer card with supporting
+							text below as a natural lead-in to additional content. This
+							content is a little bit longer.</p>
+						<p class="text-danger">
+							<strong>500.000đ</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<img
+						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
+						class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Màn hình</h5>
+						<p class="card-text">This is a longer card with supporting
+							text below as a natural lead-in to additional content. This
+							content is a little bit longer.</p>
+						<p class="text-danger">
+							<strong>500.000đ</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<img
+						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuMzdqehsDEDbXTxryJnsrXGU_lIQnSlIWag-zgqKaXA&s"
+						class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Màn hình</h5>
+						<p class="card-text">This is a longer card with supporting
+							text below as a natural lead-in to additional content. This
+							content is a little bit longer.</p>
+						<p class="text-danger">
+							<strong>500.000đ</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</main>
+	<!-- Footer -->
+	<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+
+	</footer>
+	<!-- Footer -->
+	<!-- Bootstrap JavaScript Libraries -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+		integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+		crossorigin="anonymous"></script>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+		integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>

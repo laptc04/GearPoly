@@ -64,13 +64,15 @@ public class CartController {
 	@GetMapping("user/index")
 	public String getsanpham(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size, Model model) {
 	    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-	    Page<ProductEntity> productPage = productJPA.findAll(pageable);
+	    Page<ProductEntity> productPage = productJPA.findByHien(false, pageable);
 
 	    model.addAttribute("products", productPage.getContent());
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("totalPages", productPage.getTotalPages());
 	    return "client/sanpham";
 	}
+	
+	
 
 	@GetMapping("user/chitiet")
 	public String getchitietsanpham(Model model, @RequestParam("id") int id) {
