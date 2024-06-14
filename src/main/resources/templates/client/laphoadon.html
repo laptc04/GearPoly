@@ -60,9 +60,15 @@
 									<tr class="align-middle">
 										<input name="idsanpham" type="hidden" th:value="${item?.productEntity.id}" >
 										<td th:text="${index.index + 1}">1</td>
-										<td scope="row" th:each="image : ${item.productEntity.imageEntities}">
-											<img th:src="@{'/images/' + ${image.getName()}}" class="rounded mx-auto d-block" width="50px"
-												height="50px" alt="">
+										<td scope="row">
+										    <div class="text-nowrap">
+										        <img th:if="${item.productEntity.imageEntities.size() > 0}"
+										            th:src="@{'/images/' + ${item.productEntity.imageEntities[0].name}}"
+										            class="rounded mx-auto d-inline-block align-middle" width="50px" height="50px" alt="">
+										        <span th:if="${item.productEntity.imageEntities.size() > 1}" class="align-middle">
+										            +<span th:text="${item.productEntity.imageEntities.size() - 1}"></span>
+										        </span>
+										    </div>
 										</td>
 										<td th:text="${item?.productEntity?.product_name}">Màn hình</td>
 										<td th:text="${#numbers.formatDecimal(item?.productEntity?.price, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"
