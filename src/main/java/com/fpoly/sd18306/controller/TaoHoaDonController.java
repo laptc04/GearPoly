@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
 import com.fpoly.sd18306.entities.CartEntity;
+import com.fpoly.sd18306.entities.DetailBillEntity;
+import com.fpoly.sd18306.entities.ProductEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.jpa.BillsJPA;
 import com.fpoly.sd18306.jpa.CartJpa;
+import com.fpoly.sd18306.jpa.DetailsBillJPA;
 import com.fpoly.sd18306.jpa.ProductJPA;
 import com.fpoly.sd18306.models.Account;
 import com.fpoly.sd18306.services.CartService;
@@ -36,6 +39,9 @@ public class TaoHoaDonController {
 
 	@Autowired
 	BillsJPA billsJPA;
+	
+	@Autowired
+	DetailsBillJPA detailsbillJPA;
 
 	@Autowired
 	AccountJPA accountJPA;
@@ -85,22 +91,28 @@ public class TaoHoaDonController {
 						int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
 						Optional<AccountEntity> acc = accountJPA.findById(id);
 						if (acc.isPresent()) {
+							CartEntity cartEntity = new CartEntity();
 							BillEntity bill = new BillEntity();
 							bill.setAccount(acc.get());
 							bill.setBillDate(currentDate);
 							bill.setTotal(cartService.getAmount());
 							billsJPA.save(bill);
-//							DetailBillEntity detailbill = new DetailBillEntity();
-//							detailbill.setPrice(cartService.getAmount());
-//							for (int idsp : idsanpham) {
-//								int quantitysp = billsJPA.findQuantityByProductId(idsp);
-//								System.out.println(quantitysp);
-//								System.out.println("Đã thêm số lượng");
-//								billsJPA.deleteByProductID(idsp);
-//								System.out.println("Đã xóa số lượng vừa thêm");
-//							}
+							List<CartEntity> cartItems = cartJPA.findByAccountID(id);
+							for (CartEntity cartItem : cartItems) {
+						        DetailBillEntity detailBill = new DetailBillEntity();
+						        detailBill.setBill(bill);
+						        detailBill.setProduct(cartItem.getProductEntity());
+						        detailBill.setTotal_price(cartItem.getPrice());
+						        Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
+						        if (productOpt.isPresent()) {
+						            ProductEntity product = productOpt.get();
+						            detailBill.setPrice(product.getPrice()); 
+						        }
+						        detailBill.setQuantity(cartItem.getQuantity());
+						        detailsbillJPA.save(detailBill);
+						    }
 							billsJPA.deleteByAccountId(id);
-							return "redirect:/index";
+							return "client/index";
 						}
 					} else {
 						if (phone.equals(ac.getPhone())) {

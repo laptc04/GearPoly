@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "DetailsBill")
+@Table(name = "detailsBill")
 public class DetailBillEntity implements Serializable {
     @Id
     @Column(name = "id")
@@ -40,4 +40,7 @@ public class DetailBillEntity implements Serializable {
 
     @Column(name = "quantity")
     public int quantity;
+    
+    @Column(name = "total_price")
+    public int total_price;
 }
