@@ -11,7 +11,44 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
+<style>
+	.image-container {
+	    position: relative;
+	    width: 50px;
+	    height: 50px;
+	}
 
+	.main-image {
+	    position: relative;
+	    z-index: 2;
+	}
+
+	.second-image {
+	    position: absolute;
+	    top: 0;
+	    left: 20px; /* Điều chỉnh giá trị này để điều chỉnh khoảng cách bên phải */
+	    opacity: 0.8;
+	    z-index: 1;
+	}
+
+	.third-image {
+	    position: absolute;
+	    top: 0;
+	    left: 40px; /* Điều chỉnh giá trị này để điều chỉnh khoảng cách bên phải */
+	    opacity: 0.7;
+	    z-index: 0;
+	}
+
+	.more-images {
+	    position: absolute;
+	    top: -8px;
+	    left: 80px; /* Điều chỉnh giá trị này để điều chỉnh khoảng cách bên phải */
+	    z-index: 0;
+	    border-radius: 50%;
+		background-color: white; /* Màu nền cho số lượng ảnh còn lại */
+	    padding: 5px;
+	}
+</style>
 <body>
 	<header>
 		<!-- place navbar here -->
@@ -49,7 +86,7 @@
 								<thead>
 									<tr>
 										<th>STT</th>
-										<th class="text-center" scope="col">Hình ảnh</th>
+										<th class="text-center" scope="col" style="width: 115px;" >Hình ảnh</th>
 										<th scope="col">Tên sản phẩm</th>
 										<th>Giá</th>
 										<th scope="col">Số lượng</th>
@@ -62,22 +99,24 @@
 										<td th:text="${index.index + 1}">1</td>
 										<td scope="row">
 										    <div class="text-nowrap">
-										        <img th:if="${item.productEntity.imageEntities.size() > 0}"
-										            th:src="@{'/images/' + ${item.productEntity.imageEntities[0].name}}"
-										            class="rounded mx-auto d-inline-block align-middle" width="50px" height="50px" alt="">
-										        
-										        <span th:if="${item.productEntity.imageEntities.size() > 1}">
-										            <img th:if="${item.productEntity.imageEntities.size() > 1}" style="opacity: 0.6;"
-										                th:src="@{'/images/' + ${item.productEntity.imageEntities[1].name}}"
-										                class="rounded mx-auto d-inline-block align-middle faded-1" width="50px" height="50px" alt="">
-										            <img th:if="${item.productEntity.imageEntities.size() > 2}" style="opacity: 0.3;"
-										                th:src="@{'/images/' + ${item.productEntity.imageEntities[2].name}}"
-										                class="rounded mx-auto d-inline-block align-middle faded-2" width="50px" height="50px" alt="">
-										            
-										            <span th:if="${item.productEntity.imageEntities.size() > 3}" class="align-middle">
-										                +<span th:text="${item.productEntity.imageEntities.size() - 3}"></span>
-										            </span>
-										        </span>
+										        <div class="image-container">
+										            <img th:if="${item.productEntity.imageEntities.size() > 0}"
+										                 th:src="@{'/images/' + ${item.productEntity.imageEntities[0].name}}"
+										                 class="rounded mx-auto d-inline-block align-middle main-image" width="50px" height="50px" alt="">
+
+										            <img th:if="${item.productEntity.imageEntities.size() > 1}"
+										                 th:src="@{'/images/' + ${item.productEntity.imageEntities[1].name}}"
+										                 class="rounded mx-auto d-inline-block align-middle second-image" width="50px" height="50px" alt="">
+
+										            <img th:if="${item.productEntity.imageEntities.size() > 2}"
+										                 th:src="@{'/images/' + ${item.productEntity.imageEntities[2].name}}"
+										                 class="rounded mx-auto d-inline-block align-middle third-image" width="50px" height="50px" alt="">
+
+										            <small th:if="${item.productEntity.imageEntities.size() > 3}"
+										                  class="align-middle more-images">
+										                +<small th:text="${item.productEntity.imageEntities.size() - 3}"></small>
+										            </small>
+										        </div>
 										    </div>
 										</td>
 										<td th:text="${item?.productEntity?.product_name}">Màn hình</td>
