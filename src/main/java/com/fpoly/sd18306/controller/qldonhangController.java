@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +26,11 @@ public class qldonhangController {
 	public String getQlDonHang(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {
 
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.DESC, "id"));
 		Page<BillEntity> billPage = billsJPA.findAll(pageable);
+		List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
-		model.addAttribute("donhangall", billPage.getContent());
+		model.addAttribute("donhangall", billEntity);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", billPage.getTotalPages());
 		model.addAttribute("size", size);

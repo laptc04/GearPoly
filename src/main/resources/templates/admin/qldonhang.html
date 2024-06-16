@@ -55,7 +55,7 @@
                     <td th:text="${detail.account.phone}"></td>
                     <td th:text="${detail.account.email}"></td>
                     <td th:text="${#dates.format(detail.billDate, 'dd-MM-yyyy')}"></td>
-                    <td th:text="${detail.total}"></td>
+                    <td th:text="${#numbers.formatDecimal(detail.total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
                     <td><a th:href="'/chitiet?id='+ ${detail?.id}" target="_parent" class="btn btn-2">Chi tiết</a></td>
                 </tr>
                 </tbody>

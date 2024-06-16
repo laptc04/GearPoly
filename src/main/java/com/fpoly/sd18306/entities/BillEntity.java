@@ -43,5 +43,5 @@ public class BillEntity implements Serializable {
     private int total;
 
     @OneToMany(mappedBy = "bill")
-    private List<DetailBillEntity> detailsBill;
+    List<DetailBillEntity> billEntity;
 }
