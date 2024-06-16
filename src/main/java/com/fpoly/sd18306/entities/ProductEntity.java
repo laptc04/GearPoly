@@ -35,9 +35,6 @@ public class ProductEntity implements Serializable{
 	@Column(name = "price")
 	private int price;
 	
-	@Column(name = "soluong")
-	private int soluong;
-	
 	@Column(name = "description")
 	private String description;
 	

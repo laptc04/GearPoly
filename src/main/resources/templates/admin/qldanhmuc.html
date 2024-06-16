@@ -76,13 +76,11 @@ h2 {
 									</div>
 
 									<div class="col">
-										<form class="d-flex ms-auto" th:action="@{/searchCate}"
-											method="get">
-											<div class="d-flex">
-												<input class="form-control me-2" type="search"
-													placeholder="Tìm kiếm" name="categories_name" />
-												<button class="btn btn-outline-success" type="submit">Tìm</button>
-											</div>
+										<form class="d-flex ms-auto" th:action="@{/searchCate}" method="get">
+										    <div class="d-flex">
+										        <input class="form-control me-2" type="search" placeholder="Tìm kiếm" name="categories_name" th:value="${categories_name}" />
+										        <button class="btn btn-outline-success" type="submit">Tìm</button>
+										    </div>
 										</form>
 										<table class="table mt-4 table table-hover table table-sm ">
 											<thead>
@@ -115,18 +113,18 @@ h2 {
 											</tbody>
 										</table>
 										<nav class="tohop" aria-label="Page navigation example">
-									        <ul class="pagination">
-									            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-									                <a class="page-link" th:href="@{/categoriesManager(page=${currentPage - 1}, size=${5})}">Previous</a>
-									            </li>
-									            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
-									                <a class="page-link" th:href="@{/categoriesManager(page=${i}, size=${5})}" th:text="${i + 1}"></a>
-									            </li>
-									            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-									                <a class="page-link" th:href="@{/categoriesManager(page=${currentPage + 1}, size=${5})}">Next</a>
-									            </li>
-									        </ul>
-									    </nav>
+										    <ul class="pagination">
+										        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+										            <a class="page-link" th:href="@{/searchCate(categories_name=${categories_name}, page=${currentPage - 1}, size=${5})}" th:if="${currentPage > 0}">Previous</a>
+										        </li>
+										        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+										            <a class="page-link" th:href="@{/searchCate(categories_name=${categories_name}, page=${i}, size=${5})}" th:text="${i + 1}"></a>
+										        </li>
+										        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+										            <a class="page-link" th:href="@{/searchCate(categories_name=${categories_name}, page=${currentPage + 1}, size=${5})}" th:if="${currentPage < totalPages - 1}">Next</a>
+										        </li>
+										    </ul>
+										</nav>
 									</div>
 								</div>
 							</div>

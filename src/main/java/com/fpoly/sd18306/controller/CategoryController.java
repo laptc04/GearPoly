@@ -30,21 +30,27 @@ public class CategoryController {
 	UploadService uploadService;
 
 	@GetMapping("/categoriesManager")
-	public String categoriesPage(Model model, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size) {
-		Pageable pageable = PageRequest.of(page, size);
-		Page<CategoryEntity> categoryPage = categoryJPA.findAll(pageable);
-		model.addAttribute("categories", categoryPage.getContent());
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", categoryPage.getTotalPages());
-		return "admin/qldanhmuc";
-	}
-	@GetMapping("/searchCate")
-		public String searchProducts(Model model, @RequestParam("categories_name") String categories_name) {
-			List<CategoryEntity> categoriesList = categoryJPA.findByName(categories_name);
-			model.addAttribute("categories", categoriesList);
-			return "admin/qldanhmuc";
-	}
+    public String categoriesPage(Model model, @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CategoryEntity> categoryPage = categoryJPA.findAll(pageable);
+        model.addAttribute("categories", categoryPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", categoryPage.getTotalPages());
+        return "admin/qldanhmuc";
+    }
+
+    @GetMapping("/searchCate")
+    public String searchCategory(Model model, @RequestParam("categories_name") String categories_name,
+                                 @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CategoryEntity> categoryPage = categoryJPA.findByName(categories_name, pageable);
+        model.addAttribute("categories", categoryPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", categoryPage.getTotalPages());
+        model.addAttribute("categories_name", categories_name); // To preserve the search term in the view
+        return "admin/qldanhmuc";
+    }
 	
 	@GetMapping("/add-categoriesManager")
 	public String addCategories() {

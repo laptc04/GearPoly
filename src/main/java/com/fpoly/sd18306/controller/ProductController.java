@@ -60,13 +60,33 @@ public class ProductController {
 
 		return "admin/qlsanpham";
 	}
-
+	
 	@GetMapping("/searchProd")
-	public String searchProducts(Model model, @RequestParam("product_name") String product_name) {
-		List<ProductEntity> productList = productJPA.findByName(product_name);
-		model.addAttribute("products", productList);
-		return "admin/qlsanpham";
+	public String searchProducts(Model model, 
+	                             @RequestParam(value = "product_name", required = false) String product_name,
+	                             @RequestParam(value = "minPrice", required = false) Double minPrice,
+	                             @RequestParam(value = "maxPrice", required = false) Double maxPrice) {
+	    List<ProductEntity> productList;
+
+	    if (product_name != null && !product_name.isEmpty()) {
+	        productList = productJPA.findByName(product_name);
+	    } else if (minPrice != null && maxPrice != null) {
+	        productList = productJPA.findByPriceBetween(minPrice, maxPrice);
+	    } else {
+	        productList = productJPA.findAll();
+	    }
+
+	    model.addAttribute("products", productList);
+	    return "admin/qlsanpham";
 	}
+
+
+//	@GetMapping("/searchProd")
+//	public String searchProducts(Model model, @RequestParam("product_name") String product_name) {
+//		List<ProductEntity> productList = productJPA.findByName(product_name);
+//		model.addAttribute("products", productList);
+//		return "admin/qlsanpham";
+//	}
 
 	@GetMapping("/add-productsManager")
 	public String addProduct() {
@@ -90,7 +110,6 @@ public class ProductController {
 
 			productEntity.setProduct_name(product.getProduct_name());
 			productEntity.setPrice(product.getPrice());
-			productEntity.setSoluong(product.getSoluong());
 			productEntity.setDescription(product.getDescription());
 			productEntity.setHien(product.isHien());
 
@@ -150,7 +169,6 @@ public class ProductController {
 			productEntity.setId(id);
 			productEntity.setProduct_name(product.getProduct_name());
 			productEntity.setPrice(product.getPrice());
-			productEntity.setSoluong(product.getSoluong());
 			productEntity.setDescription(product.getDescription());
 
 			Optional<CategoryEntity> catOptional = categoryJPA.findById(String.valueOf(product.getCategories_id()));
