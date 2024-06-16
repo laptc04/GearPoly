@@ -21,7 +21,7 @@ public class qldonhangController {
 	@Autowired
 	BillsJPA billsJPA;
 
-	@GetMapping("admin/qldonhang")
+	@GetMapping("/admin/qldonhang")
 	public String getQlDonHang(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size, Model model) {
 

@@ -112,7 +112,7 @@ public class TaoHoaDonController {
 						        detailsbillJPA.save(detailBill);
 						    }
 							billsJPA.deleteByAccountId(id);
-							return "client/index";
+							return "redirect:/user/index";
 						}
 					} else {
 						if (phone.equals(ac.getPhone())) {
@@ -155,9 +155,9 @@ public class TaoHoaDonController {
 			        detailsbillJPA.save(detailBill);
 			    }
 				billsJPA.deleteByAccountId(id);
-				return "client/index";
+				return "redirect:/user/index";
 			}
-			return "redirect:/index";
+			return "redirect:/user/index";
 		} else {
 			if (fullname.equals("")) {
 				model.addAttribute("message1", "Vui lòng nhập tên");
