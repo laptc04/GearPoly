@@ -54,7 +54,7 @@
     <main>
         <div class="invoice-container">
             <h1 class="text-primary">HÓA ĐƠN</h1>
-            <p>Ngày lập: 20/07/2030</p>
+            <p th:text="'Ngày lập: '+${#dates.format(billdate, 'dd-MM-yyyy')}"></p>
             <table class="table table-bordered mt-4">
                 <thead>
                     <tr>
@@ -70,7 +70,7 @@
                     <tr>
                         <td th:text="${index.index + 1}">1</td>
                         <td>5</td>
-                        <!--<td th:text="${item?.ProductEntity.product_name}"></td>-->
+                        <td th:text="${item?.ProductEntity.product_name}"></td>
                         <td th:text="${#numbers.formatDecimal(item?.price, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'">10 triệu VNĐ</td>
 						<th th:text="${item?.quantity}"></th>
 						<th th:text="${#numbers.formatDecimal(item?.total_price, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></th>
@@ -78,7 +78,7 @@
                 </tbody>
             </table>
             <div class="text-end total-row">
-                <p th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></p>
+                <p th:text="'Tổng tiền: '+${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></p>
             </div>
             <hr>
             <div class="row mt-4">

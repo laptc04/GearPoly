@@ -1,5 +1,6 @@
 package com.fpoly.sd18306.jpa;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +22,6 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	@Query(value = "SELECT phone FROM accounts WHERE id = :id", nativeQuery = true)
 	String findPhoneById(@Param("id") String id);
 
-	// lấy số lượng từng sản phẩm theo id sản phẩm có trong giỏ hàng
-	@Query(value = "SELECT quantity FROM carts WHERE product_id = :product_id", nativeQuery = true)
-	int findQuantityByProductId(@Param("product_id") int idsp);
-
 	@Query(value = "SELECT * FROM bills WHERE account_id = :account_id", nativeQuery = true)
 	List<BillEntity> findByacId(@Param("account_id") String account_id);
 	
@@ -43,6 +40,9 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	
 	@Query(value = "select total from bills where id = :billID", nativeQuery = true)
 	String findTotalById(@Param("billID") String billID);
+	
+	@Query(value = "select bill_date from bills where id = :billID", nativeQuery = true)
+	Date findBillDateById(@Param("billID") String billID);
 	
 	Page<BillEntity> findByAccount (AccountEntity account, Pageable pageable);
 }

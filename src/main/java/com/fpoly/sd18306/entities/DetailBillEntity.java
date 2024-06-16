@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "detailsBill")
+@Table(name = "details_bill")
 public class DetailBillEntity implements Serializable {
     @Id
     @Column(name = "id")
@@ -27,8 +27,8 @@ public class DetailBillEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "pro_id")
-    @JsonIgnoreProperties(value = "productEntity")
-    public ProductEntity product;
+    @JsonIgnoreProperties(value = "detailsBillEntities")
+    public ProductEntity productEntity;
 
     @ManyToOne
     @JoinColumn(name = "bill_id")

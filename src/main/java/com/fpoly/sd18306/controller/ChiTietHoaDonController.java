@@ -35,8 +35,7 @@ public class ChiTietHoaDonController {
 		if (idOptional.isPresent()) {
 			model.addAttribute("hoadon", detailsbillJPA.findBybillId(idOptional.get()));
 			model.addAttribute("total", billsJPA.findTotalById(idOptional.get()));
-		} else {
-			
+			model.addAttribute("billdate", billsJPA.findBillDateById(idOptional.get()));
 		}
 		return "client/chitiethoadon";
 	}

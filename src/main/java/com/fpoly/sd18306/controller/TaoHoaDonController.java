@@ -76,7 +76,7 @@ public class TaoHoaDonController {
 	@PostMapping("/taohoadon")
 	public String postTaoHoaDon(@Valid Account account, BindingResult error, Model model, @RequestParam("id") String id,
 			@RequestParam("fullname") String fullname, @RequestParam("phone") String phone,
-			@RequestParam("address") String address, @RequestParam("idsanpham") int[] idsanpham) {
+			@RequestParam("address") String address) {
 
 		LocalDate localDate = LocalDate.now();
 		Date currentDate = Date.valueOf(localDate);
