@@ -26,9 +26,9 @@
                    aria-label="Search" style="width: 500px;">
             <button type="submit" class="btn btn-outline-light text-dark m-1">Tìm kiếm</button>
             <!-- Reset Button -->
-           
+            <a class="btn btn-info btn-4" th:href="@{/refreshForm2}">Làm mới</a>
         </form>
- 		<button type="button" class="btn btn-outline-secondary m-1" onclick="resetSearch()">Reset</button>
+
         <!-- Display message if no results found -->
         <div th:if="${notFoundMessage}" class="alert alert-warning mt-3" role="alert">
             <p th:text="${notFoundMessage}"></p>

@@ -35,6 +35,10 @@ public class qldonhangController {
 
 		return "admin/qldonhang";
 	}
+	@GetMapping("/refreshForm2")
+	public String refreshForm2() {
+		return "redirect:/admin/qldonhang";
+	}
 	
 	 @PostMapping("/searchAdminCart")
 	    public String searchProducts(Model model, @RequestParam("account_id") String account_id) {
