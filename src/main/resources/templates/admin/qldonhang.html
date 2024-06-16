@@ -1,64 +1,145 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Title</title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-        <!-- Bootstrap CSS v5.2.1 -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
-        />
-    </head>
+    <!-- Bootstrap CSS v5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous"/>
+</head>
 
-    <body>
-        <header>
-            <!-- place navbar here -->
-        </header>
-        <main>
-            <div class="container">
-                <h1 class="my-4">Product Customer Details</h1>
-                <table class="table table-striped table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Họ tên khách hàng</th>
-                            <th>Ngày</th>
-                            <th>Số tiền</th>
-                            <th>Xem chi tiết</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="detail : ${donhangall}">
-                            <td th:text="${detail.account.fullname}"></td>
-                            <td th:text="${#dates.format(detail.billDate, 'dd-MM-yyyy')}"></td>
-                            <td th:text="${detail.total}"></td>
-                            <td>Chức năng</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-        <footer>
-            <!-- place footer here -->
-        </footer>
-        <!-- Bootstrap JavaScript Libraries -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"
-        ></script>
+<body>
+<header>
+    <!-- place navbar here -->
+</header>
+<main>
+    <div class="container">
+        <h1 class="my-4">Product Customer Details</h1>
 
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"
-        ></script>
-    </body>
+        <!-- Search Form -->
+        <form th:action="@{/searchAdminCart}" method="post" th:object="${searchForm}">
+            <input name="account_id" class="form-control me-2 m-1" type="text" placeholder="Search"
+                   aria-label="Search" style="width: 500px;">
+            <button type="submit" class="btn btn-outline-light text-dark m-1">Tìm kiếm</button>
+            <!-- Reset Button -->
+           
+        </form>
+ 		<button type="button" class="btn btn-outline-secondary m-1" onclick="resetSearch()">Reset</button>
+        <!-- Display message if no results found -->
+        <div th:if="${notFoundMessage}" class="alert alert-warning mt-3" role="alert">
+            <p th:text="${notFoundMessage}"></p>
+        </div>
+
+        <!-- Display table only if there are results -->
+        <div id="searchResults">
+            <table th:if="${donhangall.size() > 0}" class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID khách hàng</th>
+                    <th>Họ tên khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                    <th>Ngày</th>
+                    <th>Số tiền</th>
+                    <th>Xem chi tiết</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="detail : ${donhangall}">
+                    <td th:text="${detail.account.id}"></td>
+                    <td th:text="${detail.account.fullname}"></td>
+                    <td th:text="${detail.account.phone}"></td>
+                    <td th:text="${detail.account.email}"></td>
+                    <td th:text="${#dates.format(detail.billDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${detail.total}"></td>
+                    <td>Chức năng</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination Section -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!-- Nút Previous -->
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{'/admin/qldonhang?page=' + (${currentPage > 0 ? currentPage - 1 : 0}) + '&size=' + ${size}}">
+                            Previous
+                        </a>
+                    </li>
+                    <!-- Các trang -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{'/admin/qldonhang?page=' + ${i} + '&size=' + ${size}}"
+                           th:text="${i + 1}">1</a>
+                    </li>
+                    <!-- Nút Next -->
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{'/admin/qldonhang?page=' + (${currentPage < totalPages - 1 ? currentPage + 1 : totalPages - 1}) + '&size=' + ${size}}">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+<footer>
+    <!-- place footer here -->
+</footer>
+<!-- Bootstrap JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+<!-- AJAX Script to Handle Form Submission and Reset Button -->
+<script th:inline="javascript">
+    function resetSearch() {
+        // Clear the search input
+        document.getElementsByName('account_id')[0].value = '';
+        // Submit the form to reset the search results
+        $('form').submit();
+    }
+
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            event.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            var data = form.serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                beforeSend: function () {
+                    // Show loading spinner or message
+                    $('#searchResults').html('<div class="text-center mt-3">' +
+                        '<div class="spinner-border" role="status">' +
+                        '<span class="visually-hidden">Loading...</span>' +
+                        '</div>' +
+                        '<p class="mt-2">Loading...</p>' +
+                        '</div>');
+                },
+                success: function (response) {
+                    // Replace the search results section with updated content
+                    $('#searchResults').html($(response).find('#searchResults').html());
+                },
+                error: function (xhr) {
+                    console.error('Error:', xhr);
+                    // Handle error if necessary
+                }
+            });
+        });
+    });
+</script>
+</body>
 </html>
