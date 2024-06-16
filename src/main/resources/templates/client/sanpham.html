@@ -124,7 +124,7 @@
 								hình Viewsonic VA2432-H 24" IPS 100Hz viền mỏng</h6>
 							<p class="card-text bg-secondary-subtle"
 								th:each="itemCate : ${item.categoryEntity}"
-								th:text="${itemCate?.categories_name}"></p>
+								th:text="${itemCate?.categories_name[0]}"></p>
 							<p class="text-danger"
 								th:text="${#numbers.formatCurrency(item?.price)}">2.290.000₫</p>
 							<h6 class="text-warning">
