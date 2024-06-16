@@ -101,7 +101,7 @@ public class TaoHoaDonController {
 							for (CartEntity cartItem : cartItems) {
 						        DetailBillEntity detailBill = new DetailBillEntity();
 						        detailBill.setBill(bill);
-						        detailBill.setProduct(cartItem.getProductEntity());
+						        detailBill.setProductEntity(cartItem.getProductEntity());
 						        detailBill.setTotal_price(cartItem.getPrice());
 						        Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
 						        if (productOpt.isPresent()) {
@@ -144,7 +144,7 @@ public class TaoHoaDonController {
 				for (CartEntity cartItem : cartItems) {
 			        DetailBillEntity detailBill = new DetailBillEntity();
 			        detailBill.setBill(bill);
-			        detailBill.setProduct(cartItem.getProductEntity());
+			        detailBill.setProductEntity(cartItem.getProductEntity());
 			        detailBill.setTotal_price(cartItem.getPrice());
 			        Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
 			        if (productOpt.isPresent()) {

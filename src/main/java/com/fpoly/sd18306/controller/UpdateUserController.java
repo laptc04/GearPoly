@@ -52,7 +52,7 @@ public class UpdateUserController {
                     for (BillEntity bill : billEntity) {
                         List<String> imageNames = new ArrayList<>();
                         for (DetailBillEntity details : bill.getDetailsBill()) {
-                            List<ImageEntity> images = details.getProduct().getImageEntities();
+                            List<ImageEntity> images = details.getProductEntity().getImageEntities();
                             if (!images.isEmpty()) {
                                 imageNames.add(images.get(0).getName());
                             }
