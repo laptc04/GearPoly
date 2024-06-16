@@ -50,7 +50,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private boolean isAdminPath(String path) {
         // kiểm tra đường dẫn có đúng của trang admin không
-        return path.startsWith("/admin/");
+        return path.startsWith("/admin/index");
     }
 
     @Override

@@ -45,10 +45,11 @@ public class TaiKhoanController {
 		
 		return "admin/index";
 	}
-	@GetMapping("/register")
-	public String register() {
-	    return "client/register";
-	}
+	 @GetMapping("/register")
+	    public String registerForm(Model model) {
+	        model.addAttribute("account", new Account());
+	        return "client/register";
+	    }
 
 	@PostMapping("/register")
 	public String registerSave(@Valid Account account, BindingResult error,
@@ -57,36 +58,36 @@ public class TaiKhoanController {
 	                           @RequestParam("email") String email,
 	                           @RequestParam("password") String password,
 	                           Model model) {
+		//kiểm tra ID
+	    Optional<AccountEntity> existingAccountById = accountJPA.findById(account.getId());
+	    //kiểm tra email
+	    Optional<AccountEntity> existingAccountByEmail = accountJPA.findByEmail(account.getEmail());
 	    if (error.hasErrors()) {
 	        model.addAttribute("error", error);
-	    } else {
-	        //kiểm tra id
-	        Optional<AccountEntity> existingAccountById = accountJPA.findById(id);
-	        //kiểm tra email
-	        Optional<AccountEntity> existingAccountByEmail = accountJPA.findByEmail(email);
-
-	        if (existingAccountById.isPresent()) {
-	            model.addAttribute("messregerr", "*Tên đăng nhập đã tồn tại");
-	        } else if (existingAccountByEmail.isPresent()) {
-	            model.addAttribute("messregerr", "*Email đã tồn tại");
-	        } else {
-	            AccountEntity accountEntity = new AccountEntity();
-	            accountEntity.setId(id);
-	            accountEntity.setFullname(fullname);
-	            accountEntity.setEmail(email);
-	            accountEntity.setPassword(password);
-	            accountEntity.setPhone("");
-	            accountEntity.setAddress("");
-	            accountEntity.setImage("");
-	            accountEntity.setRole(false);
-	            AccountEntity accSaveEntity = accountJPA.save(accountEntity);
-	            model.addAttribute("messreg", "Đăng ký thành công");
-	        }
 	    }
+	    if(existingAccountById.isPresent()) {
+	        model.addAttribute("messregerr1", "*Tên đăng nhập đã tồn tại");
+
+	    } else if (existingAccountByEmail.isPresent()) {
+	        model.addAttribute("messregerr2", "*Email đã tồn tại");
+
+	    } else {
+	        AccountEntity accountEntity = new AccountEntity();
+	        accountEntity.setId(id);
+	        accountEntity.setFullname(fullname);
+	        accountEntity.setEmail(email);
+	        accountEntity.setPassword(password);
+	        accountEntity.setPhone("");
+	        accountEntity.setAddress("");
+	        accountEntity.setImage("");
+	        accountEntity.setRole(false);
+	        accountJPA.save(accountEntity);
+	        model.addAttribute("messreg", "Đăng ký thành công");
+	    }
+
 	    model.addAttribute("account", account);
 	    return "client/register";
 	}
-
 
 	@GetMapping("/login")
 	public String login(@RequestParam(name="path", defaultValue= "") String path, Model model) {
