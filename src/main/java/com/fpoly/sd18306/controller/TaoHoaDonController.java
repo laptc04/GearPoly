@@ -134,13 +134,28 @@ public class TaoHoaDonController {
 			int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
 			Optional<AccountEntity> acc = accountJPA.findById(id);
 			if (acc.isPresent()) {
+				CartEntity cartEntity = new CartEntity();
 				BillEntity bill = new BillEntity();
 				bill.setAccount(acc.get());
 				bill.setBillDate(currentDate);
 				bill.setTotal(cartService.getAmount());
 				billsJPA.save(bill);
-				billsJPA.deleteByAccountId(id);	
-				return "redirect:/index";
+				List<CartEntity> cartItems = cartJPA.findByAccountID(id);
+				for (CartEntity cartItem : cartItems) {
+			        DetailBillEntity detailBill = new DetailBillEntity();
+			        detailBill.setBill(bill);
+			        detailBill.setProduct(cartItem.getProductEntity());
+			        detailBill.setTotal_price(cartItem.getPrice());
+			        Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
+			        if (productOpt.isPresent()) {
+			            ProductEntity product = productOpt.get();
+			            detailBill.setPrice(product.getPrice()); 
+			        }
+			        detailBill.setQuantity(cartItem.getQuantity());
+			        detailsbillJPA.save(detailBill);
+			    }
+				billsJPA.deleteByAccountId(id);
+				return "client/index";
 			}
 			return "redirect:/index";
 		} else {
@@ -155,18 +170,4 @@ public class TaoHoaDonController {
 		}
 	}
 	
-	@GetMapping("/user/nguoidung")
-	public String ngdung(Model model) {
-		if (request.getCookies() != null) {
-			for (Cookie cookie : request.getCookies()) {
-				String name = cookie.getValue();
-				List<BillEntity> billEntity = billsJPA.findByacId(name);
-				Collections.sort(billEntity, (b1, b2) -> Integer.compare(b2.getId(), b1.getId()));
-				model.addAttribute("bill", billEntity);
-			}
-		}
-		return "client/qlTTngdung";
-	}
-	
-
 }

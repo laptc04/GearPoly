@@ -1,14 +1,17 @@
 package com.fpoly.sd18306.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
-import com.fpoly.sd18306.entities.CartEntity;
 
 import jakarta.transaction.Transactional;
 
@@ -21,11 +24,6 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	// lấy số lượng từng sản phẩm theo id sản phẩm có trong giỏ hàng
 	@Query(value = "SELECT quantity FROM carts WHERE product_id = :product_id", nativeQuery = true)
 	int findQuantityByProductId(@Param("product_id") int idsp);
-	
-//	@Modifying
-//	@Transactional
-//	@Query(value = "DELETE FROM carts WHERE product_id = :product_id", nativeQuery = true)
-//	void deleteByProductID(@Param("product_id") int idsp);
 
 	@Query(value = "SELECT * FROM bills WHERE account_id = :account_id", nativeQuery = true)
 	List<BillEntity> findByacId(@Param("account_id") String account_id);
@@ -42,4 +40,9 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	@Transactional
 	@Query(value = "DELETE FROM carts WHERE account_id = :accountId", nativeQuery = true)
 	void deleteByAccountId(@Param("accountId") String accountId);
+	
+	@Query(value = "select total from bills where id = :billID", nativeQuery = true)
+	String findTotalById(@Param("billID") String billID);
+	
+	Page<BillEntity> findByAccount (AccountEntity account, Pageable pageable);
 }
