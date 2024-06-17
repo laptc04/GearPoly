@@ -39,10 +39,10 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	void deleteByAccountId(@Param("accountId") String accountId);
 	
 	@Query(value = "select total from bills where id = :billID", nativeQuery = true)
-	String findTotalById(@Param("billID") String billID);
+	String findTotalById(@Param("billID") int billID);
 	
 	@Query(value = "select bill_date from bills where id = :billID", nativeQuery = true)
-	Date findBillDateById(@Param("billID") String billID);
+	Date findBillDateById(@Param("billID") int billID);
 	
 	Page<BillEntity> findByAccount (AccountEntity account, Pageable pageable);
 }
