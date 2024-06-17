@@ -82,7 +82,7 @@ public class TaoHoaDonController {
 		Date currentDate = Date.valueOf(localDate);
 
 		if (!fullname.equals("") && !phone.equals("") && !address.equals("")) {
-			if (phone.matches("^0\\d{9}$")) {
+			if (phone.matches("^0[3|8|7|5|9]\\d{8}$")) {
 				String sdt = billsJPA.findPhoneById(id);
 				List<AccountEntity> accEntity = accountJPA.findAll();
 				for (AccountEntity ac : accEntity) {
@@ -171,6 +171,9 @@ public class TaoHoaDonController {
 			} else if (address.equals("")) {
 				model.addAttribute("message3", "Vui lòng nhập địa chỉ");
 			}
+			List<CartEntity> cartList = cartJPA.findByAccountID(id);
+			model.addAttribute("sanpham", cartList);
+			model.addAttribute("total", cartService.getAmount());
 			return "client/laphoadon";
 		}
 	}
