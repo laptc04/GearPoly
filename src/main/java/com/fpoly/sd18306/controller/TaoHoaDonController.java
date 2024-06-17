@@ -2,7 +2,6 @@ package com.fpoly.sd18306.controller;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
@@ -39,7 +39,7 @@ public class TaoHoaDonController {
 
 	@Autowired
 	BillsJPA billsJPA;
-	
+
 	@Autowired
 	DetailsBillJPA detailsbillJPA;
 
@@ -76,7 +76,7 @@ public class TaoHoaDonController {
 	@PostMapping("/taohoadon")
 	public String postTaoHoaDon(@Valid Account account, BindingResult error, Model model, @RequestParam("id") String id,
 			@RequestParam("fullname") String fullname, @RequestParam("phone") String phone,
-			@RequestParam("address") String address) {
+			@RequestParam("address") String address, RedirectAttributes redirectAttributes) {
 
 		LocalDate localDate = LocalDate.now();
 		Date currentDate = Date.valueOf(localDate);
@@ -99,20 +99,23 @@ public class TaoHoaDonController {
 							billsJPA.save(bill);
 							List<CartEntity> cartItems = cartJPA.findByAccountID(id);
 							for (CartEntity cartItem : cartItems) {
-						        DetailBillEntity detailBill = new DetailBillEntity();
-						        detailBill.setBill(bill);
-						        detailBill.setProductEntity(cartItem.getProductEntity());
-						        detailBill.setTotal_price(cartItem.getPrice());
-						        Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
-						        if (productOpt.isPresent()) {
-						            ProductEntity product = productOpt.get();
-						            detailBill.setPrice(product.getPrice()); 
-						        }
-						        detailBill.setQuantity(cartItem.getQuantity());
-						        detailsbillJPA.save(detailBill);
-						    }
+								DetailBillEntity detailBill = new DetailBillEntity();
+								detailBill.setBill(bill);
+								detailBill.setProductEntity(cartItem.getProductEntity());
+								detailBill.setTotal_price(cartItem.getPrice());
+								Optional<ProductEntity> productOpt = productJPA
+										.findById(cartItem.getProductEntity().getId());
+								if (productOpt.isPresent()) {
+									ProductEntity product = productOpt.get();
+									detailBill.setPrice(product.getPrice());
+								}
+								detailBill.setQuantity(cartItem.getQuantity());
+								detailsbillJPA.save(detailBill);
+
+							}
 							billsJPA.deleteByAccountId(id);
-							return "redirect:/user/index";
+							redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
+							return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 						}
 					} else {
 						if (phone.equals(ac.getPhone())) {
@@ -133,31 +136,33 @@ public class TaoHoaDonController {
 			}
 			int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
 			Optional<AccountEntity> acc = accountJPA.findById(id);
+			BillEntity bill = new BillEntity();
 			if (acc.isPresent()) {
 				CartEntity cartEntity = new CartEntity();
-				BillEntity bill = new BillEntity();
 				bill.setAccount(acc.get());
 				bill.setBillDate(currentDate);
 				bill.setTotal(cartService.getAmount());
 				billsJPA.save(bill);
 				List<CartEntity> cartItems = cartJPA.findByAccountID(id);
 				for (CartEntity cartItem : cartItems) {
-			        DetailBillEntity detailBill = new DetailBillEntity();
-			        detailBill.setBill(bill);
-			        detailBill.setProductEntity(cartItem.getProductEntity());
-			        detailBill.setTotal_price(cartItem.getPrice());
-			        Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
-			        if (productOpt.isPresent()) {
-			            ProductEntity product = productOpt.get();
-			            detailBill.setPrice(product.getPrice()); 
-			        }
-			        detailBill.setQuantity(cartItem.getQuantity());
-			        detailsbillJPA.save(detailBill);
-			    }
+					DetailBillEntity detailBill = new DetailBillEntity();
+					detailBill.setBill(bill);
+					detailBill.setProductEntity(cartItem.getProductEntity());
+					detailBill.setTotal_price(cartItem.getPrice());
+					Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
+					if (productOpt.isPresent()) {
+						ProductEntity product = productOpt.get();
+						detailBill.setPrice(product.getPrice());
+					}
+					detailBill.setQuantity(cartItem.getQuantity());
+					detailsbillJPA.save(detailBill);
+				}
 				billsJPA.deleteByAccountId(id);
-				return "redirect:/user/index";
+				redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
+				return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 			}
-			return "redirect:/user/index";
+			redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
+			return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 		} else {
 			if (fullname.equals("")) {
 				model.addAttribute("message1", "Vui lòng nhập tên");
@@ -169,5 +174,5 @@ public class TaoHoaDonController {
 			return "client/laphoadon";
 		}
 	}
-	
+
 }
