@@ -13,11 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
+import com.fpoly.sd18306.entities.CartEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.jpa.BillsJPA;
+import com.fpoly.sd18306.models.Account;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,12 +64,47 @@ public class UpdateUserController {
 	}
 
 	@PostMapping("/update-user")
-	public String updateUser(Model model, @RequestParam("id") String id, @RequestParam("fullname") String fullname,
-			@RequestParam("phone") String phone, @RequestParam("email") String email,
-			@RequestParam("address") String address) {
-		
+	public String updateUser(Account account, Model model, @RequestParam("id") String id,
+			RedirectAttributes redirectAttributes) {
+		String hoTen = account.getFullname();
+		String sdt = account.getPhone();
+		String email = account.getEmail();
+		String diaChi = account.getAddress();
+		String sdtac = billsJPA.findPhoneById(account.getId());
+		System.out.println(sdtac);
+		if (hoTen.equals("")) {
+			model.addAttribute("hoten", "Vui lòng không bỏ trống họ và tên!");
+			return "client/qlTTngdung";
+		}
+		if (sdt.equals("")) {
+			model.addAttribute("hoten", "Vui lòng không bỏ trống số điện thoại!");
+			return "client/qlTTngdung";
+		} else {
+			if(sdt.matches("^0[3|8|7|5|9]\\d{8}$")) {
+				
+				List<AccountEntity> accEntity = accountJPA.findAll();
+				for (AccountEntity ac : accEntity) {
+					if (sdtac.equals(sdt)) {
+						
+					}else {
+						if (sdt.equals(ac.getPhone())) {
+							model.addAttribute("sdt", "Số điện thoại này đã tồn tại!");
+							return "client/qlTTngdung";
+						}
+					}
+					
+				}
+			} else {
+				model.addAttribute("sdt", "Số điện thoại không hợp lệ!");
+				return "client/qlTTngdung";
+			}
+		}
+		if (!(hoTen.equals("") && sdt.equals("") && email.equals("") && diaChi.equals(""))) {
 
-		return "/user/nguoidung";
+		}
+
+		redirectAttributes.addFlashAttribute("message", "Cập nhật thành công");
+		return String.format("redirect:/user/nguoidung");
 	}
 
 }

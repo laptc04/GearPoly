@@ -144,7 +144,7 @@
 								<div class="row">
 									<div class="col"></div>
 									<div class="col-9">
-										<form action="/update-user" method="post">
+										<form action="/update-user" method="post" enctype="multipart/form-data">
 											<div class="row position-relative ">
 												<h3 class="nd mt-1 text-center" id="h2">Tài khoản</h3>
 												<div class="col mt-3">
@@ -157,9 +157,11 @@
 													<H3>Họ và tên</H3>
 													<input class="rounded" th:value="${account?.fullname}" type="text"
 														style="width: 60vh" name="fullname" placeholder="fullname">
+														<small class="text-danger" th:text="${hoten}" ></small>
 													<H3>Số điện thoại</H3>
 													<input class="rounded" th:value="${account?.phone}" type="text"
 														style="width: 60vh" name="phone" placeholder="phone">	
+														<small class="text-danger" th:text="${sdt}" ></small>
 													<H3>Email</H3>
 													<input class="rounded" type="email"
 														style="border-radius: 5px; width: 60vh" name="email"
@@ -173,6 +175,7 @@
 											</div>
 											<div class="row">
 												<div class="col d-inline mt-3 mb-3">
+													<input th:value="account?.id" type="hidden" name="id" >
 													<button type="submit" class="btn btn-1">Cập nhật tài khoản</button>
 													<a class="btn btn-2">Đổi mật khẩu</a>
 												</div>
