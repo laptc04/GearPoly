@@ -11,6 +11,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 	<script src="https://kit.fontawesome.com/8121fed272.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -35,8 +36,8 @@
 						</button>
 						<a href="/cart" target="user" class="btn btn-outline-light text-dark m-1" type="submit"><i
 								class="fa-solid fa-cart-shopping"></i> </a>
-						<a href="/user/nguoidung" target="user"><img th:src="@{'/images/' + ${account?.getImage()}}" class="rounded-image"
-								alt="" style="width: 35px;"></a>
+						<a href="/user/nguoidung" target="user"><img id="profileImage" th:if="${account?.getImage()}" th:src="@{'/images/' + ${account?.getImage()}}" class="rounded-image"
+								alt="" style="border-radius: 50%; height: 35px; width: 35px; margin-top: 5px;"></a>
 					</div>
 					<div>
 						<button class="navbar-toggler bg-light" type="button" data-bs-toggle="offcanvas"
@@ -120,7 +121,24 @@
 					</div>
 					<!--  -->
 					<iframe src="/user/index" name="user" width="100%" height="1400px" frameborder="0"></iframe>
+					<script>
+						function updateProfileImage(imageUrl) {
+						            document.getElementById('profileImage').setAttribute('src', imageUrl);
+						        }
 
+						        // Lắng nghe các thông điệp từ iframe
+						        window.addEventListener('message', function(event) {
+						            if (event.data && event.data.action === 'updateProfileImage') {
+						                updateProfileImage(event.data.imageUrl);
+						            }
+						        });
+						<!--window.addEventListener('message', function(event) {
+						    if (event.data && event.data.action === 'updateProfileImage') {
+						        // Cập nhật đường dẫn ảnh đại diện
+						        $('#profileImage').attr('src', '/images/' + event.data.imageUrl);
+						    }
+						});-->
+				    </script>
 
 					<!--  -->
 

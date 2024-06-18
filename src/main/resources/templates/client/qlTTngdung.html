@@ -147,48 +147,48 @@
 								<div class="row">
 									<div class="col"></div>
 									<div class="col-9">
-										<form id="uploadForm" action="/update-user" method="post" enctype="multipart/form-data">
-										    <div class="row position-relative">
-										        <h3 class="nd mt-1 text-center" id="h2">Tài khoản</h3>
-										        <div class="col mt-3">
-										            <img id="profileImage"
-										                 th:src="@{'/images/' + ${account?.getImage()}}"
-										                 style="border-radius: 50%; width: 100px; height: 100px;"
-										                 alt="Profile Image"
-										                 onclick="document.getElementById('imageInput').click();">
-										            <input type="file" name="image" id="imageInput" style="display: none;"
-										                   accept="image/*">
-										            <input type="hidden" name="id" th:value="${account.id}">
-										            <h3>Tên tài khoản</h3>
-										            <input class="rounded" disabled th:value="${account?.id}"
-										                   type="text" style="width: 60vh" placeholder="ID">
-										            <input th:value="${account?.id}" type="hidden" name="id">
-										            <h3>Họ và tên</h3>
-										            <input class="rounded" th:value="${account?.fullname}" type="text"
-										                   style="width: 60vh" name="fullname" placeholder="fullname">
-										            <small class="text-danger" th:text="${hoten}"></small>
-										            <h3>Số điện thoại</h3>
-										            <input class="rounded" th:value="${account?.phone}" type="text"
-										                   style="width: 60vh" name="phone" placeholder="phone">
-										            <small class="text-danger" th:text="${sdt}"></small>
-										            <h3>Email</h3>
-										            <input class="rounded" type="email"
-										                   style="border-radius: 5px; width: 60vh" name="email"
-										                   placeholder="email" th:value="${account?.email}">
-										            <small class="text-danger" th:text="${email}"></small>
-										            <h3>Địa chỉ</h3>
-										            <textarea class="rounded" th:text="${account?.address}" type="text"
-										                      style="width: 60vh; background-color: rgba(171, 177, 181, 0.205);"
-										                      name="address" placeholder="address"></textarea>
-										            <small class="text-danger" th:text="${diachi}"></small>
-										        </div>
-										    </div>
-										    <div class="row">
-										        <div class="col d-inline mt-3 mb-3">
-										            <button type="submit" class="btn btn-1">Cập nhật tài khoản</button>
-										            <a class="btn btn-2">Đổi mật khẩu</a>
-										        </div>
-										    </div>
+										<form id="uploadForm" action="/update-user" method="post"
+											enctype="multipart/form-data">
+											<div class="row position-relative">
+												<h3 class="nd mt-1 text-center" id="h2">Tài khoản</h3>
+												<div class="col mt-3">
+													<img id="profileImage"
+														th:src="@{'/images/' + ${image}}"
+														style="border-radius: 50%; width: 100px; height: 100px;"
+														alt="Profile Image"
+														onclick="document.getElementById('imageInput').click();">
+													<input type="file" name="image" id="imageInput"
+														style="display: none;" accept="image/*">
+													<h3>Tên tài khoản</h3>
+													<input class="rounded" disabled th:value="${account?.id}"
+														type="text" style="width: 60vh" placeholder="ID">
+													<input th:value="${account?.id}" type="hidden" name="id">
+													<h3>Họ và tên</h3>
+													<input class="rounded" th:value="${account?.fullname}" type="text"
+														style="width: 60vh" name="fullname" placeholder="fullname">
+													<small class="text-danger" th:text="${hoten}"></small>
+													<h3>Số điện thoại</h3>
+													<input class="rounded" th:value="${account?.phone}" type="text"
+														style="width: 60vh" name="phone" placeholder="phone">
+													<small class="text-danger" th:text="${sdt}"></small>
+													<h3>Email</h3>
+													<input class="rounded" type="email"
+														style="border-radius: 5px; width: 60vh" name="email"
+														placeholder="email" th:value="${account?.email}">
+													<small class="text-danger" th:text="${email}"></small>
+													<h3>Địa chỉ</h3>
+													<textarea class="rounded" th:text="${account?.address}" type="text"
+														style="width: 60vh; background-color: rgba(171, 177, 181, 0.205);"
+														name="address" placeholder="address"></textarea>
+													<small class="text-danger" th:text="${diachi}"></small>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col d-inline mt-3 mb-3">
+													<button type="submit" class="btn btn-1">Cập nhật tài khoản</button>
+													<a class="btn btn-2">Đổi mật khẩu</a>
+												</div>
+											</div>
 										</form>
 									</div>
 									<div class="col"></div>
@@ -289,31 +289,55 @@
 		crossorigin="anonymous"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-			// Find the notification element by its ID
 			var notification = document.getElementById("thongbao");
-
-			// If the notification exists, set a timeout to hide it after 3 seconds
 			if (notification) {
 				setTimeout(function () {
 					notification.style.display = "none";
-				}, 3000); // 3000ms = 3 seconds
+				}, 3000); 
 			}
 		});
-		document.getElementById('profileImage').addEventListener('click', function() {
-		        document.getElementById('imageInput').click();
-		    });
+		document.getElementById('profileImage').addEventListener('mousedown', function (event) {
+			event.preventDefault(); 
+			document.getElementById('imageInput').click();
+		});
 
-		    // JavaScript để xử lý khi chọn ảnh mới và tự động gửi form
-		    <!--document.getElementById('imageInput').addEventListener('change', function(event) {
-		        const file = event.target.files[0];
-		        if (file) {
-		            const reader = new FileReader();
-		            reader.onload = function(e) {
-		                document.getElementById('profileImage').src = e.target.result;
-		            };
-		            reader.readAsDataURL(file);
+		document.getElementById('imageInput').addEventListener('change', function () {
+			var file = this.files[0];
+			if (file) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					document.getElementById('profileImage').setAttribute('src', e.target.result);
+				};
+				reader.readAsDataURL(file);
+			}
+			document.getElementById('updateForm').submit();
+		});
+		document.getElementById('updateForm').addEventListener('submit', function(event) {
+		    event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+		    var formData = new FormData(this);
+
+		    $.ajax({
+		        url: $(this).attr('action'),
+		        type: 'POST',
+		        data: formData,
+		        processData: false,
+		        contentType: false,
+		        success: function(response) {
+		            // Cập nhật đường dẫn ảnh dựa trên response từ server
+		            var imageUrl = '/images/' + response.imageUrl;
+
+		            // Gửi thông điệp đến cửa sổ cha để cập nhật lại ảnh đại diện
+		            parent.postMessage({
+		                action: 'updateProfileImage',
+		                imageUrl: imageUrl
+		            }, '*');
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('Lỗi:', error);
 		        }
-		    });-->
+		    });
+		});
 	</script>
 </body>
 

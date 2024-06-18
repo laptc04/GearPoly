@@ -41,7 +41,7 @@ public class UpdateUserController {
 
 	@Autowired
 	AccountJPA accountJPA;
-	
+
 	@Autowired
 	UploadService uploadService;
 
@@ -60,6 +60,7 @@ public class UpdateUserController {
 					List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
 					model.addAttribute("account", accountEntity.get());
+					model.addAttribute("image", accountEntity.get().getImage());
 					model.addAttribute("bills", billEntity);
 					model.addAttribute("currentPage", page);
 					model.addAttribute("totalPages", billPage.getTotalPages());
@@ -71,8 +72,8 @@ public class UpdateUserController {
 
 	@PostMapping("/update-user")
 	public String updateUser(Account account, Model model, @RequestParam("id") String id,
-			RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size,@RequestParam("image") MultipartFile image) {
+			RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam("image") MultipartFile image) {
 		Optional<AccountEntity> accountEntity = accountJPA.findById(id);
 		String hoTen = account.getFullname();
 		String sdt = account.getPhone();
@@ -89,6 +90,7 @@ public class UpdateUserController {
 				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+				model.addAttribute("image", accountEntity.get().getImage());
 				model.addAttribute("bills", billEntity);
 				model.addAttribute("currentPage", page);
 				model.addAttribute("totalPages", billPage.getTotalPages());
@@ -104,6 +106,7 @@ public class UpdateUserController {
 				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+				model.addAttribute("image", accountEntity.get().getImage());
 				model.addAttribute("bills", billEntity);
 				model.addAttribute("currentPage", page);
 				model.addAttribute("totalPages", billPage.getTotalPages());
@@ -125,6 +128,7 @@ public class UpdateUserController {
 								Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 								List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+								model.addAttribute("image", accountEntity.get().getImage());
 								model.addAttribute("bills", billEntity);
 								model.addAttribute("currentPage", page);
 								model.addAttribute("totalPages", billPage.getTotalPages());
@@ -143,6 +147,7 @@ public class UpdateUserController {
 					Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 					List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+					model.addAttribute("image", accountEntity.get().getImage());
 					model.addAttribute("bills", billEntity);
 					model.addAttribute("currentPage", page);
 					model.addAttribute("totalPages", billPage.getTotalPages());
@@ -160,6 +165,7 @@ public class UpdateUserController {
 				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+				model.addAttribute("image", accountEntity.get().getImage());
 				model.addAttribute("bills", billEntity);
 				model.addAttribute("currentPage", page);
 				model.addAttribute("totalPages", billPage.getTotalPages());
@@ -181,6 +187,7 @@ public class UpdateUserController {
 								Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 								List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+								model.addAttribute("image", accountEntity.get().getImage());
 								model.addAttribute("bills", billEntity);
 								model.addAttribute("currentPage", page);
 								model.addAttribute("totalPages", billPage.getTotalPages());
@@ -199,6 +206,7 @@ public class UpdateUserController {
 					Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 					List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+					model.addAttribute("image", accountEntity.get().getImage());
 					model.addAttribute("bills", billEntity);
 					model.addAttribute("currentPage", page);
 					model.addAttribute("totalPages", billPage.getTotalPages());
@@ -206,8 +214,8 @@ public class UpdateUserController {
 				return "client/qlTTngdung";
 			}
 		}
-		
-		if(diaChi.equals("")) {
+
+		if (diaChi.equals("")) {
 			model.addAttribute("diachi", "Địa chỉ không để trống!");
 			AccountEntity account1 = accountJPA.findById(id).orElse(null);
 			if (account1 != null) {
@@ -216,6 +224,7 @@ public class UpdateUserController {
 				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
 				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
 
+				model.addAttribute("image", accountEntity.get().getImage());
 				model.addAttribute("bills", billEntity);
 				model.addAttribute("currentPage", page);
 				model.addAttribute("totalPages", billPage.getTotalPages());
@@ -231,20 +240,21 @@ public class UpdateUserController {
 			accounts.setPhone(sdt);
 			accounts.setEmail(email);
 			accounts.setAddress(diaChi);
-			if (image != null && !image.isEmpty()) {
-	            String fileName = uploadService.uploadFile(image);
-	            if (fileName != null) {
-	                account.setImage(fileName);
-	            }
-	        }
+
+			String fileName = uploadService.uploadFile(image);
+			if (fileName != null) {
+				accounts.setImage(fileName);
+			}else {
+				String img = accountEntity.get().getImage();
+				accounts.setImage(img);
+			}
 			accountJPA.save(accounts);
 			System.out.println("Lưu thành công");
 			redirectAttributes.addFlashAttribute("thongbao", "Cập nhật thành công");
 			return String.format("redirect:/user/nguoidung");
 		}
-		
-		redirectAttributes.addFlashAttribute("thongbao", "Cập nhật thành công");
+//		redirectAttributes.addFlashAttribute("thongbao", "Cập nhật thành công");
 		return String.format("redirect:/user/nguoidung");
-	}
 
+	}
 }
