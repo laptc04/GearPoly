@@ -1,6 +1,8 @@
 package com.fpoly.sd18306.controller;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -88,7 +90,12 @@ public class TaoHoaDonController {
 
 		LocalDate localDate = LocalDate.now();
 		Date currentDate = Date.valueOf(localDate);
-
+		//format date
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    String formattedDate = dateFormat.format(currentDate);
+	    //format price
+	    DecimalFormat formatter = new DecimalFormat("#,### VNĐ");
+        String formattedAmount = formatter.format(cartService.getAmount());
 		if (!fullname.equals("") && !phone.equals("") && !address.equals("")) {
 			if (phone.matches("^0[3|8|7|5|9]\\d{8}$")) {
 				String sdt = billsJPA.findPhoneById(id);
@@ -131,16 +138,20 @@ public class TaoHoaDonController {
 									helper.setTo(email);
 									helper.setSubject("GearPoly");
 									helper.setText("<h3>" + "Thanh toán thành công" + " </h3>" +
-									"Tên người nhận: " + fullname + "<br>" +
-									"Số điện thoại: " + phone + "<br>" +
-									"Địa chỉ nhận hàng: " + address + "<br>" +
+									"<strong>" + "Ngày tạo: " + "</strong>" + formattedDate  + "<br>" +
+									"<strong>" + "Tên người nhận: " + "</strong>" + fullname + "<br>" +
+									"<strong>" + "Số điện thoại: " + "</strong>" +  phone + "<br>" +
+									"<strong>" + "Địa chỉ nhận hàng: " + "</strong>" +  address + "<br>" +
+									"<h4>" +
+										"Tổng tiền: " + formattedAmount +
+									"</h4>" +
 									"Thông tin chi tiết hóa đơn xem tại: http://localhost:8080/chitiet?id=" + String.valueOf(bill.getId()), true);
 									mailSender.send(message);
+									return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 						}
 					} else {
 						if (phone.equals(ac.getPhone())) {
@@ -192,16 +203,20 @@ public class TaoHoaDonController {
 						helper.setTo(email);
 						helper.setSubject("GearPoly");
 						helper.setText("<h3>" + "Thanh toán thành công" + " </h3>" +
-						"Tên người nhận: " + fullname + "<br>" +
-						"Số điện thoại: " + phone + "<br>" +
-						"Địa chỉ nhận hàng: " + address + "<br>" +
+						"<strong>" + "Ngày tạo: " + "</strong>" + formattedDate  + "<br>" +
+						"<strong>" + "Tên người nhận: " + "</strong>" + fullname + "<br>" +
+						"<strong>" + "Số điện thoại: " + "</strong>" +  phone + "<br>" +
+						"<strong>" + "Địa chỉ nhận hàng: " + "</strong>" +  address + "<br>" +
+						"<h4>" +
+							"Tổng tiền: " + formattedAmount +
+						"</h4>" +
 						"Thông tin chi tiết hóa đơn xem tại: http://localhost:8080/chitiet?id=" + String.valueOf(bill.getId()), true);
 						mailSender.send(message);
+						return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 			}
 			redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
 			return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));

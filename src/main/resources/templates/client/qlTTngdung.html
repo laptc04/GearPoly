@@ -236,7 +236,7 @@
 											<h3 class="text-center">HÓA ĐƠN</h3>
 										</table>
 										<nav class="tohop" aria-label="Page navigation example">
-											<ul class="pagination" th:if="${totalPages > 10}">
+											<ul class="pagination" th:if="${totalPages > 1}">
 												<li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
 													<a class="page-link"
 														th:href="@{'/user/nguoidung?page=' + (${currentPage > 0 ? currentPage - 1 : 0}) + '&size=10'}">Previous</a>
