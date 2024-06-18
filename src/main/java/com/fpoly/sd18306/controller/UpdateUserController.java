@@ -231,9 +231,11 @@ public class UpdateUserController {
 			accounts.setPhone(sdt);
 			accounts.setEmail(email);
 			accounts.setAddress(diaChi);
-			String fileName = uploadService.uploadFile(image);
-	        if (fileName != null) {
-	            account.setImage(fileName);
+			if (image != null && !image.isEmpty()) {
+	            String fileName = uploadService.uploadFile(image);
+	            if (fileName != null) {
+	                account.setImage(fileName);
+	            }
 	        }
 			accountJPA.save(accounts);
 			System.out.println("Lưu thành công");

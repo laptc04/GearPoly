@@ -98,7 +98,7 @@ public class TaiKhoanController {
 	        accountEntity.setPassword(password);
 	        accountEntity.setPhone("");
 	        accountEntity.setAddress("");
-	        accountEntity.setImage("");
+	        accountEntity.setImage("avttrang.jpg");
 	        accountEntity.setRole(false);
 	        accountJPA.save(accountEntity);
 	        model.addAttribute("messreg", "Đăng ký thành công");

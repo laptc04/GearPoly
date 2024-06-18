@@ -151,46 +151,31 @@
 										    <div class="row position-relative">
 										        <h3 class="nd mt-1 text-center" id="h2">Tài khoản</h3>
 										        <div class="col mt-3">
-										            <!-- Hình ảnh đại diện -->
 										            <img id="profileImage"
 										                 th:src="@{'/images/' + ${account?.getImage()}}"
 										                 style="border-radius: 50%; width: 100px; height: 100px;"
 										                 alt="Profile Image"
 										                 onclick="document.getElementById('imageInput').click();">
-										            
-										            <!-- Input file ẩn để chọn ảnh mới -->
 										            <input type="file" name="image" id="imageInput" style="display: none;"
 										                   accept="image/*">
-										            
-										            <!-- Input hidden để lưu ID của tài khoản -->
 										            <input type="hidden" name="id" th:value="${account.id}">
-										            
-										            <!-- Tên tài khoản (disabled với giá trị ID) -->
 										            <h3>Tên tài khoản</h3>
 										            <input class="rounded" disabled th:value="${account?.id}"
 										                   type="text" style="width: 60vh" placeholder="ID">
 										            <input th:value="${account?.id}" type="hidden" name="id">
-										            
-										            <!-- Họ và tên -->
 										            <h3>Họ và tên</h3>
 										            <input class="rounded" th:value="${account?.fullname}" type="text"
 										                   style="width: 60vh" name="fullname" placeholder="fullname">
 										            <small class="text-danger" th:text="${hoten}"></small>
-										            
-										            <!-- Số điện thoại -->
 										            <h3>Số điện thoại</h3>
 										            <input class="rounded" th:value="${account?.phone}" type="text"
 										                   style="width: 60vh" name="phone" placeholder="phone">
 										            <small class="text-danger" th:text="${sdt}"></small>
-										            
-										            <!-- Email -->
 										            <h3>Email</h3>
 										            <input class="rounded" type="email"
 										                   style="border-radius: 5px; width: 60vh" name="email"
 										                   placeholder="email" th:value="${account?.email}">
 										            <small class="text-danger" th:text="${email}"></small>
-										            
-										            <!-- Địa chỉ -->
 										            <h3>Địa chỉ</h3>
 										            <textarea class="rounded" th:text="${account?.address}" type="text"
 										                      style="width: 60vh; background-color: rgba(171, 177, 181, 0.205);"
@@ -200,9 +185,7 @@
 										    </div>
 										    <div class="row">
 										        <div class="col d-inline mt-3 mb-3">
-										            <!-- Nút cập nhật tài khoản -->
 										            <button type="submit" class="btn btn-1">Cập nhật tài khoản</button>
-										            <!-- Link đổi mật khẩu (chưa được implement) -->
 										            <a class="btn btn-2">Đổi mật khẩu</a>
 										        </div>
 										    </div>
