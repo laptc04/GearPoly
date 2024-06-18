@@ -57,7 +57,7 @@
 		</div>
 		<div class="invoice-container">
 			<h1 class="text-primary">HÓA ĐƠN</h1>
-			<p th:text="'Ngày lập: '+${#dates.format(billdate, 'dd-MM-yyyy')}"></p>
+			<p th:text="'Ngày lập: '+${#dates.format(billdate, 'dd-MM-yyyy')}"></p><hr>
 			<strong>Địa chỉ nhận hàng:</strong><br>
 			<p th:text="${address}"></p>
 			<table class="table table-bordered mt-4">

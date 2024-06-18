@@ -5,13 +5,16 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.sd18306.entities.AccountEntity;
@@ -27,6 +30,7 @@ import com.fpoly.sd18306.jpa.ProductJPA;
 import com.fpoly.sd18306.models.Account;
 import com.fpoly.sd18306.services.CartService;
 
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -55,6 +59,9 @@ public class TaoHoaDonController {
 	@Autowired
 	HttpServletRequest request;
 
+	@Autowired
+	JavaMailSender mailSender;
+
 	@GetMapping("/taohoadon")
 	public String getTaoHoaDon(Model model) {
 		if (request.getCookies() != null) {
@@ -76,7 +83,8 @@ public class TaoHoaDonController {
 	@PostMapping("/taohoadon")
 	public String postTaoHoaDon(@Valid Account account, BindingResult error, Model model, @RequestParam("id") String id,
 			@RequestParam("fullname") String fullname, @RequestParam("phone") String phone,
-			@RequestParam("address") String address, RedirectAttributes redirectAttributes) {
+			@RequestParam("address") String address, @RequestParam("email") String email,
+			RedirectAttributes redirectAttributes) {
 
 		LocalDate localDate = LocalDate.now();
 		Date currentDate = Date.valueOf(localDate);
@@ -116,6 +124,22 @@ public class TaoHoaDonController {
 							}
 							billsJPA.deleteByAccountId(id);
 							redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
+							try {
+								if (email != null) {
+									MimeMessage message = mailSender.createMimeMessage();
+									MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+									helper.setTo(email);
+									helper.setSubject("GearPoly");
+									helper.setText("<h3>" + "Thanh toán thành công" + " </h3>" +
+									"Tên người nhận: " + fullname + "<br>" +
+									"Số điện thoại: " + phone + "<br>" +
+									"Địa chỉ nhận hàng: " + address + "<br>" +
+									"Thông tin chi tiết hóa đơn xem tại: http://localhost:8080/chitiet?id=" + String.valueOf(bill.getId()), true);
+									mailSender.send(message);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 							return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 						}
 					} else {
@@ -161,6 +185,22 @@ public class TaoHoaDonController {
 				}
 				billsJPA.deleteByAccountId(id);
 				redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
+				try {
+					if (email != null) {
+						MimeMessage message = mailSender.createMimeMessage();
+						MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+						helper.setTo(email);
+						helper.setSubject("GearPoly");
+						helper.setText("<h3>" + "Thanh toán thành công" + " </h3>" +
+						"Tên người nhận: " + fullname + "<br>" +
+						"Số điện thoại: " + phone + "<br>" +
+						"Địa chỉ nhận hàng: " + address + "<br>" +
+						"Thông tin chi tiết hóa đơn xem tại: http://localhost:8080/chitiet?id=" + String.valueOf(bill.getId()), true);
+						mailSender.send(message);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
 			}
 			redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");

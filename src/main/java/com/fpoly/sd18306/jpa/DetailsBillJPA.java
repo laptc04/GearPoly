@@ -16,7 +16,7 @@ public interface DetailsBillJPA extends JpaRepository<DetailBillEntity, String>{
 	List<DetailBillEntity> findBybillId(@Param("bill_id") String bill_id);
 
 	@Query(value = "SELECT address FROM details_bill WHERE bill_id = :bill_id", nativeQuery = true)
-	String findByDetailsBillId(@Param("bill_id") int bill_id);
+	String[] findByDetailsBillId(@Param("bill_id") int bill_id);
 	
 	 Page<DetailBillEntity> findByBillId(Integer billId, Pageable pageable);
 }

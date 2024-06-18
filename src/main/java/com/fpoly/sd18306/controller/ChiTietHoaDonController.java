@@ -41,14 +41,14 @@ public class ChiTietHoaDonController {
 			int currentPage = page.orElse(1);
 			int pageSize = size.orElse(5); 
 
-			String detailsbillEntity = detailsbillJPA.findByDetailsBillId(idOptional.get());
+			String[] detailsbillEntity = detailsbillJPA.findByDetailsBillId(idOptional.get());
 			Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
 			Page<DetailBillEntity> detailsPage = detailsbillJPA.findByBillId(idOptional.get(), pageable);
 
 			model.addAttribute("hoadon", detailsPage.getContent());
 			model.addAttribute("total", billsJPA.findTotalById(idOptional.get()));
 			model.addAttribute("billdate", billsJPA.findBillDateById(idOptional.get()));
-			model.addAttribute("address", detailsbillEntity);
+			model.addAttribute("address", detailsbillEntity[0]);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("totalPages", detailsPage.getTotalPages());
 			model.addAttribute("totalItems", detailsPage.getTotalElements());
