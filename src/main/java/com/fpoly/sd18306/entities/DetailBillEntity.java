@@ -20,27 +20,31 @@ import lombok.Setter;
 @Entity
 @Table(name = "details_bill")
 public class DetailBillEntity implements Serializable {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public int id;
 
-    @ManyToOne
-    @JoinColumn(name = "pro_id")
-    @JsonIgnoreProperties(value = "detailsBillEntities")
-    public ProductEntity productEntity;
+	@ManyToOne
+	@JoinColumn(name = "pro_id")
+	@JsonIgnoreProperties(value = "detailsBillEntities")
+	public ProductEntity productEntity;
 
-    @ManyToOne
-    @JoinColumn(name = "bill_id")
-    @JsonIgnoreProperties(value = "billEntity")
-    public BillEntity bill;
+	@ManyToOne
+	@JoinColumn(name = "bill_id")
+	@JsonIgnoreProperties(value = "billEntity")
+	public BillEntity bill;
 
-    @Column(name = "price")
-    public int price;
+	@Column(name = "price")
+	public int price;
 
-    @Column(name = "quantity")
-    public int quantity;
-    
-    @Column(name = "total_price")
-    public int total_price;
+	@Column(name = "quantity")
+	public int quantity;
+
+	@Column(name = "total_price")
+	public int total_price;
+
+	@Column(name = "address", length = 2000)
+	public String address;
+
 }

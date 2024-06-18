@@ -74,12 +74,13 @@
 							aria-describedby="helpId" placeholder="" />
 						<p class="text-danger" th:text="${message2}"></p>
 					</div>
-					<label for="" class="form-label">Địa chỉ</label>
+					<label for="" class="form-label">Địa chỉ nhận hàng</label>
 					<div class="mb-3">
 						<textarea name="address" th:text="${account?.address}" id=""
 							style="width: 100%;height: 100px;">Cần Thơ</textarea>
 						<p class="text-danger" th:text="${message3}"></p>
 					</div>
+					<input type="hidden" th:value="${account?.email}" name="email" >
 					<h4>Sản phẩm đã chọn</h2>
 						<div class="table-responsive">
 							<table class="table table-bordered">

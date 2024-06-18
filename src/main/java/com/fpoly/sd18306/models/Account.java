@@ -1,6 +1,7 @@
 package com.fpoly.sd18306.models;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,7 +32,7 @@ public class Account {
 	@NotBlank(message = "Địa chỉ không bỏ trống.")
 	@NotEmpty(message = "Địa chỉ không bỏ trống.")
 	private String address;
-	private String image;
+	private MultipartFile image;
 	boolean role;
 	
 }

@@ -1,17 +1,22 @@
 package com.fpoly.sd18306.controller;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.sd18306.entities.AccountEntity;
@@ -27,6 +32,7 @@ import com.fpoly.sd18306.jpa.ProductJPA;
 import com.fpoly.sd18306.models.Account;
 import com.fpoly.sd18306.services.CartService;
 
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -55,6 +61,9 @@ public class TaoHoaDonController {
 	@Autowired
 	HttpServletRequest request;
 
+	@Autowired
+	JavaMailSender mailSender;
+
 	@GetMapping("/taohoadon")
 	public String getTaoHoaDon(Model model) {
 		if (request.getCookies() != null) {
@@ -76,11 +85,17 @@ public class TaoHoaDonController {
 	@PostMapping("/taohoadon")
 	public String postTaoHoaDon(@Valid Account account, BindingResult error, Model model, @RequestParam("id") String id,
 			@RequestParam("fullname") String fullname, @RequestParam("phone") String phone,
-			@RequestParam("address") String address, RedirectAttributes redirectAttributes) {
+			@RequestParam("address") String address, @RequestParam("email") String email,
+			RedirectAttributes redirectAttributes) {
 
 		LocalDate localDate = LocalDate.now();
 		Date currentDate = Date.valueOf(localDate);
-
+		//format date
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    String formattedDate = dateFormat.format(currentDate);
+	    //format price
+	    DecimalFormat formatter = new DecimalFormat("#,### VNĐ");
+        String formattedAmount = formatter.format(cartService.getAmount());
 		if (!fullname.equals("") && !phone.equals("") && !address.equals("")) {
 			if (phone.matches("^0[3|8|7|5|9]\\d{8}$")) {
 				String sdt = billsJPA.findPhoneById(id);
@@ -88,7 +103,7 @@ public class TaoHoaDonController {
 				for (AccountEntity ac : accEntity) {
 					if (sdt.equals(phone)) {
 						System.out.println(sdt);
-						int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
+						int accountEntity = billsJPA.updateByAccountId(fullname, phone, id);
 						Optional<AccountEntity> acc = accountJPA.findById(id);
 						if (acc.isPresent()) {
 							CartEntity cartEntity = new CartEntity();
@@ -103,6 +118,7 @@ public class TaoHoaDonController {
 								detailBill.setBill(bill);
 								detailBill.setProductEntity(cartItem.getProductEntity());
 								detailBill.setTotal_price(cartItem.getPrice());
+								detailBill.setAddress(address);
 								Optional<ProductEntity> productOpt = productJPA
 										.findById(cartItem.getProductEntity().getId());
 								if (productOpt.isPresent()) {
@@ -115,7 +131,27 @@ public class TaoHoaDonController {
 							}
 							billsJPA.deleteByAccountId(id);
 							redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
-							return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
+							try {
+								if (email != null) {
+									MimeMessage message = mailSender.createMimeMessage();
+									MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+									helper.setTo(email);
+									helper.setSubject("GearPoly");
+									helper.setText("<h3>" + "Thanh toán thành công" + " </h3>" +
+									"<strong>" + "Ngày tạo: " + "</strong>" + formattedDate  + "<br>" +
+									"<strong>" + "Tên người nhận: " + "</strong>" + fullname + "<br>" +
+									"<strong>" + "Số điện thoại: " + "</strong>" +  phone + "<br>" +
+									"<strong>" + "Địa chỉ nhận hàng: " + "</strong>" +  address + "<br>" +
+									"<h4>" +
+										"Tổng tiền: " + formattedAmount +
+									"</h4>" +
+									"Thông tin chi tiết hóa đơn xem tại: http://localhost:8080/chitiet?id=" + String.valueOf(bill.getId()), true);
+									mailSender.send(message);
+									return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 					} else {
 						if (phone.equals(ac.getPhone())) {
@@ -134,7 +170,7 @@ public class TaoHoaDonController {
 				model.addAttribute("total", cartService.getAmount());
 				return "client/laphoadon";
 			}
-			int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
+			int accountEntity = billsJPA.updateByAccountId(fullname, phone, id);
 			Optional<AccountEntity> acc = accountJPA.findById(id);
 			BillEntity bill = new BillEntity();
 			if (acc.isPresent()) {
@@ -149,6 +185,7 @@ public class TaoHoaDonController {
 					detailBill.setBill(bill);
 					detailBill.setProductEntity(cartItem.getProductEntity());
 					detailBill.setTotal_price(cartItem.getPrice());
+					detailBill.setAddress(address);
 					Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
 					if (productOpt.isPresent()) {
 						ProductEntity product = productOpt.get();
@@ -159,7 +196,27 @@ public class TaoHoaDonController {
 				}
 				billsJPA.deleteByAccountId(id);
 				redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
-				return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
+				try {
+					if (email != null) {
+						MimeMessage message = mailSender.createMimeMessage();
+						MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+						helper.setTo(email);
+						helper.setSubject("GearPoly");
+						helper.setText("<h3>" + "Thanh toán thành công" + " </h3>" +
+						"<strong>" + "Ngày tạo: " + "</strong>" + formattedDate  + "<br>" +
+						"<strong>" + "Tên người nhận: " + "</strong>" + fullname + "<br>" +
+						"<strong>" + "Số điện thoại: " + "</strong>" +  phone + "<br>" +
+						"<strong>" + "Địa chỉ nhận hàng: " + "</strong>" +  address + "<br>" +
+						"<h4>" +
+							"Tổng tiền: " + formattedAmount +
+						"</h4>" +
+						"Thông tin chi tiết hóa đơn xem tại: http://localhost:8080/chitiet?id=" + String.valueOf(bill.getId()), true);
+						mailSender.send(message);
+						return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			redirectAttributes.addFlashAttribute("message", "Mua sản phẩm thành công!");
 			return String.format("redirect:/chitiet?id=%s", String.valueOf(bill.getId()));
