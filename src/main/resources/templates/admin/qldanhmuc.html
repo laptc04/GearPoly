@@ -133,7 +133,6 @@ h2 {
 						role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 						<div class="container-fluid">
 							<div>
-
 								<div class="row">
 									<div class="col">
 										<div class="row position-relative ">
@@ -142,18 +141,22 @@ h2 {
 												<H2 class="nd ">Quản Lý Danh Mục</H2>
 											</div>
 											<br> <br> <br>
-											<form th:action="@{${category == null ? '/add-categoriesManager' : '/update-categoriesManager'}}" method="post" style="margin-left: 17vh;" enctype="multipart/form-data">
+											<form th:action="@{${category == null ? '/add-categoriesManager' : '/update-categoriesManager'}}" method="post" style="margin-left: 17vh;" enctype="multipart/form-data" th:object="${category}">
 											    <input type="hidden" name="id" th:value="${category?.id}" />
 											    <div class="col">
 											        <h3>Tên Danh Mục</h3>
 											        <input class="rounded" type="text" style="width: 60vh" name="categories_name" placeholder="Tên Danh Mục" th:value="${category?.categories_name}" />
+											        <!-- <p class="text-danger" th:if="${error?.getFieldError('categories_name')}"
+                                        				th:text="${error?.getFieldError('categories_name')?.getDefaultMessage()}"></p> -->
 											        <br>
 											        <h3>Hình Ảnh</h3>
 											        <input class="rounded p-1" type="file" style="width: 60vh" name="file" multiple accept="image/*" />
+											        <!-- <p class="text-danger" th:if="${error?.getFieldError('image')}"
+    													th:text="${error?.getFieldError('image')?.getDefaultMessage()}"></p> -->
 											    </div>
-											    <div class="mb-3" th:if="${category != null}">
-											        <img th:src="'/images/' + ${category?.image}" style="width: 100px; height: 100px" />
-											    </div>
+											    <div class="mb-3" th:if="${category != null}"> <!--  && category.image != null -->
+												    <img th:src="'/images/' + ${category?.image}" style="width: 100px; height: 100px" />
+												</div>
 											    <br>
 											    <div class="col d-inline mt-5">
 											        <button type="submit" class="btn btn-primary" th:text="${category == null ? 'Thêm' : 'Cập Nhật'}"></button>
