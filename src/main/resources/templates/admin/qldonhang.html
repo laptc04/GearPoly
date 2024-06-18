@@ -46,7 +46,7 @@
 							<th class="text-center">Ảnh sản phẩm</th>
 							<th>Số tiền</th>
 							<th>Ngày</th>
-							<th>Xem chi tiết</th>
+							<th class="text-center">Xem chi tiết</th>
 						</tr>
 					</thead>
 					<tbody th:each="detail : ${donhangall}">
@@ -72,7 +72,7 @@
 							</td>
 							<td th:text="${#numbers.formatDecimal(detail.total, 1, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
 							<td th:text="${#dates.format(detail.billDate, 'dd-MM-yyyy')}"></td>
-							<td><a th:href="'/chitiet?id='+ ${detail?.id}" target="_parent" class="btn btn-2 btn-primary">Chi
+							<td class="text-center"><a th:href="'/chitiet?id='+ ${detail?.id}" target="_parent" class="btn btn-2 btn-primary">Chi
 									tiết</a></td>
 						</tr>
 					</tbody>

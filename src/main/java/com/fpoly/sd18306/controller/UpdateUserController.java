@@ -13,14 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.sd18306.entities.AccountEntity;
 import com.fpoly.sd18306.entities.BillEntity;
 import com.fpoly.sd18306.entities.CartEntity;
+import com.fpoly.sd18306.entities.ImageEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.jpa.BillsJPA;
 import com.fpoly.sd18306.models.Account;
+import com.fpoly.sd18306.services.UploadService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +41,9 @@ public class UpdateUserController {
 
 	@Autowired
 	AccountJPA accountJPA;
+	
+	@Autowired
+	UploadService uploadService;
 
 	@GetMapping("/user/nguoidung")
 	public String ngdung(Model model, @RequestParam(defaultValue = "0") int page,
@@ -65,45 +71,177 @@ public class UpdateUserController {
 
 	@PostMapping("/update-user")
 	public String updateUser(Account account, Model model, @RequestParam("id") String id,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,@RequestParam("image") MultipartFile image) {
+		Optional<AccountEntity> accountEntity = accountJPA.findById(id);
 		String hoTen = account.getFullname();
 		String sdt = account.getPhone();
 		String email = account.getEmail();
 		String diaChi = account.getAddress();
-		String sdtac = billsJPA.findPhoneById(account.getId());
-		System.out.println(sdtac);
+		String sdtac = billsJPA.findPhoneById(id);
+		String emailac = billsJPA.findEmailById(id);
 		if (hoTen.equals("")) {
 			model.addAttribute("hoten", "Vui lòng không bỏ trống họ và tên!");
+			AccountEntity account1 = accountJPA.findById(id).orElse(null);
+			if (account1 != null) {
+				Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+				model.addAttribute("bills", billEntity);
+				model.addAttribute("currentPage", page);
+				model.addAttribute("totalPages", billPage.getTotalPages());
+			}
 			return "client/qlTTngdung";
 		}
 		if (sdt.equals("")) {
 			model.addAttribute("hoten", "Vui lòng không bỏ trống số điện thoại!");
+			AccountEntity account1 = accountJPA.findById(id).orElse(null);
+			if (account1 != null) {
+				Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+				model.addAttribute("bills", billEntity);
+				model.addAttribute("currentPage", page);
+				model.addAttribute("totalPages", billPage.getTotalPages());
+			}
 			return "client/qlTTngdung";
 		} else {
-			if(sdt.matches("^0[3|8|7|5|9]\\d{8}$")) {
-				
+			if (sdt.matches("^0[3|8|7|5|9]\\d{8}$")) {
 				List<AccountEntity> accEntity = accountJPA.findAll();
 				for (AccountEntity ac : accEntity) {
 					if (sdtac.equals(sdt)) {
-						
-					}else {
+						System.out.println(sdtac);
+					} else {
 						if (sdt.equals(ac.getPhone())) {
 							model.addAttribute("sdt", "Số điện thoại này đã tồn tại!");
+							AccountEntity account1 = accountJPA.findById(id).orElse(null);
+							if (account1 != null) {
+								Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+								Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+								List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+								model.addAttribute("bills", billEntity);
+								model.addAttribute("currentPage", page);
+								model.addAttribute("totalPages", billPage.getTotalPages());
+							}
 							return "client/qlTTngdung";
 						}
 					}
-					
+
 				}
 			} else {
 				model.addAttribute("sdt", "Số điện thoại không hợp lệ!");
+				AccountEntity account1 = accountJPA.findById(id).orElse(null);
+				if (account1 != null) {
+					Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+					Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+					List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+					model.addAttribute("bills", billEntity);
+					model.addAttribute("currentPage", page);
+					model.addAttribute("totalPages", billPage.getTotalPages());
+				}
 				return "client/qlTTngdung";
 			}
 		}
-		if (!(hoTen.equals("") && sdt.equals("") && email.equals("") && diaChi.equals(""))) {
 
+		if (email.equals("")) {
+			model.addAttribute("email", "Email không bỏ trống!");
+			AccountEntity account1 = accountJPA.findById(id).orElse(null);
+			if (account1 != null) {
+				Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+				model.addAttribute("bills", billEntity);
+				model.addAttribute("currentPage", page);
+				model.addAttribute("totalPages", billPage.getTotalPages());
+			}
+			return "client/qlTTngdung";
+		} else {
+			if (email.matches("^[a-zA-Z0-9]*@(gmail\\.com|fpt\\.edu\\.vn)$")) {
+				List<AccountEntity> accEntity = accountJPA.findAll();
+				for (AccountEntity ac : accEntity) {
+					if (emailac.equals(email)) {
+						System.out.println(emailac);
+					} else {
+						if (email.equals(ac.getEmail())) {
+							model.addAttribute("email", "Email này đã tồn tại!");
+							AccountEntity account1 = accountJPA.findById(id).orElse(null);
+							if (account1 != null) {
+								Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+								Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+								List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+								model.addAttribute("bills", billEntity);
+								model.addAttribute("currentPage", page);
+								model.addAttribute("totalPages", billPage.getTotalPages());
+							}
+							return "client/qlTTngdung";
+						}
+					}
+
+				}
+			} else {
+				model.addAttribute("email", "Email không hợp lệ!");
+				AccountEntity account1 = accountJPA.findById(id).orElse(null);
+				if (account1 != null) {
+					Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+					Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+					List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+					model.addAttribute("bills", billEntity);
+					model.addAttribute("currentPage", page);
+					model.addAttribute("totalPages", billPage.getTotalPages());
+				}
+				return "client/qlTTngdung";
+			}
+		}
+		
+		if(diaChi.equals("")) {
+			model.addAttribute("diachi", "Địa chỉ không để trống!");
+			AccountEntity account1 = accountJPA.findById(id).orElse(null);
+			if (account1 != null) {
+				Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+				Page<BillEntity> billPage = billsJPA.findByAccount(account1, pageable);
+				List<BillEntity> billEntity = new ArrayList<>(billPage.getContent());
+
+				model.addAttribute("bills", billEntity);
+				model.addAttribute("currentPage", page);
+				model.addAttribute("totalPages", billPage.getTotalPages());
+			}
+			return "client/qlTTngdung";
 		}
 
-		redirectAttributes.addFlashAttribute("message", "Cập nhật thành công");
+		if (!(hoTen.equals("") && sdt.equals("") && email.equals("") && diaChi.equals(""))) {
+			AccountEntity accounts = new AccountEntity();
+			accounts.setId(id);
+			accounts.setFullname(hoTen);
+			accounts.setPassword(accountEntity.get().getPassword());
+			accounts.setPhone(sdt);
+			accounts.setEmail(email);
+			accounts.setAddress(diaChi);
+			String fileName = uploadService.uploadFile(image);
+	        if (fileName != null) {
+	            account.setImage(fileName);
+	        }
+			accountJPA.save(accounts);
+			System.out.println("Lưu thành công");
+			redirectAttributes.addFlashAttribute("thongbao", "Cập nhật thành công");
+			return String.format("redirect:/user/nguoidung");
+		}
+		
+		redirectAttributes.addFlashAttribute("thongbao", "Cập nhật thành công");
 		return String.format("redirect:/user/nguoidung");
 	}
 

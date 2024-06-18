@@ -35,7 +35,7 @@
 						</button>
 						<a href="/cart" target="user" class="btn btn-outline-light text-dark m-1" type="submit"><i
 								class="fa-solid fa-cart-shopping"></i> </a>
-						<a href="/user/nguoidung" target="user"><img src="/images/unnamed.gif" class="rounded-image"
+						<a href="/user/nguoidung" target="user"><img th:src="@{'/images/' + ${account?.getImage()}}" class="rounded-image"
 								alt="" style="width: 35px;"></a>
 					</div>
 					<div>

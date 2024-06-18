@@ -88,7 +88,7 @@ public class TaoHoaDonController {
 				for (AccountEntity ac : accEntity) {
 					if (sdt.equals(phone)) {
 						System.out.println(sdt);
-						int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
+						int accountEntity = billsJPA.updateByAccountId(fullname, phone, id);
 						Optional<AccountEntity> acc = accountJPA.findById(id);
 						if (acc.isPresent()) {
 							CartEntity cartEntity = new CartEntity();
@@ -103,6 +103,7 @@ public class TaoHoaDonController {
 								detailBill.setBill(bill);
 								detailBill.setProductEntity(cartItem.getProductEntity());
 								detailBill.setTotal_price(cartItem.getPrice());
+								detailBill.setAddress(address);
 								Optional<ProductEntity> productOpt = productJPA
 										.findById(cartItem.getProductEntity().getId());
 								if (productOpt.isPresent()) {
@@ -134,7 +135,7 @@ public class TaoHoaDonController {
 				model.addAttribute("total", cartService.getAmount());
 				return "client/laphoadon";
 			}
-			int accountEntity = billsJPA.updateByAccountId(fullname, phone, address, id);
+			int accountEntity = billsJPA.updateByAccountId(fullname, phone, id);
 			Optional<AccountEntity> acc = accountJPA.findById(id);
 			BillEntity bill = new BillEntity();
 			if (acc.isPresent()) {
@@ -149,6 +150,7 @@ public class TaoHoaDonController {
 					detailBill.setBill(bill);
 					detailBill.setProductEntity(cartItem.getProductEntity());
 					detailBill.setTotal_price(cartItem.getPrice());
+					detailBill.setAddress(address);
 					Optional<ProductEntity> productOpt = productJPA.findById(cartItem.getProductEntity().getId());
 					if (productOpt.isPresent()) {
 						ProductEntity product = productOpt.get();

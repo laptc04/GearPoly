@@ -2,9 +2,15 @@ package com.fpoly.sd18306.controller;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fpoly.sd18306.entities.AccountEntity;
+import com.fpoly.sd18306.entities.BillEntity;
 import com.fpoly.sd18306.jpa.AccountJPA;
 import com.fpoly.sd18306.models.Account;
 
@@ -33,11 +40,23 @@ public class TaiKhoanController {
 	
 	@Autowired 
 	HttpSession httpSession;
+	
+	@Autowired
+	HttpServletRequest request;
 
 	
 	@GetMapping("/index")
-	public String index() {
-		
+	public String index( Model model) {
+		if (request.getCookies() != null) {
+			for (Cookie cookie : request.getCookies()) {
+				String accountId = cookie.getValue();
+				Optional<AccountEntity> accountEntity = accountJPA.findById(accountId);
+				AccountEntity account = accountJPA.findById(accountId).orElse(null);
+				if (account != null) {
+					model.addAttribute("account", accountEntity.get());
+				}
+			}
+		}
 		return "client/index";
 	}
 	@GetMapping("/admin/index")

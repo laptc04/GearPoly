@@ -22,27 +22,31 @@ public interface BillsJPA extends JpaRepository<BillEntity, String> {
 	@Query(value = "SELECT phone FROM accounts WHERE id = :id", nativeQuery = true)
 	String findPhoneById(@Param("id") String id);
 
+	// lấy sđt theo id khách hàng
+	@Query(value = "SELECT email FROM accounts WHERE id = :id", nativeQuery = true)
+	String findEmailById(@Param("id") String id);
+
 	@Query(value = "SELECT * FROM bills WHERE account_id = :account_id", nativeQuery = true)
 	List<BillEntity> findByacId(@Param("account_id") String account_id);
-	
+
 	// update thông tin mà khách hàng đã sửa
 	@Modifying
 	@Transactional
-	@Query(value = "UPDATE accounts SET fullname = :fullname, phone = :phone, address = :address WHERE id = :id", nativeQuery = true)
-	public int updateByAccountId(@Param("fullname") String fullname, @Param("phone") String phone,
-			@Param("address") String address, @Param("id") String id);
+	@Query(value = "UPDATE accounts SET fullname = :fullname, phone = :phone WHERE id = :id", nativeQuery = true)
+	public int updateByAccountId(@Param("fullname") String fullname, @Param("phone") String phone, @Param("id") String id);
+			
 
 	// xóa sản phẩm trong giỏ hàng khi mua sản phẩm
 	@Modifying
 	@Transactional
 	@Query(value = "DELETE FROM carts WHERE account_id = :accountId", nativeQuery = true)
 	void deleteByAccountId(@Param("accountId") String accountId);
-	
+
 	@Query(value = "select total from bills where id = :billID", nativeQuery = true)
 	String findTotalById(@Param("billID") int billID);
-	
+
 	@Query(value = "select bill_date from bills where id = :billID", nativeQuery = true)
 	Date findBillDateById(@Param("billID") int billID);
-	
-	Page<BillEntity> findByAccount (AccountEntity account, Pageable pageable);
+
+	Page<BillEntity> findByAccount(AccountEntity account, Pageable pageable);
 }
